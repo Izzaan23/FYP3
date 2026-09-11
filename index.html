@@ -1,67 +1,2767 @@
 <!doctype html>
-<html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
-        <meta name="mobile-web-app-capable" content="yes">
-        <meta name="apple-mobile-web-app-capable" content="yes">
-        <link rel="stylesheet" href="./resources/ol.css">
-        <link rel="stylesheet" href="resources/fontawesome-all.min.css">
-        <link href="resources/photon-geocoder-autocomplete.min.css" rel="stylesheet">
-        <link rel="stylesheet" href="./resources/ol-layerswitcher.css">
-        <link rel="stylesheet" href="./resources/qgis2web.css">
-        <style>
-        html, body {
-            background-color: #ffffff;
-        }
-        .ol-control > * {
-            background-color: #f8f8f8!important;
-            color: #444444!important;
-            border-radius: 0px;
-        }
-        .ol-attribution a, .gcd-gl-input::placeholder, .search-layer-input-search::placeholder {
-            color: #444444!important;
-        }
-        .search-layer-input-search {
-            background-color: #f8f8f8!important;
-        }
-        .ol-control > *:focus, .ol-control >*:hover {
-            background-color: rgba(248, 248, 248, 0.7)!important;
-        } 
-        .ol-control {
-            background-color: rgba(255,255,255,.4) !important;
-            padding: 2px !important;
-        } 
-        </style>
+<html lang="ms">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1,user-scalable=no">
 
-        <style>
-        html, body, #map {
-            width: 100%;
-            height: 100%;
-            padding: 0;
-            margin: 0;
-        }
-        </style>
-        <title></title>
-    </head>
-    <body>
-        <div id="map">
-            <div id="popup" class="ol-popup">
-                <a href="#" id="popup-closer" class="ol-popup-closer"></a>
-                <div id="popup-content"></div>
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+<link rel="stylesheet" href="./resources/ol.css">
+<link rel="stylesheet" href="resources/fontawesome-all.min.css">
+<link rel="stylesheet" href="resources/photon-geocoder-autocomplete.min.css">
+<link rel="stylesheet" href="./resources/ol-layerswitcher.css">
+<link rel="stylesheet" href="./resources/qgis2web.css">
+
+<title>Web GIS Jenayah Pecah Rumah - Ipoh</title>
+
+<style>
+
+/* =========================================================
+   GLOBAL
+========================================================= */
+
+:root{
+    --primary:#0b3554;
+    --primary2:#123f60;
+    --accent:#1687c9;
+    --bg:#f4f7fa;
+    --card:#ffffff;
+    --text:#1f2933;
+    --muted:#7a8793;
+    --border:#e2e8ee;
+    --sidebar:250px;
+    --topbar:70px;
+    --shadow:0 4px 16px rgba(17,42,61,.08);
+}
+
+*{
+    box-sizing:border-box;
+}
+
+html,
+body{
+    margin:0;
+    padding:0;
+    width:100%;
+    height:100%;
+    font-family:"Segoe UI",Arial,sans-serif;
+    background:var(--bg);
+    color:var(--text);
+}
+
+button,
+input{
+    font-family:inherit;
+}
+
+/* =========================================================
+   APPLICATION
+========================================================= */
+
+.app{
+    width:100%;
+    height:100vh;
+    overflow:hidden;
+}
+
+/* =========================================================
+   TOP BAR
+========================================================= */
+
+.topbar{
+    position:fixed;
+    left:0;
+    top:0;
+    right:0;
+    height:var(--topbar);
+
+    background:linear-gradient(
+        135deg,
+        #082d4b,
+        #0d4365
+    );
+
+    color:white;
+    display:flex;
+    align-items:center;
+
+    z-index:10000;
+
+    box-shadow:0 3px 12px rgba(0,0,0,.18);
+}
+
+.brand{
+    width:var(--sidebar);
+    height:100%;
+
+    display:flex;
+    align-items:center;
+
+    padding:0 20px;
+
+    border-right:1px solid rgba(255,255,255,.10);
+}
+
+.brand-icon{
+    width:40px;
+    height:40px;
+
+    border-radius:10px;
+
+    background:rgba(255,255,255,.12);
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    margin-right:12px;
+
+    font-size:20px;
+}
+
+.brand-text{
+    font-size:14px;
+    font-weight:700;
+    line-height:1.25;
+}
+
+.header-title{
+    flex:1;
+    padding-left:25px;
+
+    font-size:18px;
+    font-weight:600;
+
+    letter-spacing:.2px;
+}
+
+.header-actions{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    padding-right:15px;
+}
+
+.header-btn{
+    width:42px;
+    height:42px;
+
+    border:none;
+    border-radius:9px;
+
+    background:rgba(255,255,255,.08);
+    color:white;
+
+    cursor:pointer;
+
+    font-size:18px;
+
+    transition:.2s;
+}
+
+.header-btn:hover{
+    background:rgba(255,255,255,.18);
+}
+
+/* =========================================================
+   SIDEBAR
+========================================================= */
+
+.sidebar{
+    position:fixed;
+    left:0;
+    top:var(--topbar);
+    bottom:0;
+
+    width:var(--sidebar);
+
+    background:#082e4b;
+
+    color:white;
+
+    z-index:9000;
+
+    transition:.3s ease;
+
+    overflow:hidden;
+}
+
+.sidebar.collapsed{
+    width:74px;
+}
+
+.sidebar-menu{
+    padding:18px 12px;
+}
+
+.menu-label{
+    padding:10px 12px;
+
+    font-size:10px;
+    font-weight:700;
+
+    text-transform:uppercase;
+
+    color:#7fa1b8;
+
+    letter-spacing:1px;
+}
+
+.menu-item{
+    width:100%;
+
+    display:flex;
+    align-items:center;
+
+    padding:13px 12px;
+
+    margin:4px 0;
+
+    border-radius:9px;
+
+    color:#d8e5ed;
+
+    cursor:pointer;
+
+    transition:.2s;
+}
+
+.menu-item:hover{
+    background:rgba(255,255,255,.08);
+    color:white;
+}
+
+.menu-item.active{
+    background:#1688ce;
+    color:white;
+
+    box-shadow:0 4px 10px rgba(0,0,0,.12);
+}
+
+.menu-icon{
+    width:28px;
+    min-width:28px;
+
+    text-align:center;
+
+    font-size:15px;
+}
+
+.menu-text{
+    margin-left:8px;
+    font-size:13px;
+    white-space:nowrap;
+}
+
+.sidebar.collapsed .menu-text,
+.sidebar.collapsed .menu-label{
+    display:none;
+}
+
+.sidebar-footer{
+    position:absolute;
+    left:0;
+    right:0;
+    bottom:0;
+
+    padding:15px;
+
+    border-top:1px solid rgba(255,255,255,.08);
+
+    color:#7595aa;
+
+    font-size:10px;
+
+    text-align:center;
+}
+
+/* =========================================================
+   MAIN CONTENT
+========================================================= */
+
+.main{
+    position:absolute;
+
+    left:var(--sidebar);
+    right:0;
+    top:var(--topbar);
+    bottom:0;
+
+    overflow:auto;
+
+    transition:.3s ease;
+}
+
+.main.expanded{
+    left:74px;
+}
+
+.page{
+    display:none;
+    padding:22px;
+
+    min-height:100%;
+}
+
+.page.active{
+    display:block;
+}
+
+/* =========================================================
+   PAGE HEADER
+========================================================= */
+
+.page-header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    margin-bottom:20px;
+}
+
+.page-title{
+    margin:0;
+
+    font-size:22px;
+    font-weight:700;
+}
+
+.page-subtitle{
+    margin-top:5px;
+
+    color:var(--muted);
+
+    font-size:12px;
+}
+
+/* =========================================================
+   STATISTICS CARDS
+========================================================= */
+
+.stats{
+    display:grid;
+
+    grid-template-columns:
+        repeat(4,minmax(0,1fr));
+
+    gap:15px;
+
+    margin-bottom:18px;
+}
+
+.stat-card{
+    background:var(--card);
+
+    border:1px solid var(--border);
+
+    border-radius:12px;
+
+    padding:18px;
+
+    box-shadow:var(--shadow);
+
+    position:relative;
+
+    overflow:hidden;
+}
+
+.stat-card::after{
+    content:"";
+
+    position:absolute;
+
+    right:-25px;
+    top:-25px;
+
+    width:90px;
+    height:90px;
+
+    border-radius:50%;
+
+    background:rgba(22,135,201,.07);
+}
+
+.stat-top{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+}
+
+.stat-icon{
+    width:42px;
+    height:42px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    border-radius:10px;
+
+    background:#e9f5fb;
+
+    color:#1285c6;
+
+    font-size:18px;
+}
+
+.stat-number{
+    margin-top:12px;
+
+    font-size:27px;
+    font-weight:700;
+}
+
+.stat-label{
+    margin-top:3px;
+
+    font-size:12px;
+
+    color:var(--muted);
+}
+
+.stat-change{
+    margin-top:8px;
+
+    font-size:10px;
+
+    color:#219653;
+}
+
+/* =========================================================
+   DASHBOARD GRID
+========================================================= */
+
+.dashboard-grid{
+    display:grid;
+
+    grid-template-columns:
+        1.45fr
+        1fr
+        1fr;
+
+    gap:16px;
+}
+
+.panel{
+    background:var(--card);
+
+    border:1px solid var(--border);
+
+    border-radius:12px;
+
+    box-shadow:var(--shadow);
+
+    overflow:hidden;
+}
+
+.panel-header{
+    display:flex;
+
+    justify-content:space-between;
+    align-items:center;
+
+    padding:14px 16px;
+
+    border-bottom:1px solid var(--border);
+}
+
+.panel-title{
+    font-size:13px;
+    font-weight:700;
+}
+
+.panel-action{
+    border:none;
+
+    background:none;
+
+    color:#1687c9;
+
+    cursor:pointer;
+
+    font-size:12px;
+}
+
+.panel-body{
+    padding:15px;
+}
+
+/* =========================================================
+   MAP
+========================================================= */
+
+.map-panel{
+    grid-column:span 1;
+}
+
+.map-dashboard{
+    height:390px;
+
+    position:relative;
+
+    overflow:hidden;
+}
+
+#map{
+    width:100%;
+    height:100%;
+
+    padding:0;
+    margin:0;
+}
+
+/* QGIS controls */
+
+.ol-control > *{
+    background:#fff !important;
+    color:#34495e !important;
+
+    border-radius:6px !important;
+}
+
+.ol-control{
+    background:rgba(255,255,255,.45) !important;
+    padding:3px !important;
+}
+
+.ol-attribution a,
+.gcd-gl-input::placeholder,
+.search-layer-input-search::placeholder{
+    color:#34495e !important;
+}
+
+.search-layer-input-search{
+    background:#fff !important;
+}
+
+/* =========================================================
+   CHART
+========================================================= */
+
+.chart-container{
+    height:390px;
+
+    padding:20px;
+}
+
+.chart{
+    width:100%;
+    height:100%;
+
+    display:flex;
+    align-items:flex-end;
+
+    gap:8px;
+
+    padding:10px 5px 25px;
+
+    border-bottom:1px solid #dfe5ea;
+}
+
+.bar{
+    flex:1;
+
+    min-width:10px;
+
+    background:linear-gradient(
+        to top,
+        #0e75ad,
+        #36a5dc
+    );
+
+    border-radius:5px 5px 0 0;
+
+    position:relative;
+
+    cursor:pointer;
+
+    transition:.25s;
+}
+
+.bar:hover{
+    opacity:.75;
+}
+
+.bar span{
+    position:absolute;
+
+    bottom:-21px;
+    left:50%;
+
+    transform:translateX(-50%);
+
+    font-size:9px;
+
+    color:#74808b;
+}
+
+.bar strong{
+    position:absolute;
+
+    top:-17px;
+    left:50%;
+
+    transform:translateX(-50%);
+
+    font-size:9px;
+
+    color:#596773;
+}
+
+/* =========================================================
+   DONUT
+========================================================= */
+
+.donut-wrap{
+    height:390px;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    flex-direction:column;
+}
+
+.donut{
+    width:190px;
+    height:190px;
+
+    border-radius:50%;
+
+    background:
+        conic-gradient(
+            #2586c1 0 65%,
+            #e8a23a 65% 82%,
+            #55a868 82% 91%,
+            #c64e4e 91% 100%
+        );
+
+    position:relative;
+}
+
+.donut::after{
+    content:"";
+
+    position:absolute;
+
+    inset:45px;
+
+    background:white;
+
+    border-radius:50%;
+}
+
+.donut-center{
+    position:absolute;
+
+    inset:0;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    z-index:2;
+
+    font-size:23px;
+
+    font-weight:700;
+}
+
+.legend{
+    margin-top:20px;
+
+    display:grid;
+
+    grid-template-columns:1fr 1fr;
+
+    gap:8px 20px;
+
+    font-size:10px;
+}
+
+.legend-item{
+    display:flex;
+    align-items:center;
+    gap:6px;
+}
+
+.legend-dot{
+    width:9px;
+    height:9px;
+
+    border-radius:50%;
+}
+
+/* =========================================================
+   TABLE
+========================================================= */
+
+.table-panel{
+    margin-top:16px;
+}
+
+.table-wrapper{
+    overflow:auto;
+}
+
+.data-table{
+    width:100%;
+
+    border-collapse:collapse;
+
+    font-size:11px;
+}
+
+.data-table th{
+    background:#f2f6f9;
+
+    color:#53616d;
+
+    font-weight:700;
+
+    text-align:left;
+}
+
+.data-table th,
+.data-table td{
+    padding:11px 13px;
+
+    border-bottom:1px solid #e8edf1;
+}
+
+.data-table tr:hover td{
+    background:#f8fbfd;
+}
+
+/* =========================================================
+   BIG MAP PAGE
+========================================================= */
+
+.map-page-container{
+    height:calc(100vh - 155px);
+
+    min-height:500px;
+
+    border-radius:12px;
+
+    overflow:hidden;
+
+    border:1px solid var(--border);
+
+    box-shadow:var(--shadow);
+
+    position:relative;
+}
+
+.map-page-container #map{
+    height:100%;
+}
+
+/* =========================================================
+   SETTINGS DRAWER
+========================================================= */
+
+.settings-overlay{
+    position:fixed;
+
+    inset:0;
+
+    background:rgba(0,0,0,.35);
+
+    z-index:11000;
+
+    display:none;
+}
+
+.settings-overlay.show{
+    display:block;
+}
+
+.settings{
+    position:absolute;
+
+    top:0;
+    right:0;
+    bottom:0;
+
+    width:330px;
+
+    background:white;
+
+    box-shadow:-8px 0 25px rgba(0,0,0,.18);
+
+    padding:22px;
+
+    overflow:auto;
+}
+
+.settings-title{
+    display:flex;
+
+    align-items:center;
+    justify-content:space-between;
+
+    margin-bottom:20px;
+}
+
+.settings-title h3{
+    margin:0;
+
+    font-size:18px;
+}
+
+.close-settings{
+    border:none;
+
+    background:#f0f3f5;
+
+    width:35px;
+    height:35px;
+
+    border-radius:8px;
+
+    cursor:pointer;
+}
+
+.setting-section{
+    margin-bottom:24px;
+}
+
+.setting-section h4{
+    margin:0 0 10px;
+
+    font-size:11px;
+
+    text-transform:uppercase;
+
+    color:#8a969f;
+
+    letter-spacing:.7px;
+}
+
+.setting-row{
+    display:flex;
+
+    align-items:center;
+    justify-content:space-between;
+
+    padding:12px 0;
+
+    border-bottom:1px solid #edf0f2;
+
+    font-size:13px;
+}
+
+.setting-row button{
+    border:none;
+
+    background:#e9f3f8;
+
+    color:#0879b6;
+
+    padding:7px 11px;
+
+    border-radius:6px;
+
+    cursor:pointer;
+}
+
+.toggle{
+    width:42px;
+    height:22px;
+
+    background:#ccd5dc;
+
+    border-radius:20px;
+
+    position:relative;
+
+    cursor:pointer;
+}
+
+.toggle::after{
+    content:"";
+
+    width:16px;
+    height:16px;
+
+    background:white;
+
+    border-radius:50%;
+
+    position:absolute;
+
+    top:3px;
+    left:3px;
+
+    transition:.2s;
+}
+
+.toggle.active{
+    background:#1687c9;
+}
+
+.toggle.active::after{
+    left:23px;
+}
+
+/* =========================================================
+   SEARCH
+========================================================= */
+
+.search-box{
+    display:flex;
+
+    align-items:center;
+
+    background:white;
+
+    border:1px solid #dce4e9;
+
+    border-radius:8px;
+
+    padding:0 10px;
+
+    width:240px;
+}
+
+.search-box i{
+    color:#8c99a4;
+}
+
+.search-box input{
+    width:100%;
+
+    border:none;
+    outline:none;
+
+    padding:9px;
+
+    font-size:12px;
+}
+
+/* =========================================================
+   NOTIFICATION
+========================================================= */
+
+.notification{
+    position:fixed;
+
+    right:25px;
+    bottom:25px;
+
+    background:#123f60;
+
+    color:white;
+
+    padding:13px 18px;
+
+    border-radius:8px;
+
+    box-shadow:0 8px 25px rgba(0,0,0,.2);
+
+    font-size:12px;
+
+    opacity:0;
+
+    transform:translateY(20px);
+
+    transition:.3s;
+
+    z-index:15000;
+}
+
+.notification.show{
+    opacity:1;
+    transform:translateY(0);
+}
+
+/* =========================================================
+   DARK MODE
+========================================================= */
+
+body.dark{
+    --bg:#101820;
+    --card:#18242e;
+    --text:#e8eef2;
+    --muted:#9eabb5;
+    --border:#293844;
+}
+
+body.dark .panel,
+body.dark .stat-card{
+    box-shadow:0 4px 16px rgba(0,0,0,.25);
+}
+
+body.dark .data-table th{
+    background:#202f3a;
+}
+
+body.dark .data-table tr:hover td{
+    background:#1d2a34;
+}
+
+body.dark .settings{
+    background:#18242e;
+    color:#e8eef2;
+}
+
+body.dark .settings .close-settings{
+    background:#25343f;
+    color:white;
+}
+
+body.dark .setting-row{
+    border-color:#293844;
+}
+
+body.dark .donut::after{
+    background:#18242e;
+}
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media(max-width:1100px){
+
+    .stats{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .dashboard-grid{
+        grid-template-columns:1fr 1fr;
+    }
+
+}
+
+@media(max-width:750px){
+
+    :root{
+        --sidebar:0px;
+    }
+
+    .brand{
+        width:auto;
+        padding:0 12px;
+    }
+
+    .brand-text{
+        display:none;
+    }
+
+    .header-title{
+        font-size:13px;
+        padding-left:10px;
+    }
+
+    .sidebar{
+        width:250px;
+        transform:translateX(-100%);
+    }
+
+    .sidebar.mobile-show{
+        transform:translateX(0);
+    }
+
+    .main,
+    .main.expanded{
+        left:0;
+    }
+
+    .stats{
+        grid-template-columns:1fr;
+    }
+
+    .dashboard-grid{
+        grid-template-columns:1fr;
+    }
+
+    .map-panel{
+        grid-column:span 1;
+    }
+
+    .search-box{
+        display:none;
+    }
+
+    .settings{
+        width:90%;
+    }
+}
+
+</style>
+</head>
+
+
+<body>
+
+<div class="app">
+
+<!-- =====================================================
+     TOP HEADER
+===================================================== -->
+
+<header class="topbar">
+
+    <div class="brand">
+
+        <div class="brand-icon">
+            <i class="fas fa-map-marked-alt"></i>
+        </div>
+
+        <div class="brand-text">
+            WEB GIS<br>
+            IPoh 2025
+        </div>
+
+    </div>
+
+    <div class="header-title">
+        SISTEM WEB GIS JENAYAH PECAH RUMAH DI IPOH TAHUN 2025
+    </div>
+
+    <div class="header-actions">
+
+        <div class="search-box">
+            <i class="fas fa-search"></i>
+            <input
+                type="text"
+                id="searchInput"
+                placeholder="Cari kawasan...">
+        </div>
+
+        <button
+            class="header-btn"
+            title="Notifikasi"
+            onclick="showNotification('Tiada notifikasi baharu')">
+
+            <i class="fas fa-bell"></i>
+
+        </button>
+
+        <!-- GARIS TIGA -->
+        <button
+            class="header-btn"
+            title="Settings"
+            onclick="openSettings()">
+
+            <i class="fas fa-bars"></i>
+
+        </button>
+
+    </div>
+
+</header>
+
+
+<!-- =====================================================
+     SIDEBAR
+===================================================== -->
+
+<aside class="sidebar" id="sidebar">
+
+    <div class="sidebar-menu">
+
+        <div class="menu-label">
+            Menu Utama
+        </div>
+
+        <div
+            class="menu-item active"
+            onclick="showPage('dashboard',this)">
+
+            <div class="menu-icon">
+                <i class="fas fa-th-large"></i>
+            </div>
+
+            <div class="menu-text">
+                Dashboard
+            </div>
+
+        </div>
+
+
+        <div
+            class="menu-item"
+            onclick="showPage('map-page',this)">
+
+            <div class="menu-icon">
+                <i class="fas fa-map"></i>
+            </div>
+
+            <div class="menu-text">
+                Peta Taburan
+            </div>
+
+        </div>
+
+
+        <div
+            class="menu-item"
+            onclick="showPage('trend-page',this)">
+
+            <div class="menu-icon">
+                <i class="fas fa-chart-line"></i>
+            </div>
+
+            <div class="menu-text">
+                Trend Bulanan
+            </div>
+
+        </div>
+
+
+        <div
+            class="menu-item"
+            onclick="showPage('jenis-page',this)">
+
+            <div class="menu-icon">
+                <i class="fas fa-store"></i>
+            </div>
+
+            <div class="menu-text">
+                Jenis Premis
+            </div>
+
+        </div>
+
+
+        <div
+            class="menu-item"
+            onclick="showPage('jadual-page',this)">
+
+            <div class="menu-icon">
+                <i class="fas fa-table"></i>
+            </div>
+
+            <div class="menu-text">
+                Jadual Statistik
+            </div>
+
+        </div>
+
+
+        <div
+            class="menu-item"
+            onclick="showPage('laporan-page',this)">
+
+            <div class="menu-icon">
+                <i class="fas fa-file-alt"></i>
+            </div>
+
+            <div class="menu-text">
+                Laporan
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="sidebar-footer">
+        Web GIS v1.0<br>
+        © 2025
+    </div>
+
+</aside>
+
+
+<!-- =====================================================
+     MAIN
+===================================================== -->
+
+<main class="main" id="main">
+
+
+<!-- =====================================================
+     DASHBOARD
+===================================================== -->
+
+<section
+    class="page active"
+    id="dashboard">
+
+    <div class="page-header">
+
+        <div>
+            <h1 class="page-title">
+                Dashboard
+            </h1>
+
+            <div class="page-subtitle">
+                Ringkasan statistik jenayah pecah rumah di Ipoh
             </div>
         </div>
-        <script src="resources/qgis2web_expressions.js"></script>
-        <script src="./resources/functions.js"></script>
-        <script src="./resources/ol.js"></script>
-        <script src="./resources/ol-layerswitcher.js"></script>
-        <script src="resources/photon-geocoder-autocomplete.min.js"></script>
-        <script src="resources/olms.js"></script>
-        <script src="layers/mukimclipped_1.js"></script><script src="layers/parlimenpeninsular_2018_parlimen_2.js"></script><script src="layers/landuse3landuse_residential_3.js"></script><script src="layers/landuse2landuse_residential_4.js"></script><script src="layers/landuse1landuse_residential_5.js"></script><script src="layers/balai_polis__6.js"></script>
-        <script src="styles/mukimclipped_1_style.js"></script><script src="styles/parlimenpeninsular_2018_parlimen_2_style.js"></script><script src="styles/landuse3landuse_residential_3_style.js"></script><script src="styles/landuse2landuse_residential_4_style.js"></script><script src="styles/landuse1landuse_residential_5_style.js"></script><script src="styles/balai_polis__6_style.js"></script>
-        <script src="./layers/layers.js" type="text/javascript"></script> 
-        <script src="./resources/Autolinker.min.js"></script>
-        <script src="./resources/qgis2web.js"></script>        
-    </body>
+
+        <button
+            class="panel-action"
+            onclick="showNotification('Data dashboard telah dikemas kini')">
+
+            <i class="fas fa-sync-alt"></i>
+            Kemas Kini
+
+        </button>
+
+    </div>
+
+
+    <!-- STATISTICS -->
+
+    <div class="stats">
+
+        <div class="stat-card">
+
+            <div class="stat-top">
+
+                <div>
+                    <div class="stat-label">
+                        JUMLAH KESELURUHAN
+                    </div>
+
+                    <div class="stat-number">
+                        718
+                    </div>
+
+                    <div class="stat-label">
+                        KES
+                    </div>
+                </div>
+
+                <div class="stat-icon">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+
+            </div>
+
+            <div class="stat-change">
+                <i class="fas fa-chart-line"></i>
+                Jumlah keseluruhan
+            </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-top">
+
+                <div>
+                    <div class="stat-label">
+                        RUMAH
+                    </div>
+
+                    <div class="stat-number">
+                        648
+                    </div>
+
+                    <div class="stat-label">
+                        KES
+                    </div>
+                </div>
+
+                <div class="stat-icon">
+                    <i class="fas fa-home"></i>
+                </div>
+
+            </div>
+
+            <div class="stat-change">
+                <i class="fas fa-arrow-up"></i>
+                Kategori utama
+            </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-top">
+
+                <div>
+                    <div class="stat-label">
+                        KEDAI
+                    </div>
+
+                    <div class="stat-number">
+                        130
+                    </div>
+
+                    <div class="stat-label">
+                        KES
+                    </div>
+                </div>
+
+                <div class="stat-icon">
+                    <i class="fas fa-store"></i>
+                </div>
+
+            </div>
+
+            <div class="stat-change">
+                <i class="fas fa-chart-bar"></i>
+                Analisis premis
+            </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-top">
+
+                <div>
+                    <div class="stat-label">
+                        MASJID / SURAU / TOKONG
+                    </div>
+
+                    <div class="stat-number">
+                        9
+                    </div>
+
+                    <div class="stat-label">
+                        KES
+                    </div>
+                </div>
+
+                <div class="stat-icon">
+                    <i class="fas fa-place-of-worship"></i>
+                </div>
+
+            </div>
+
+            <div class="stat-change">
+                <i class="fas fa-info-circle"></i>
+                Data 2025
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- DASHBOARD PANELS -->
+
+    <div class="dashboard-grid">
+
+
+        <!-- MAP -->
+
+        <div class="panel map-panel">
+
+            <div class="panel-header">
+
+                <div class="panel-title">
+                    <i class="fas fa-map-marker-alt"></i>
+                    PETA TABURAN KES
+                </div>
+
+                <button
+                    class="panel-action"
+                    onclick="showPageById('map-page')">
+
+                    Lihat Peta
+
+                </button>
+
+            </div>
+
+            <div class="map-dashboard">
+
+                <div id="map"></div>
+
+            </div>
+
+        </div>
+
+
+        <!-- TREND -->
+
+        <div class="panel">
+
+            <div class="panel-header">
+
+                <div class="panel-title">
+                    TREND BULANAN (2025)
+                </div>
+
+                <button
+                    class="panel-action"
+                    onclick="showPageById('trend-page')">
+
+                    Detail
+
+                </button>
+
+            </div>
+
+            <div class="chart-container">
+
+                <div class="chart">
+
+                    <div class="bar" style="height:72%">
+                        <strong>69</strong>
+                        <span>JAN</span>
+                    </div>
+
+                    <div class="bar" style="height:66%">
+                        <strong>65</strong>
+                        <span>FEB</span>
+                    </div>
+
+                    <div class="bar" style="height:53%">
+                        <strong>52</strong>
+                        <span>MAC</span>
+                    </div>
+
+                    <div class="bar" style="height:67%">
+                        <strong>64</strong>
+                        <span>APR</span>
+                    </div>
+
+                    <div class="bar" style="height:59%">
+                        <strong>58</strong>
+                        <span>MEI</span>
+                    </div>
+
+                    <div class="bar" style="height:52%">
+                        <strong>51</strong>
+                        <span>JUN</span>
+                    </div>
+
+                    <div class="bar" style="height:40%">
+                        <strong>39</strong>
+                        <span>JUL</span>
+                    </div>
+
+                    <div class="bar" style="height:70%">
+                        <strong>68</strong>
+                        <span>OGOS</span>
+                    </div>
+
+                    <div class="bar" style="height:45%">
+                        <strong>44</strong>
+                        <span>SEP</span>
+                    </div>
+
+                    <div class="bar" style="height:42%">
+                        <strong>41</strong>
+                        <span>OKT</span>
+                    </div>
+
+                    <div class="bar" style="height:32%">
+                        <strong>31</strong>
+                        <span>NOV</span>
+                    </div>
+
+                    <div class="bar" style="height:22%">
+                        <strong>22</strong>
+                        <span>DIS</span>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- DONUT -->
+
+        <div class="panel">
+
+            <div class="panel-header">
+
+                <div class="panel-title">
+                    KES MENGIKUT JENIS PREMIS
+                </div>
+
+                <button
+                    class="panel-action"
+                    onclick="showPageById('jenis-page')">
+
+                    Detail
+
+                </button>
+
+            </div>
+
+            <div class="donut-wrap">
+
+                <div class="donut">
+
+                    <div class="donut-center">
+                        718
+                    </div>
+
+                </div>
+
+                <div class="legend">
+
+                    <div class="legend-item">
+                        <span
+                            class="legend-dot"
+                            style="background:#2586c1">
+                        </span>
+                        Rumah
+                    </div>
+
+                    <div class="legend-item">
+                        <span
+                            class="legend-dot"
+                            style="background:#e8a23a">
+                        </span>
+                        Kedai
+                    </div>
+
+                    <div class="legend-item">
+                        <span
+                            class="legend-dot"
+                            style="background:#55a868">
+                        </span>
+                        Masjid
+                    </div>
+
+                    <div class="legend-item">
+                        <span
+                            class="legend-dot"
+                            style="background:#c64e4e">
+                        </span>
+                        Lain-lain
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- TABLE -->
+
+    <div class="panel table-panel">
+
+        <div class="panel-header">
+
+            <div class="panel-title">
+                JADUAL STATISTIK KES PECAH RUMAH 2025
+            </div>
+
+            <button
+                class="panel-action"
+                onclick="showPageById('jadual-page')">
+
+                Lihat Semua
+
+            </button>
+
+        </div>
+
+        <div class="table-wrapper">
+
+            <table class="data-table">
+
+                <thead>
+
+                    <tr>
+                        <th>BULAN</th>
+                        <th>JUMLAH KES</th>
+                        <th>RUMAH</th>
+                        <th>KEDAI</th>
+                        <th>MASJID/SURAU/TOKONG</th>
+                        <th>LAIN-LAIN</th>
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    <tr>
+                        <td>JANUARI</td>
+                        <td>69</td>
+                        <td>45</td>
+                        <td>14</td>
+                        <td>0</td>
+                        <td>10</td>
+                    </tr>
+
+                    <tr>
+                        <td>FEBRUARI</td>
+                        <td>65</td>
+                        <td>50</td>
+                        <td>5</td>
+                        <td>0</td>
+                        <td>10</td>
+                    </tr>
+
+                    <tr>
+                        <td>MAC</td>
+                        <td>52</td>
+                        <td>43</td>
+                        <td>9</td>
+                        <td>0</td>
+                        <td>0</td>
+                    </tr>
+
+                    <tr>
+                        <td>APRIL</td>
+                        <td>64</td>
+                        <td>64</td>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>1</td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     MAP PAGE
+===================================================== -->
+
+<section
+    class="page"
+    id="map-page">
+
+    <div class="page-header">
+
+        <div>
+            <h1 class="page-title">
+                Peta Taburan
+            </h1>
+
+            <div class="page-subtitle">
+                Peta interaktif taburan kes pecah rumah
+            </div>
+        </div>
+
+        <button
+            class="panel-action"
+            onclick="resetMap()">
+
+            <i class="fas fa-sync"></i>
+            Reset Peta
+
+        </button>
+
+    </div>
+
+    <div class="map-page-container">
+
+        <!-- MAP QGIS2WEB -->
+        <div id="map"></div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     TREND PAGE
+===================================================== -->
+
+<section
+    class="page"
+    id="trend-page">
+
+    <div class="page-header">
+
+        <div>
+            <h1 class="page-title">
+                Trend Bulanan
+            </h1>
+
+            <div class="page-subtitle">
+                Perubahan jumlah kes mengikut bulan bagi tahun 2025
+            </div>
+        </div>
+
+    </div>
+
+    <div class="panel">
+
+        <div class="panel-header">
+            <div class="panel-title">
+                Trend Kes Pecah Rumah 2025
+            </div>
+        </div>
+
+        <div class="chart-container"
+             style="height:500px">
+
+            <div class="chart">
+
+                <div class="bar" style="height:72%">
+                    <strong>69</strong>
+                    <span>JAN</span>
+                </div>
+
+                <div class="bar" style="height:66%">
+                    <strong>65</strong>
+                    <span>FEB</span>
+                </div>
+
+                <div class="bar" style="height:53%">
+                    <strong>52</strong>
+                    <span>MAC</span>
+                </div>
+
+                <div class="bar" style="height:67%">
+                    <strong>64</strong>
+                    <span>APR</span>
+                </div>
+
+                <div class="bar" style="height:59%">
+                    <strong>58</strong>
+                    <span>MEI</span>
+                </div>
+
+                <div class="bar" style="height:52%">
+                    <strong>51</strong>
+                    <span>JUN</span>
+                </div>
+
+                <div class="bar" style="height:40%">
+                    <strong>39</strong>
+                    <span>JUL</span>
+                </div>
+
+                <div class="bar" style="height:70%">
+                    <strong>68</strong>
+                    <span>OGOS</span>
+                </div>
+
+                <div class="bar" style="height:45%">
+                    <strong>44</strong>
+                    <span>SEP</span>
+                </div>
+
+                <div class="bar" style="height:42%">
+                    <strong>41</strong>
+                    <span>OKT</span>
+                </div>
+
+                <div class="bar" style="height:32%">
+                    <strong>31</strong>
+                    <span>NOV</span>
+                </div>
+
+                <div class="bar" style="height:22%">
+                    <strong>22</strong>
+                    <span>DIS</span>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     JENIS PREMIS
+===================================================== -->
+
+<section
+    class="page"
+    id="jenis-page">
+
+    <div class="page-header">
+
+        <div>
+            <h1 class="page-title">
+                Jenis Premis
+            </h1>
+
+            <div class="page-subtitle">
+                Analisis kes mengikut kategori premis
+            </div>
+        </div>
+
+    </div>
+
+    <div class="stats">
+
+        <div class="stat-card">
+            <div class="stat-label">RUMAH</div>
+            <div class="stat-number">648</div>
+            <div class="stat-label">90.3%</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-label">KEDAI</div>
+            <div class="stat-number">130</div>
+            <div class="stat-label">18.1%</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-label">MASJID/SURAU/TOKONG</div>
+            <div class="stat-number">9</div>
+            <div class="stat-label">1.3%</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-label">LAIN-LAIN</div>
+            <div class="stat-number">53</div>
+            <div class="stat-label">7.4%</div>
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     JADUAL
+===================================================== -->
+
+<section
+    class="page"
+    id="jadual-page">
+
+    <div class="page-header">
+
+        <div>
+            <h1 class="page-title">
+                Jadual Statistik
+            </h1>
+
+            <div class="page-subtitle">
+                Statistik bulanan kes pecah rumah tahun 2025
+            </div>
+        </div>
+
+        <button
+            class="panel-action"
+            onclick="exportTable()">
+
+            <i class="fas fa-download"></i>
+            Export CSV
+
+        </button>
+
+    </div>
+
+    <div class="panel">
+
+        <div class="table-wrapper">
+
+            <table class="data-table" id="statisticsTable">
+
+                <thead>
+
+                    <tr>
+                        <th>BULAN</th>
+                        <th>JUMLAH KES</th>
+                        <th>RUMAH</th>
+                        <th>KEDAI</th>
+                        <th>MASJID/SURAU/TOKONG</th>
+                        <th>LAIN-LAIN</th>
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    <tr>
+                        <td>JANUARI</td>
+                        <td>69</td>
+                        <td>45</td>
+                        <td>14</td>
+                        <td>0</td>
+                        <td>10</td>
+                    </tr>
+
+                    <tr>
+                        <td>FEBRUARI</td>
+                        <td>65</td>
+                        <td>50</td>
+                        <td>5</td>
+                        <td>0</td>
+                        <td>10</td>
+                    </tr>
+
+                    <tr>
+                        <td>MAC</td>
+                        <td>52</td>
+                        <td>43</td>
+                        <td>9</td>
+                        <td>0</td>
+                        <td>0</td>
+                    </tr>
+
+                    <tr>
+                        <td>APRIL</td>
+                        <td>64</td>
+                        <td>64</td>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>1</td>
+                    </tr>
+
+                    <tr>
+                        <td>MEI</td>
+                        <td>58</td>
+                        <td>45</td>
+                        <td>8</td>
+                        <td>1</td>
+                        <td>4</td>
+                    </tr>
+
+                    <tr>
+                        <td>JUN</td>
+                        <td>51</td>
+                        <td>40</td>
+                        <td>7</td>
+                        <td>1</td>
+                        <td>3</td>
+                    </tr>
+
+                    <tr>
+                        <td>JULAI</td>
+                        <td>39</td>
+                        <td>31</td>
+                        <td>5</td>
+                        <td>1</td>
+                        <td>2</td>
+                    </tr>
+
+                    <tr>
+                        <td>OGOS</td>
+                        <td>68</td>
+                        <td>55</td>
+                        <td>9</td>
+                        <td>1</td>
+                        <td>3</td>
+                    </tr>
+
+                    <tr>
+                        <td>SEPTEMBER</td>
+                        <td>44</td>
+                        <td>38</td>
+                        <td>4</td>
+                        <td>1</td>
+                        <td>1</td>
+                    </tr>
+
+                    <tr>
+                        <td>OKTOBER</td>
+                        <td>41</td>
+                        <td>34</td>
+                        <td>5</td>
+                        <td>1</td>
+                        <td>1</td>
+                    </tr>
+
+                    <tr>
+                        <td>NOVEMBER</td>
+                        <td>31</td>
+                        <td>25</td>
+                        <td>4</td>
+                        <td>0</td>
+                        <td>2</td>
+                    </tr>
+
+                    <tr>
+                        <td>DISEMBER</td>
+                        <td>22</td>
+                        <td>18</td>
+                        <td>3</td>
+                        <td>1</td>
+                        <td>0</td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     LAPORAN
+===================================================== -->
+
+<section
+    class="page"
+    id="laporan-page">
+
+    <div class="page-header">
+
+        <div>
+            <h1 class="page-title">
+                Laporan
+            </h1>
+
+            <div class="page-subtitle">
+                Ringkasan analisis Web GIS
+            </div>
+        </div>
+
+    </div>
+
+    <div class="stats">
+
+        <div class="stat-card">
+            <div class="stat-label">
+                JUMLAH KES
+            </div>
+
+            <div class="stat-number">
+                718
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-label">
+                PREMIS TERTINGGI
+            </div>
+
+            <div class="stat-number">
+                Rumah
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-label">
+                KES TERTINGGI BULANAN
+            </div>
+
+            <div class="stat-number">
+                69
+            </div>
+        </div>
+
+    </div>
+
+    <div class="panel">
+
+        <div class="panel-header">
+
+            <div class="panel-title">
+                Ringkasan Sistem
+            </div>
+
+            <button
+                class="panel-action"
+                onclick="window.print()">
+
+                <i class="fas fa-print"></i>
+                Cetak
+
+            </button>
+
+        </div>
+
+        <div class="panel-body">
+
+            <p>
+                Sistem Web GIS ini memaparkan taburan dan statistik
+                kes pecah rumah di kawasan Ipoh bagi tahun 2025.
+                Sistem menggabungkan maklumat spatial, statistik
+                bulanan dan kategori premis dalam satu paparan
+                interaktif.
+            </p>
+
+            <p>
+                Berdasarkan data yang dipaparkan, kategori rumah
+                merupakan kategori dengan jumlah kes tertinggi.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+</main>
+
+
+<!-- =====================================================
+     SETTINGS OVERLAY
+===================================================== -->
+
+<div
+    class="settings-overlay"
+    id="settingsOverlay"
+    onclick="closeSettings(event)">
+
+    <div
+        class="settings"
+        onclick="event.stopPropagation()">
+
+        <div class="settings-title">
+
+            <h3>
+                <i class="fas fa-cog"></i>
+                Tetapan
+            </h3>
+
+            <button
+                class="close-settings"
+                onclick="closeSettings()">
+
+                <i class="fas fa-times"></i>
+
+            </button>
+
+        </div>
+
+
+        <div class="setting-section">
+
+            <h4>
+                Paparan
+            </h4>
+
+            <div class="setting-row">
+
+                <span>
+                    Dark Mode
+                </span>
+
+                <div
+                    class="toggle"
+                    id="darkToggle"
+                    onclick="toggleDarkMode()">
+                </div>
+
+            </div>
+
+
+            <div class="setting-row">
+
+                <span>
+                    Sidebar
+                </span>
+
+                <button onclick="toggleSidebar()">
+                    Collapse
+                </button>
+
+            </div>
+
+
+            <div class="setting-row">
+
+                <span>
+                    Fullscreen
+                </span>
+
+                <button onclick="toggleFullscreen()">
+                    <i class="fas fa-expand"></i>
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <div class="setting-section">
+
+            <h4>
+                Peta
+            </h4>
+
+            <div class="setting-row">
+
+                <span>
+                    Reset Peta
+                </span>
+
+                <button onclick="resetMap()">
+                    Reset
+                </button>
+
+            </div>
+
+
+            <div class="setting-row">
+
+                <span>
+                    Kawalan Layer
+                </span>
+
+                <button onclick="showNotification('Kawalan layer QGIS2Web tersedia pada peta')">
+                    Buka
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <div class="setting-section">
+
+            <h4>
+                Sistem
+            </h4>
+
+            <div class="setting-row">
+
+                <span>
+                    Versi Sistem
+                </span>
+
+                <span>
+                    v1.0
+                </span>
+
+            </div>
+
+
+            <div class="setting-row">
+
+                <span>
+                    Bahasa
+                </span>
+
+                <button>
+                    Bahasa Melayu
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     NOTIFICATION
+===================================================== -->
+
+<div
+    class="notification"
+    id="notification">
+</div>
+
+
+<!-- =====================================================
+     QGIS2WEB SCRIPTS
+===================================================== -->
+
+<script src="resources/qgis2web_expressions.js"></script>
+<script src="./resources/functions.js"></script>
+<script src="./resources/ol.js"></script>
+<script src="./resources/ol-layerswitcher.js"></script>
+<script src="resources/photon-geocoder-autocomplete.min.js"></script>
+<script src="resources/olms.js"></script>
+
+
+<script src="layers/mukimclipped_1.js"></script>
+<script src="layers/parlimenpeninsular_2018_parlimen_2.js"></script>
+<script src="layers/landuse3landuse_residential_3.js"></script>
+<script src="layers/landuse2landuse_residential_4.js"></script>
+<script src="layers/landuse1landuse_residential_5.js"></script>
+<script src="layers/balai_polis__6.js"></script>
+
+
+<script src="styles/mukimclipped_1_style.js"></script>
+<script src="styles/parlimenpeninsular_2018_parlimen_2_style.js"></script>
+<script src="styles/landuse3landuse_residential_3_style.js"></script>
+<script src="styles/landuse2landuse_residential_4_style.js"></script>
+<script src="styles/landuse1landuse_residential_5_style.js"></script>
+<script src="styles/balai_polis__6_style.js"></script>
+
+
+<script src="./layers/layers.js"></script>
+
+<script src="./resources/Autolinker.min.js"></script>
+<script src="./resources/qgis2web.js"></script>
+
+
+<!-- =====================================================
+     WEBSITE FUNCTIONS
+===================================================== -->
+
+<script>
+
+/* =====================================================
+   NAVIGATION
+===================================================== */
+
+function showPage(pageId, element){
+
+    document
+        .querySelectorAll(".page")
+        .forEach(page => {
+            page.classList.remove("active");
+        });
+
+    const page =
+        document.getElementById(pageId);
+
+    if(page){
+        page.classList.add("active");
+    }
+
+    document
+        .querySelectorAll(".menu-item")
+        .forEach(item => {
+            item.classList.remove("active");
+        });
+
+    if(element){
+        element.classList.add("active");
+    }
+
+    /*
+       OpenLayers perlu resize semula apabila
+       peta bertukar daripada hidden kepada visible.
+    */
+
+    setTimeout(function(){
+
+        if(typeof map !== "undefined" && map){
+
+            map.updateSize();
+
+        }
+
+    },300);
+}
+
+
+function showPageById(pageId){
+
+    const menu =
+        document.querySelector(
+            '.menu-item[onclick*="' + pageId + '"]'
+        );
+
+    showPage(pageId,menu);
+
+}
+
+
+/* =====================================================
+   SIDEBAR
+===================================================== */
+
+function toggleSidebar(){
+
+    const sidebar =
+        document.getElementById("sidebar");
+
+    const main =
+        document.getElementById("main");
+
+    if(window.innerWidth <= 750){
+
+        sidebar.classList.toggle("mobile-show");
+
+    }else{
+
+        sidebar.classList.toggle("collapsed");
+
+        main.classList.toggle("expanded");
+
+    }
+
+}
+
+
+/* =====================================================
+   SETTINGS
+===================================================== */
+
+function openSettings(){
+
+    document
+        .getElementById("settingsOverlay")
+        .classList.add("show");
+
+}
+
+
+function closeSettings(event){
+
+    if(
+        !event ||
+        event.target.id === "settingsOverlay"
+    ){
+
+        document
+            .getElementById("settingsOverlay")
+            .classList.remove("show");
+
+    }
+
+}
+
+
+/* =====================================================
+   DARK MODE
+===================================================== */
+
+function toggleDarkMode(){
+
+    document.body.classList.toggle("dark");
+
+    const toggle =
+        document.getElementById("darkToggle");
+
+    toggle.classList.toggle("active");
+
+    if(document.body.classList.contains("dark")){
+
+        localStorage.setItem(
+            "webgis-theme",
+            "dark"
+        );
+
+        showNotification("Dark Mode diaktifkan");
+
+    }else{
+
+        localStorage.setItem(
+            "webgis-theme",
+            "light"
+        );
+
+        showNotification("Light Mode diaktifkan");
+
+    }
+
+}
+
+
+/* =====================================================
+   LOAD SAVED THEME
+===================================================== */
+
+window.addEventListener("DOMContentLoaded",function(){
+
+    if(
+        localStorage.getItem("webgis-theme")
+        === "dark"
+    ){
+
+        document.body.classList.add("dark");
+
+        document
+            .getElementById("darkToggle")
+            .classList.add("active");
+
+    }
+
+});
+
+
+/* =====================================================
+   FULLSCREEN
+===================================================== */
+
+function toggleFullscreen(){
+
+    if(!document.fullscreenElement){
+
+        document.documentElement
+            .requestFullscreen();
+
+        showNotification(
+            "Paparan fullscreen diaktifkan"
+        );
+
+    }else{
+
+        document.exitFullscreen();
+
+        showNotification(
+            "Fullscreen ditutup"
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   RESET MAP
+===================================================== */
+
+function resetMap(){
+
+    try{
+
+        if(typeof map !== "undefined" && map){
+
+            const view =
+                map.getView();
+
+            view.setZoom(11);
+
+            showNotification(
+                "Paparan peta telah direset"
+            );
+
+        }else{
+
+            showNotification(
+                "Peta sedang dimuatkan..."
+            );
+
+        }
+
+    }catch(error){
+
+        showNotification(
+            "Tidak dapat reset peta"
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   NOTIFICATION
+===================================================== */
+
+let notificationTimer;
+
+function showNotification(message){
+
+    const box =
+        document.getElementById(
+            "notification"
+        );
+
+    box.textContent = message;
+
+    box.classList.add("show");
+
+    clearTimeout(notificationTimer);
+
+    notificationTimer =
+        setTimeout(function(){
+
+            box.classList.remove("show");
+
+        },2500);
+
+}
+
+
+/* =====================================================
+   SEARCH
+===================================================== */
+
+document
+    .getElementById("searchInput")
+    .addEventListener(
+        "keydown",
+        function(event){
+
+            if(event.key === "Enter"){
+
+                const value =
+                    this.value.trim();
+
+                if(value){
+
+                    showNotification(
+                        "Mencari kawasan: " + value
+                    );
+
+                }
+
+            }
+
+        }
+    );
+
+
+/* =====================================================
+   EXPORT TABLE
+===================================================== */
+
+function exportTable(){
+
+    const table =
+        document.getElementById(
+            "statisticsTable"
+        );
+
+    let csv = [];
+
+    const rows =
+        table.querySelectorAll("tr");
+
+    rows.forEach(function(row){
+
+        const cols =
+            row.querySelectorAll("th,td");
+
+        const data =
+            Array.from(cols)
+                .map(function(col){
+
+                    return '"' +
+                        col.innerText
+                        .replace(/"/g,'""')
+                        + '"';
+
+                });
+
+        csv.push(data.join(","));
+
+    });
+
+    const blob =
+        new Blob(
+            [csv.join("\n")],
+            {
+                type:"text/csv;charset=utf-8;"
+            }
+        );
+
+    const url =
+        URL.createObjectURL(blob);
+
+    const link =
+        document.createElement("a");
+
+    link.href = url;
+
+    link.download =
+        "statistik_pecah_rumah_2025.csv";
+
+    link.click();
+
+    URL.revokeObjectURL(url);
+
+    showNotification(
+        "Fail CSV berjaya dijana"
+    );
+
+}
+
+</script>
+
+</body>
 </html>
