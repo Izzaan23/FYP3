@@ -2368,7 +2368,7 @@ body.dark .complaint-status{background:#1c3528;}
 
             <h3>
                 <i class="fas fa-cog"></i>
-                Tetapan
+                <span data-i18n="settings">Tetapan</span>
             </h3>
 
             <button
@@ -2384,9 +2384,7 @@ body.dark .complaint-status{background:#1c3528;}
 
         <div class="setting-section">
 
-            <h4>
-                Paparan
-            </h4>
+            <h4 data-i18n="display">Paparan</h4>
 
             <div class="setting-row">
 
@@ -2409,9 +2407,7 @@ body.dark .complaint-status{background:#1c3528;}
                     Sidebar
                 </span>
 
-                <button onclick="toggleSidebar()">
-                    Collapse
-                </button>
+                <button onclick="toggleSidebar()" data-i18n="collapse">Collapse</button>
 
             </div>
 
@@ -2433,9 +2429,7 @@ body.dark .complaint-status{background:#1c3528;}
 
         <div class="setting-section">
 
-            <h4>
-                Peta
-            </h4>
+            <h4 data-i18n="mapSection">Peta</h4>
 
             <div class="setting-row">
 
@@ -2443,9 +2437,7 @@ body.dark .complaint-status{background:#1c3528;}
                     Reset Peta
                 </span>
 
-                <button onclick="resetMap()">
-                    Reset
-                </button>
+                <button onclick="resetMap()" data-i18n="reset">Reset</button>
 
             </div>
 
@@ -2456,9 +2448,7 @@ body.dark .complaint-status{background:#1c3528;}
                     Kawalan Layer
                 </span>
 
-                <button onclick="showNotification('Kawalan layer QGIS2Web tersedia pada peta')">
-                    Buka
-                </button>
+                <button onclick="showNotification('Kawalan layer QGIS2Web tersedia pada peta')" data-i18n="open">Buka</button>
 
             </div>
 
@@ -2467,9 +2457,7 @@ body.dark .complaint-status{background:#1c3528;}
 
         <div class="setting-section">
 
-            <h4>
-                Sistem
-            </h4>
+            <h4 data-i18n="systemSection">Sistem</h4>
 
             <div class="setting-row">
 
@@ -2565,9 +2553,9 @@ window.addEventListener("DOMContentLoaded",function(){
    MULTI-LANGUAGE
 ===================================================== */
 const translations={
-ms:{appTitle:"SISTEM WEB GIS JENAYAH PECAH RUMAH DI IPOH TAHUN 2025",dashboard:"Dashboard",map:"Peta Taburan",trend:"Trend Bulanan",premise:"Jenis Premis",table:"Jadual Statistik",reports:"Laporan",complaint:"Aduan Warga",settings:"Tetapan",language:"Bahasa",mainMenu:"Menu Utama",darkMode:"Dark Mode",sidebar:"Sidebar",fullscreen:"Fullscreen",resetMap:"Reset Peta",layerControl:"Kawalan Layer",systemVersion:"Versi Sistem",reportSubtitle:"Ringkasan analisis Web GIS",totalCases:"JUMLAH KES",highestPremise:"PREMIS TERTINGGI",highestMonthly:"KES TERTINGGI BULANAN",systemSummary:"Ringkasan Sistem",print:"Cetak",reportText1:"Sistem Web GIS ini memaparkan taburan dan statistik kes pecah rumah di kawasan Ipoh bagi tahun 2025. Sistem menggabungkan maklumat spatial, statistik bulanan dan kategori premis dalam satu paparan interaktif.",reportText2:"Berdasarkan data yang dipaparkan, kategori rumah merupakan kategori dengan jumlah kes tertinggi.",complaintTitle:"Aduan Warga Tempatan",complaintSubtitle:"Salurkan aduan berkaitan keselamatan dan kejadian pecah rumah di kawasan anda.",complaintForm:"Borang Aduan",name:"Nama",phone:"No. Telefon",email:"Email",category:"Kategori Aduan",location:"Lokasi Kejadian",details:"Butiran Aduan",photo:"Lampiran Gambar",photoHint:"Format gambar: JPG, PNG",complaintNotice:"Aduan ini direkodkan untuk tujuan pelaporan dan rujukan. Bagi kecemasan atau kejadian yang sedang berlaku, hubungi pihak berkuasa melalui saluran kecemasan yang sesuai.",guide:"Panduan Aduan",step1Title:"Kenal pasti lokasi",step1Text:"Nyatakan lokasi kejadian dengan jelas.",step2Title:"Terangkan kejadian",step2Text:"Berikan maklumat yang berkaitan dengan aduan.",step3Title:"Hantar aduan",step3Text:"Semak maklumat sebelum menghantar borang.",systemComplaint:"Sistem Aduan",systemReady:"Sedia menerima aduan",submitComplaint:"Hantar Aduan",reset:"Reset",catBreakin:"Kes Pecah Rumah",catSuspicious:"Aktiviti Mencurigakan",catSafety:"Keselamatan Kawasan",catInfrastructure:"Lampu / Infrastruktur",catOther:"Lain-lain"},
-en:{appTitle:"WEB GIS SYSTEM FOR HOUSEBREAKING CRIME IN IPOH 2025",dashboard:"Dashboard",map:"Distribution Map",trend:"Monthly Trend",premise:"Premise Type",table:"Statistics Table",reports:"Reports",complaint:"Citizen Complaint",settings:"Settings",language:"Language",mainMenu:"Main Menu",darkMode:"Dark Mode",sidebar:"Sidebar",fullscreen:"Fullscreen",resetMap:"Reset Map",layerControl:"Layer Control",systemVersion:"System Version",reportSubtitle:"Web GIS analysis summary",totalCases:"TOTAL CASES",highestPremise:"HIGHEST PREMISE",highestMonthly:"HIGHEST MONTHLY CASES",systemSummary:"System Summary",print:"Print",reportText1:"This Web GIS system displays the distribution and statistics of housebreaking cases in the Ipoh area for 2025. The system combines spatial information, monthly statistics and premise categories in one interactive dashboard.",reportText2:"Based on the displayed data, the house category has the highest number of cases.",complaintTitle:"Local Citizen Complaint",complaintSubtitle:"Submit complaints related to safety and housebreaking incidents in your area.",complaintForm:"Complaint Form",name:"Name",phone:"Phone Number",email:"Email",category:"Complaint Category",location:"Incident Location",details:"Complaint Details",photo:"Photo Attachment",photoHint:"Image format: JPG, PNG",complaintNotice:"This complaint is recorded for reporting and reference purposes. For emergencies or incidents in progress, contact the appropriate emergency authority.",guide:"Complaint Guide",step1Title:"Identify the location",step1Text:"State the incident location clearly.",step2Title:"Describe the incident",step2Text:"Provide relevant information about the complaint.",step3Title:"Submit the complaint",step3Text:"Review the information before submitting the form.",systemComplaint:"Complaint System",systemReady:"Ready to receive complaints",submitComplaint:"Submit Complaint",reset:"Reset",catBreakin:"Housebreaking Case",catSuspicious:"Suspicious Activity",catSafety:"Area Safety",catInfrastructure:"Lighting / Infrastructure",catOther:"Others"},
-zh:{appTitle:"怡保2025年破屋盗窃罪案 Web GIS 系统",dashboard:"仪表板",map:"案件分布地图",trend:"每月趋势",premise:"场所类型",table:"统计表",reports:"报告",complaint:"居民投诉",settings:"设置",language:"语言",mainMenu:"主菜单",darkMode:"深色模式",sidebar:"侧边栏",fullscreen:"全屏",resetMap:"重置地图",layerControl:"图层控制",systemVersion:"系统版本",reportSubtitle:"Web GIS 分析摘要",totalCases:"案件总数",highestPremise:"最高案件场所",highestMonthly:"每月最高案件数",systemSummary:"系统摘要",print:"打印",reportText1:"此 Web GIS 系统展示 2025 年怡保地区入屋盗窃案件的分布和统计数据。系统将空间信息、每月统计数据和场所类别整合在一个互动式仪表板中。",reportText2:"根据所显示的数据，住宅类别的案件数量最高。",complaintTitle:"居民投诉",complaintSubtitle:"提交有关您所在地区安全及入屋盗窃事件的投诉。",complaintForm:"投诉表格",name:"姓名",phone:"电话号码",email:"电子邮件",category:"投诉类别",location:"事件地点",details:"投诉详情",photo:"照片附件",photoHint:"图片格式：JPG、PNG",complaintNotice:"此投诉用于记录、报告和参考。如遇紧急情况或正在发生的事件，请联系适当的紧急机构。",guide:"投诉指南",step1Title:"确认地点",step1Text:"清楚注明事件发生地点。",step2Title:"说明事件",step2Text:"提供与投诉有关的资料。",step3Title:"提交投诉",step3Text:"提交表格前请检查资料。",systemComplaint:"投诉系统",systemReady:"准备接收投诉",submitComplaint:"提交投诉",reset:"重置",catBreakin:"入屋盗窃案件",catSuspicious:"可疑活动",catSafety:"地区安全",catInfrastructure:"照明 / 基础设施",catOther:"其他"}};
+ms:{appTitle:"SISTEM WEB GIS JENAYAH PECAH RUMAH DI IPOH TAHUN 2025",dashboard:"Dashboard",map:"Peta Taburan",trend:"Trend Bulanan",premise:"Jenis Premis",table:"Jadual Statistik",reports:"Laporan",complaint:"Aduan Warga",settings:"Tetapan",language:"Bahasa",mainMenu:"Menu Utama",display:"Paparan",mapSection:"Peta",systemSection:"Sistem",collapse:"Runtuhkan",open:"Buka",darkMode:"Dark Mode",sidebar:"Sidebar",fullscreen:"Fullscreen",resetMap:"Reset Peta",layerControl:"Kawalan Layer",systemVersion:"Versi Sistem",reportSubtitle:"Ringkasan analisis Web GIS",totalCases:"JUMLAH KES",highestPremise:"PREMIS TERTINGGI",highestMonthly:"KES TERTINGGI BULANAN",systemSummary:"Ringkasan Sistem",print:"Cetak",reportText1:"Sistem Web GIS ini memaparkan taburan dan statistik kes pecah rumah di kawasan Ipoh bagi tahun 2025. Sistem menggabungkan maklumat spatial, statistik bulanan dan kategori premis dalam satu paparan interaktif.",reportText2:"Berdasarkan data yang dipaparkan, kategori rumah merupakan kategori dengan jumlah kes tertinggi.",complaintTitle:"Aduan Warga Tempatan",complaintSubtitle:"Salurkan aduan berkaitan keselamatan dan kejadian pecah rumah di kawasan anda.",complaintForm:"Borang Aduan",name:"Nama",phone:"No. Telefon",email:"Email",category:"Kategori Aduan",location:"Lokasi Kejadian",details:"Butiran Aduan",photo:"Lampiran Gambar",photoHint:"Format gambar: JPG, PNG",complaintNotice:"Aduan ini direkodkan untuk tujuan pelaporan dan rujukan. Bagi kecemasan atau kejadian yang sedang berlaku, hubungi pihak berkuasa melalui saluran kecemasan yang sesuai.",guide:"Panduan Aduan",step1Title:"Kenal pasti lokasi",step1Text:"Nyatakan lokasi kejadian dengan jelas.",step2Title:"Terangkan kejadian",step2Text:"Berikan maklumat yang berkaitan dengan aduan.",step3Title:"Hantar aduan",step3Text:"Semak maklumat sebelum menghantar borang.",systemComplaint:"Sistem Aduan",systemReady:"Sedia menerima aduan",submitComplaint:"Hantar Aduan",reset:"Reset",catBreakin:"Kes Pecah Rumah",catSuspicious:"Aktiviti Mencurigakan",catSafety:"Keselamatan Kawasan",catInfrastructure:"Lampu / Infrastruktur",catOther:"Lain-lain"},
+en:{appTitle:"WEB GIS SYSTEM FOR HOUSEBREAKING CRIME IN IPOH 2025",dashboard:"Dashboard",map:"Distribution Map",trend:"Monthly Trend",premise:"Premise Type",table:"Statistics Table",reports:"Reports",complaint:"Citizen Complaint",settings:"Settings",language:"Language",mainMenu:"Main Menu",display:"Display",mapSection:"Map",systemSection:"System",collapse:"Collapse",open:"Open",darkMode:"Dark Mode",sidebar:"Sidebar",fullscreen:"Fullscreen",resetMap:"Reset Map",layerControl:"Layer Control",systemVersion:"System Version",reportSubtitle:"Web GIS analysis summary",totalCases:"TOTAL CASES",highestPremise:"HIGHEST PREMISE",highestMonthly:"HIGHEST MONTHLY CASES",systemSummary:"System Summary",print:"Print",reportText1:"This Web GIS system displays the distribution and statistics of housebreaking cases in the Ipoh area for 2025. The system combines spatial information, monthly statistics and premise categories in one interactive dashboard.",reportText2:"Based on the displayed data, the house category has the highest number of cases.",complaintTitle:"Local Citizen Complaint",complaintSubtitle:"Submit complaints related to safety and housebreaking incidents in your area.",complaintForm:"Complaint Form",name:"Name",phone:"Phone Number",email:"Email",category:"Complaint Category",location:"Incident Location",details:"Complaint Details",photo:"Photo Attachment",photoHint:"Image format: JPG, PNG",complaintNotice:"This complaint is recorded for reporting and reference purposes. For emergencies or incidents in progress, contact the appropriate emergency authority.",guide:"Complaint Guide",step1Title:"Identify the location",step1Text:"State the incident location clearly.",step2Title:"Describe the incident",step2Text:"Provide relevant information about the complaint.",step3Title:"Submit the complaint",step3Text:"Review the information before submitting the form.",systemComplaint:"Complaint System",systemReady:"Ready to receive complaints",submitComplaint:"Submit Complaint",reset:"Reset",catBreakin:"Housebreaking Case",catSuspicious:"Suspicious Activity",catSafety:"Area Safety",catInfrastructure:"Lighting / Infrastructure",catOther:"Others"},
+zh:{appTitle:"怡保2025年破屋盗窃罪案 Web GIS 系统",dashboard:"仪表板",map:"案件分布地图",trend:"每月趋势",premise:"场所类型",table:"统计表",reports:"报告",complaint:"居民投诉",settings:"设置",language:"语言",mainMenu:"主菜单",display:"显示",mapSection:"地图",systemSection:"系统",collapse:"收起",open:"打开",darkMode:"深色模式",sidebar:"侧边栏",fullscreen:"全屏",resetMap:"重置地图",layerControl:"图层控制",systemVersion:"系统版本",reportSubtitle:"Web GIS 分析摘要",totalCases:"案件总数",highestPremise:"最高案件场所",highestMonthly:"每月最高案件数",systemSummary:"系统摘要",print:"打印",reportText1:"此 Web GIS 系统展示 2025 年怡保地区入屋盗窃案件的分布和统计数据。系统将空间信息、每月统计数据和场所类别整合在一个互动式仪表板中。",reportText2:"根据所显示的数据，住宅类别的案件数量最高。",complaintTitle:"居民投诉",complaintSubtitle:"提交有关您所在地区安全及入屋盗窃事件的投诉。",complaintForm:"投诉表格",name:"姓名",phone:"电话号码",email:"电子邮件",category:"投诉类别",location:"事件地点",details:"投诉详情",photo:"照片附件",photoHint:"图片格式：JPG、PNG",complaintNotice:"此投诉用于记录、报告和参考。如遇紧急情况或正在发生的事件，请联系适当的紧急机构。",guide:"投诉指南",step1Title:"确认地点",step1Text:"清楚注明事件发生地点。",step2Title:"说明事件",step2Text:"提供与投诉有关的资料。",step3Title:"提交投诉",step3Text:"提交表格前请检查资料。",systemComplaint:"投诉系统",systemReady:"准备接收投诉",submitComplaint:"提交投诉",reset:"重置",catBreakin:"入屋盗窃案件",catSuspicious:"可疑活动",catSafety:"地区安全",catInfrastructure:"照明 / 基础设施",catOther:"其他"}};
 
 const uiTextTranslations={
     "Dashboard":["Dashboard","仪表板"],
