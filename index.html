@@ -1025,6 +1025,42 @@ body.dark .donut::after{
 }
 
 /* =========================================================
+   LANGUAGE + COMPLAINT
+========================================================= */
+.language-select{min-width:150px;border:1px solid var(--border);background:#fff;color:#34495e;padding:8px 10px;border-radius:7px;font-size:12px;outline:none;cursor:pointer;}
+body.dark .language-select{background:#25343f;color:#fff;border-color:#3b4c58;}
+.complaint-layout{display:grid;grid-template-columns:minmax(0,2fr) minmax(280px,1fr);gap:18px;}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.form-group{display:flex;flex-direction:column;}
+.form-group.full{grid-column:1 / -1;}
+.form-group label{font-size:12px;font-weight:600;color:#53616d;margin-bottom:7px;}
+body.dark .form-group label{color:#b9c5cc;}
+.form-group input,.form-group select,.form-group textarea{width:100%;border:1px solid #dce4e9;border-radius:8px;padding:11px 12px;outline:none;background:#fff;color:#263746;font-size:12px;transition:.2s;}
+.form-group textarea{resize:vertical;}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:#1687c9;box-shadow:0 0 0 3px rgba(22,135,201,.10);}
+.form-group small{margin-top:5px;font-size:10px;color:#8996a0;}
+body.dark .form-group input,body.dark .form-group select,body.dark .form-group textarea{background:#202f3a;color:#e8eef2;border-color:#3b4c58;}
+.complaint-notice{margin-top:20px;padding:13px;background:#eef7fb;border-left:4px solid #1687c9;border-radius:7px;display:flex;gap:10px;font-size:11px;line-height:1.5;color:#50616d;}
+body.dark .complaint-notice{background:#1d3441;color:#c8d3d9;}
+.complaint-notice i{color:#1687c9;margin-top:2px;}
+.form-actions{margin-top:20px;display:flex;justify-content:flex-end;gap:10px;}
+.btn-primary,.btn-secondary{border:none;border-radius:8px;padding:11px 17px;cursor:pointer;font-size:12px;font-weight:600;}
+.btn-primary{background:#1687c9;color:white;}
+.btn-primary:hover{background:#0e73ae;}
+.btn-secondary{background:#eef2f5;color:#52616d;}
+body.dark .btn-secondary{background:#25343f;color:#d8e2e8;}
+.info-step{display:flex;gap:12px;margin-bottom:20px;}
+.info-number{min-width:30px;width:30px;height:30px;border-radius:50%;background:#e9f5fb;color:#1687c9;display:flex;align-items:center;justify-content:center;font-weight:700;}
+.info-step strong{font-size:12px;}
+.info-step p{margin:5px 0 0;color:#7a8791;font-size:11px;line-height:1.5;}
+.complaint-status{margin-top:25px;padding:13px;background:#eef8f1;border-radius:8px;display:flex;gap:10px;align-items:center;}
+.complaint-status i{color:#27ae60;font-size:20px;}
+.complaint-status strong,.complaint-status span{display:block;}
+.complaint-status strong{font-size:11px;}
+.complaint-status span{margin-top:3px;font-size:10px;color:#6c7a74;}
+body.dark .complaint-status{background:#1c3528;}
+
+/* =========================================================
    RESPONSIVE
 ========================================================= */
 
@@ -1093,6 +1129,10 @@ body.dark .donut::after{
     .settings{
         width:90%;
     }
+
+    .complaint-layout{grid-template-columns:1fr;}
+    .form-grid{grid-template-columns:1fr;}
+    .form-group.full{grid-column:auto;}
 }
 
 </style>
@@ -1122,7 +1162,7 @@ body.dark .donut::after{
 
     </div>
 
-    <div class="header-title">
+    <div class="header-title" data-i18n="appTitle">
         SISTEM WEB GIS JENAYAH PECAH RUMAH DI IPOH TAHUN 2025
     </div>
 
@@ -1168,7 +1208,7 @@ body.dark .donut::after{
 
     <div class="sidebar-menu">
 
-        <div class="menu-label">
+        <div class="menu-label" data-i18n="mainMenu">
             Menu Utama
         </div>
 
@@ -1180,7 +1220,7 @@ body.dark .donut::after{
                 <i class="fas fa-th-large"></i>
             </div>
 
-            <div class="menu-text">
+            <div class="menu-text" data-i18n="dashboard">
                 Dashboard
             </div>
 
@@ -1195,7 +1235,7 @@ body.dark .donut::after{
                 <i class="fas fa-map"></i>
             </div>
 
-            <div class="menu-text">
+            <div class="menu-text" data-i18n="map">
                 Peta Taburan
             </div>
 
@@ -1210,7 +1250,7 @@ body.dark .donut::after{
                 <i class="fas fa-chart-line"></i>
             </div>
 
-            <div class="menu-text">
+            <div class="menu-text" data-i18n="trend">
                 Trend Bulanan
             </div>
 
@@ -1225,7 +1265,7 @@ body.dark .donut::after{
                 <i class="fas fa-store"></i>
             </div>
 
-            <div class="menu-text">
+            <div class="menu-text" data-i18n="premise">
                 Jenis Premis
             </div>
 
@@ -1240,7 +1280,7 @@ body.dark .donut::after{
                 <i class="fas fa-table"></i>
             </div>
 
-            <div class="menu-text">
+            <div class="menu-text" data-i18n="table">
                 Jadual Statistik
             </div>
 
@@ -1255,11 +1295,26 @@ body.dark .donut::after{
                 <i class="fas fa-file-alt"></i>
             </div>
 
-            <div class="menu-text">
+            <div class="menu-text" data-i18n="reports">
                 Laporan
             </div>
 
         </div>
+
+        <div
+            class="menu-item"
+            onclick="showPage('aduan-page',this)">
+
+            <div class="menu-icon">
+                <i class="fas fa-comment-alt"></i>
+            </div>
+
+            <div class="menu-text" data-i18n="complaint">
+                Aduan Warga
+            </div>
+
+        </div>
+
 
     </div>
 
@@ -1761,10 +1816,9 @@ body.dark .donut::after{
 
     </div>
 
-    <div class="map-page-container">
+    <div class="map-page-container" id="mapPageHost">
 
-        <!-- MAP QGIS2WEB -->
-        <div id="map"></div>
+        <!-- QGIS2Web #map is moved here when this page is opened -->
 
     </div>
 
@@ -2110,7 +2164,7 @@ body.dark .donut::after{
     <div class="page-header">
 
         <div>
-            <h1 class="page-title">
+            <h1 class="page-title" data-i18n="reports">
                 Laporan
             </h1>
 
@@ -2195,6 +2249,95 @@ body.dark .donut::after{
 
 </section>
 
+
+<!-- =====================================================
+     ADUAN WARGA
+===================================================== -->
+<section class="page" id="aduan-page">
+
+    <div class="page-header">
+        <div>
+            <h1 class="page-title" data-i18n="complaintTitle">Aduan Warga Tempatan</h1>
+            <div class="page-subtitle" data-i18n="complaintSubtitle">Salurkan aduan berkaitan keselamatan dan kejadian pecah rumah di kawasan anda.</div>
+        </div>
+        <button class="panel-action" onclick="document.getElementById('complaintForm').reset()">
+            <i class="fas fa-redo"></i> <span data-i18n="reset">Reset</span>
+        </button>
+    </div>
+
+    <div class="complaint-layout">
+        <div class="panel">
+            <div class="panel-header">
+                <div class="panel-title"><i class="fas fa-edit"></i> <span data-i18n="complaintForm">Borang Aduan</span></div>
+            </div>
+            <div class="panel-body">
+                <form id="complaintForm" onsubmit="submitComplaint(event)">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label data-i18n="name">Nama</label>
+                            <input type="text" id="complaintName" required placeholder="Masukkan nama">
+                        </div>
+                        <div class="form-group">
+                            <label data-i18n="phone">No. Telefon</label>
+                            <input type="tel" id="complaintPhone" required placeholder="Contoh: 0123456789">
+                        </div>
+                        <div class="form-group">
+                            <label data-i18n="email">Email</label>
+                            <input type="email" id="complaintEmail" placeholder="nama@email.com">
+                        </div>
+                        <div class="form-group">
+                            <label data-i18n="category">Kategori Aduan</label>
+                            <select id="complaintCategory">
+                                <option data-i18n="catBreakin">Kes Pecah Rumah</option>
+                                <option data-i18n="catSuspicious">Aktiviti Mencurigakan</option>
+                                <option data-i18n="catSafety">Keselamatan Kawasan</option>
+                                <option data-i18n="catInfrastructure">Lampu / Infrastruktur</option>
+                                <option data-i18n="catOther">Lain-lain</option>
+                            </select>
+                        </div>
+                        <div class="form-group full">
+                            <label data-i18n="location">Lokasi Kejadian</label>
+                            <input type="text" id="complaintLocation" required placeholder="Contoh: Taman Canning, Ipoh">
+                        </div>
+                        <div class="form-group full">
+                            <label data-i18n="details">Butiran Aduan</label>
+                            <textarea id="complaintDescription" rows="6" required placeholder="Terangkan aduan atau kejadian yang berlaku..."></textarea>
+                        </div>
+                        <div class="form-group full">
+                            <label data-i18n="photo">Lampiran Gambar</label>
+                            <input type="file" id="complaintPhoto" accept="image/*">
+                            <small data-i18n="photoHint">Format gambar: JPG, PNG</small>
+                        </div>
+                    </div>
+
+                    <div class="complaint-notice">
+                        <i class="fas fa-info-circle"></i>
+                        <span data-i18n="complaintNotice">Aduan ini direkodkan untuk tujuan pelaporan dan rujukan. Bagi kecemasan atau kejadian yang sedang berlaku, hubungi pihak berkuasa melalui saluran kecemasan yang sesuai.</span>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="reset" class="btn-secondary"><i class="fas fa-undo"></i> <span data-i18n="reset">Reset</span></button>
+                        <button type="submit" class="btn-primary"><i class="fas fa-paper-plane"></i> <span data-i18n="submitComplaint">Hantar Aduan</span></button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="panel">
+            <div class="panel-header">
+                <div class="panel-title"><i class="fas fa-shield-alt"></i> <span data-i18n="guide">Panduan Aduan</span></div>
+            </div>
+            <div class="panel-body">
+                <div class="info-step"><div class="info-number">1</div><div><strong data-i18n="step1Title">Kenal pasti lokasi</strong><p data-i18n="step1Text">Nyatakan lokasi kejadian dengan jelas.</p></div></div>
+                <div class="info-step"><div class="info-number">2</div><div><strong data-i18n="step2Title">Terangkan kejadian</strong><p data-i18n="step2Text">Berikan maklumat yang berkaitan dengan aduan.</p></div></div>
+                <div class="info-step"><div class="info-number">3</div><div><strong data-i18n="step3Title">Hantar aduan</strong><p data-i18n="step3Text">Semak maklumat sebelum menghantar borang.</p></div></div>
+                <div class="complaint-status"><i class="fas fa-check-circle"></i><div><strong data-i18n="systemComplaint">Sistem Aduan</strong><span data-i18n="systemReady">Sedia menerima aduan</span></div></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
 </main>
 
 
@@ -2237,7 +2380,7 @@ body.dark .donut::after{
 
             <div class="setting-row">
 
-                <span>
+                <span data-i18n="darkMode">
                     Dark Mode
                 </span>
 
@@ -2252,7 +2395,7 @@ body.dark .donut::after{
 
             <div class="setting-row">
 
-                <span>
+                <span data-i18n="sidebar">
                     Sidebar
                 </span>
 
@@ -2265,7 +2408,7 @@ body.dark .donut::after{
 
             <div class="setting-row">
 
-                <span>
+                <span data-i18n="fullscreen">
                     Fullscreen
                 </span>
 
@@ -2286,7 +2429,7 @@ body.dark .donut::after{
 
             <div class="setting-row">
 
-                <span>
+                <span data-i18n="resetMap">
                     Reset Peta
                 </span>
 
@@ -2299,7 +2442,7 @@ body.dark .donut::after{
 
             <div class="setting-row">
 
-                <span>
+                <span data-i18n="layerControl">
                     Kawalan Layer
                 </span>
 
@@ -2320,7 +2463,7 @@ body.dark .donut::after{
 
             <div class="setting-row">
 
-                <span>
+                <span data-i18n="systemVersion">
                     Versi Sistem
                 </span>
 
@@ -2331,32 +2474,20 @@ body.dark .donut::after{
             </div>
 
 
-            <div class="setting-row language-setting">
+            <div class="setting-row">
 
-    <span>
-        <i class="fas fa-language"></i>
-        <span data-i18n="language">Bahasa</span>
-    </span>
+                <span>
+                    <i class="fas fa-language"></i>
+                    <span data-i18n="language">Bahasa</span>
+                </span>
 
-    <select
-        id="languageSelect"
-        onchange="changeLanguage(this.value)">
+                <select id="languageSelect" class="language-select" onchange="changeLanguage(this.value)">
+                    <option value="ms">🇲🇾 Bahasa Melayu</option>
+                    <option value="en">🇬🇧 English</option>
+                    <option value="zh">🇨🇳 Mandarin</option>
+                </select>
 
-        <option value="ms">
-            🇲🇾 Bahasa Melayu
-        </option>
-
-        <option value="en">
-            🇬🇧 English
-        </option>
-
-        <option value="zh">
-            🇨🇳 Mandarin
-        </option>
-
-    </select>
-
-</div>
+            </div>
 
         </div>
 
@@ -2379,7 +2510,12 @@ body.dark .donut::after{
      QGIS2WEB SCRIPTS
 ===================================================== -->
 
-<script src="resources/qgis2web_expressions.js"></script>
+<script src="resources/qgis2web_expressions.js"><script>
+window.addEventListener("DOMContentLoaded",function(){
+    changeLanguage(localStorage.getItem("webgis-language") || "ms");
+    setTimeout(function(){ moveMapContainer("dashboard"); },100);
+});
+</script>
 <script src="./resources/functions.js"></script>
 <script src="./resources/ol.js"></script>
 <script src="./resources/ol-layerswitcher.js"></script>
@@ -2416,6 +2552,26 @@ body.dark .donut::after{
 <script>
 
 /* =====================================================
+   MULTI-LANGUAGE
+===================================================== */
+const translations={
+ms:{appTitle:"SISTEM WEB GIS JENAYAH PECAH RUMAH DI IPOH TAHUN 2025",dashboard:"Dashboard",map:"Peta Taburan",trend:"Trend Bulanan",premise:"Jenis Premis",table:"Jadual Statistik",reports:"Laporan",complaint:"Aduan Warga",settings:"Tetapan",language:"Bahasa",mainMenu:"Menu Utama",darkMode:"Dark Mode",sidebar:"Sidebar",fullscreen:"Fullscreen",resetMap:"Reset Peta",layerControl:"Kawalan Layer",systemVersion:"Versi Sistem",complaintTitle:"Aduan Warga Tempatan",complaintSubtitle:"Salurkan aduan berkaitan keselamatan dan kejadian pecah rumah di kawasan anda.",complaintForm:"Borang Aduan",name:"Nama",phone:"No. Telefon",email:"Email",category:"Kategori Aduan",location:"Lokasi Kejadian",details:"Butiran Aduan",photo:"Lampiran Gambar",photoHint:"Format gambar: JPG, PNG",complaintNotice:"Aduan ini direkodkan untuk tujuan pelaporan dan rujukan. Bagi kecemasan atau kejadian yang sedang berlaku, hubungi pihak berkuasa melalui saluran kecemasan yang sesuai.",guide:"Panduan Aduan",step1Title:"Kenal pasti lokasi",step1Text:"Nyatakan lokasi kejadian dengan jelas.",step2Title:"Terangkan kejadian",step2Text:"Berikan maklumat yang berkaitan dengan aduan.",step3Title:"Hantar aduan",step3Text:"Semak maklumat sebelum menghantar borang.",systemComplaint:"Sistem Aduan",systemReady:"Sedia menerima aduan",submitComplaint:"Hantar Aduan",reset:"Reset",catBreakin:"Kes Pecah Rumah",catSuspicious:"Aktiviti Mencurigakan",catSafety:"Keselamatan Kawasan",catInfrastructure:"Lampu / Infrastruktur",catOther:"Lain-lain"},
+en:{appTitle:"WEB GIS SYSTEM FOR HOUSEBREAKING CRIME IN IPOH 2025",dashboard:"Dashboard",map:"Distribution Map",trend:"Monthly Trend",premise:"Premise Type",table:"Statistics Table",reports:"Reports",complaint:"Citizen Complaint",settings:"Settings",language:"Language",mainMenu:"Main Menu",darkMode:"Dark Mode",sidebar:"Sidebar",fullscreen:"Fullscreen",resetMap:"Reset Map",layerControl:"Layer Control",systemVersion:"System Version",complaintTitle:"Local Citizen Complaint",complaintSubtitle:"Submit complaints related to safety and housebreaking incidents in your area.",complaintForm:"Complaint Form",name:"Name",phone:"Phone Number",email:"Email",category:"Complaint Category",location:"Incident Location",details:"Complaint Details",photo:"Photo Attachment",photoHint:"Image format: JPG, PNG",complaintNotice:"This complaint is recorded for reporting and reference purposes. For emergencies or incidents in progress, contact the appropriate emergency authority.",guide:"Complaint Guide",step1Title:"Identify the location",step1Text:"State the incident location clearly.",step2Title:"Describe the incident",step2Text:"Provide relevant information about the complaint.",step3Title:"Submit the complaint",step3Text:"Review the information before submitting the form.",systemComplaint:"Complaint System",systemReady:"Ready to receive complaints",submitComplaint:"Submit Complaint",reset:"Reset",catBreakin:"Housebreaking Case",catSuspicious:"Suspicious Activity",catSafety:"Area Safety",catInfrastructure:"Lighting / Infrastructure",catOther:"Others"},
+zh:{appTitle:"怡保2025年破屋盗窃罪案 Web GIS 系统",dashboard:"仪表板",map:"案件分布地图",trend:"每月趋势",premise:"场所类型",table:"统计表",reports:"报告",complaint:"居民投诉",settings:"设置",language:"语言",mainMenu:"主菜单",darkMode:"深色模式",sidebar:"侧边栏",fullscreen:"全屏",resetMap:"重置地图",layerControl:"图层控制",systemVersion:"系统版本",complaintTitle:"居民投诉",complaintSubtitle:"提交有关您所在地区安全及入屋盗窃事件的投诉。",complaintForm:"投诉表格",name:"姓名",phone:"电话号码",email:"电子邮件",category:"投诉类别",location:"事件地点",details:"投诉详情",photo:"照片附件",photoHint:"图片格式：JPG、PNG",complaintNotice:"此投诉用于记录、报告和参考。如遇紧急情况或正在发生的事件，请联系适当的紧急机构。",guide:"投诉指南",step1Title:"确认地点",step1Text:"清楚注明事件发生地点。",step2Title:"说明事件",step2Text:"提供与投诉有关的资料。",step3Title:"提交投诉",step3Text:"提交表格前请检查资料。",systemComplaint:"投诉系统",systemReady:"准备接收投诉",submitComplaint:"提交投诉",reset:"重置",catBreakin:"入屋盗窃案件",catSuspicious:"可疑活动",catSafety:"地区安全",catInfrastructure:"照明 / 基础设施",catOther:"其他"}};
+
+function changeLanguage(lang){const d=translations[lang]||translations.ms;document.documentElement.lang=lang;document.querySelectorAll("[data-i18n]").forEach(el=>{const k=el.getAttribute("data-i18n");if(d[k])el.textContent=d[k];});const s=document.getElementById("languageSelect");if(s)s.value=lang;localStorage.setItem("webgis-language",lang);}
+
+/* =====================================================
+   QGIS2WEB MAP CONTAINER - SINGLE #map
+===================================================== */
+function moveMapContainer(pageId){const el=document.getElementById("map");if(!el)return;const target=pageId==="map-page"?document.getElementById("mapPageHost"):document.querySelector("#dashboard .map-dashboard");if(target&&el.parentElement!==target)target.appendChild(el);setTimeout(()=>{if(typeof map!=="undefined"&&map)map.updateSize();},150);}
+
+/* =====================================================
+   ADUAN WARGA
+===================================================== */
+function submitComplaint(event){event.preventDefault();const c={id:"ADUAN-"+Date.now(),name:document.getElementById("complaintName").value.trim(),phone:document.getElementById("complaintPhone").value.trim(),email:document.getElementById("complaintEmail").value.trim(),category:document.getElementById("complaintCategory").value,location:document.getElementById("complaintLocation").value.trim(),description:document.getElementById("complaintDescription").value.trim(),date:new Date().toLocaleString("ms-MY"),status:"Diterima"};if(!c.name||!c.phone||!c.location||!c.description){showNotification("Sila lengkapkan semua maklumat wajib");return;}const records=JSON.parse(localStorage.getItem("webgis-complaints")||"[]");records.push(c);localStorage.setItem("webgis-complaints",JSON.stringify(records));document.getElementById("complaintForm").reset();showNotification("Aduan berjaya direkodkan: "+c.id);}
+
+/* =====================================================
    NAVIGATION
 ===================================================== */
 
@@ -2443,6 +2599,8 @@ function showPage(pageId, element){
     if(element){
         element.classList.add("active");
     }
+
+    moveMapContainer(pageId);
 
     /*
        OpenLayers perlu resize semula apabila
@@ -2628,7 +2786,14 @@ function resetMap(){
             const view =
                 map.getView();
 
-            view.setZoom(11);
+            if(window._qgis2webInitialCenter && window._qgis2webInitialZoom){
+                view.setCenter(window._qgis2webInitialCenter);
+                view.setZoom(window._qgis2webInitialZoom);
+            }else{
+                view.setZoom(11);
+            }
+
+            map.updateSize();
 
             showNotification(
                 "Paparan peta telah direset"
@@ -2681,6 +2846,20 @@ function showNotification(message){
 
 }
 
+
+/* =====================================================
+   CAPTURE INITIAL QGIS2WEB VIEW
+===================================================== */
+window.addEventListener("load",function(){
+    setTimeout(function(){
+        if(typeof map!=="undefined"&&map){
+            const view=map.getView();
+            window._qgis2webInitialCenter=view.getCenter()?view.getCenter().slice():null;
+            window._qgis2webInitialZoom=view.getZoom();
+            map.updateSize();
+        }
+    },500);
+});
 
 /* =====================================================
    SEARCH
