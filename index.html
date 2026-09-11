@@ -2331,17 +2331,32 @@ body.dark .donut::after{
             </div>
 
 
-            <div class="setting-row">
+            <div class="setting-row language-setting">
 
-                <span>
-                    Bahasa
-                </span>
+    <span>
+        <i class="fas fa-language"></i>
+        <span data-i18n="language">Bahasa</span>
+    </span>
 
-                <button>
-                    Bahasa Melayu
-                </button>
+    <select
+        id="languageSelect"
+        onchange="changeLanguage(this.value)">
 
-            </div>
+        <option value="ms">
+            🇲🇾 Bahasa Melayu
+        </option>
+
+        <option value="en">
+            🇬🇧 English
+        </option>
+
+        <option value="zh">
+            🇨🇳 Mandarin
+        </option>
+
+    </select>
+
+</div>
 
         </div>
 
