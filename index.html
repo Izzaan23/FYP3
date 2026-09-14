@@ -2069,7 +2069,7 @@ body.dark .admin-cloud-note{background:#1d3441;color:#c8d3d9}
 
                 <div>
                     <div class="stat-label">
-                        MASJID / SURAU / TOKONG
+                        MASJID / KUIL / TOKONG
                     </div>
 
                     <div class="stat-number">
@@ -2329,7 +2329,7 @@ body.dark .admin-cloud-note{background:#1d3441;color:#c8d3d9}
                         <th>JUMLAH KES</th>
                         <th>RUMAH</th>
                         <th>KEDAI</th>
-                        <th>MASJID/SURAU/TOKONG</th>
+                        <th>MASJID/KUIL/TOKONG</th>
                         <th>LAIN-LAIN</th>
                     </tr>
 
@@ -2566,7 +2566,7 @@ body.dark .admin-cloud-note{background:#1d3441;color:#c8d3d9}
         </div>
 
         <div class="stat-card">
-            <div class="stat-label">MASJID/SURAU/TOKONG</div>
+            <div class="stat-label">MASJID/KUIL/TOKONG</div>
             <div class="stat-number">9</div>
             <div class="stat-label">1.3%</div>
         </div>
@@ -2609,7 +2609,7 @@ body.dark .admin-cloud-note{background:#1d3441;color:#c8d3d9}
                     <div class="premise-slice-icon" id="premiseIconKedai" title="Kedai">
                         <i class="fas fa-store"></i>
                     </div>
-                    <div class="premise-slice-icon" id="premiseIconMasjid" title="Masjid / Surau / Tokong">
+                    <div class="premise-slice-icon" id="premiseIconMasjid" title="Masjid / Kuil / Tokong">
                         <i class="fas fa-place-of-worship"></i>
                     </div>
                     <div class="premise-slice-icon" id="premiseIconLain" title="Lain-lain">
@@ -2638,7 +2638,7 @@ body.dark .admin-cloud-note{background:#1d3441;color:#c8d3d9}
                 <div class="premise-legend-item">
                     <span class="premise-legend-icon masjid"><i class="fas fa-place-of-worship"></i></span>
                     <div>
-                        <strong>Masjid / Surau / Tokong</strong>
+                        <strong>Masjid / Kuil / Tokong</strong>
                         <span id="premiseLegendMasjid">0 kes • 0%</span>
                     </div>
                 </div>
@@ -2702,7 +2702,7 @@ body.dark .admin-cloud-note{background:#1d3441;color:#c8d3d9}
                         <th>JUMLAH KES</th>
                         <th>RUMAH</th>
                         <th>KEDAI</th>
-                        <th>MASJID/SURAU/TOKONG</th>
+                        <th>MASJID/KUIL/TOKONG</th>
                         <th>LAIN-LAIN</th>
                     </tr>
 
@@ -3363,8 +3363,8 @@ const uiTextTranslations={
     "Analisis premis":["Premise analysis","场所分析"],
     "RUMAH":["HOUSE","住宅"],
     "KEDAI":["SHOP","商店"],
-    "MASJID / SURAU / TOKONG":["MOSQUE / PRAYER HALL / TEMPLE","清真寺 / 祈祷室 / 寺庙"],
-    "MASJID/SURAU/TOKONG":["MOSQUE / PRAYER HALL / TEMPLE","清真寺 / 祈祷室 / 寺庙"],
+    "MASJID / KUIL / TOKONG":["MOSQUE / PRAYER HALL / TEMPLE","清真寺 / 祈祷室 / 寺庙"],
+    "MASJID/KUIL/TOKONG":["MOSQUE / PRAYER HALL / TEMPLE","清真寺 / 祈祷室 / 寺庙"],
     "LAIN-LAIN":["OTHERS","其他"],
     "Data 2025":["2025 Data","2025年数据"],
     "PETA TABURAN KES":["CASE DISTRIBUTION MAP","案件分布地图"],
@@ -4328,7 +4328,7 @@ body.dark .year-badge{
                     icon.style.transform=`translate(${x}px,${yPos}px)`;
                     icon.title=(item.key==="rumah"?"Rumah":
                                 item.key==="kedai"?"Kedai":
-                                item.key==="masjid"?"Masjid / Surau / Tokong":"Lain-lain")
+                                item.key==="masjid"?"Masjid / Kuil / Tokong":"Lain-lain")
                                 +" — "+item.value+" kes ("+pct.toFixed(1)+"%)";
                 }
             }
@@ -4345,7 +4345,7 @@ body.dark .year-badge{
     function updatePremise(){
         const t=selectedTotals(), total=Math.max(selectedTotal(),1);
         const cards=document.querySelectorAll("#jenis-page .stats .stat-card");
-        const vals=[["RUMAH",t.rumah],["KEDAI",t.kedai],["MASJID/SURAU/TOKONG",t.masjid],["LAIN-LAIN",t.lain]];
+        const vals=[["RUMAH",t.rumah],["KEDAI",t.kedai],["MASJID/KUIL/TOKONG",t.masjid],["LAIN-LAIN",t.lain]];
         cards.forEach((card,i)=>{
             if(!vals[i])return;
             card.querySelector(".stat-label").textContent=vals[i][0];
@@ -4361,7 +4361,7 @@ body.dark .year-badge{
             const n=r.rumah+r.kedai+r.masjid+r.lain;return n>best.n?{m:r.month,n:n}:best;
         },{m:"-",n:-1});
         const t=selectedTotals();
-        const highest=[["Rumah",t.rumah],["Kedai",t.kedai],["Masjid/Surau/Tokong",t.masjid],["Lain-lain",t.lain]].sort((a,b)=>b[1]-a[1])[0];
+        const highest=[["Rumah",t.rumah],["Kedai",t.kedai],["Masjid/Kuil/Tokong",t.masjid],["Lain-lain",t.lain]].sort((a,b)=>b[1]-a[1])[0];
         const cards=document.querySelectorAll("#laporan-page .stats .stat-card");
         if(cards[0]) cards[0].querySelector(".stat-number").textContent=total;
         if(cards[1]) cards[1].querySelector(".stat-number").textContent=highest[0];
