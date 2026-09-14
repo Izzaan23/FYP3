@@ -1645,8 +1645,8 @@ body.dark .complaint-status{background:#1c3528;}
 
             <div class="map-dashboard">
 
-                <div class="map-case-labels" id="dashboardMapLabels"></div>
-                <div class="map-filter-panel" id="dashboardMapFilter"></div>
+                <!-- Dashboard map kekal bersih seperti paparan peta penuh.
+                     Filter dan label kategori hanya dipaparkan di Peta Taburan. -->
                 <div id="map"></div>
 
             </div>
@@ -3585,17 +3585,19 @@ body.dark .year-badge{
     }
 
     function syncMapLabels(){
-        ['dashboardMapFilter','mapPageFilter'].forEach((filterId,i)=>{
-            const target=document.getElementById(filterId), labels=document.getElementById(i===0?'dashboardMapLabels':'mapPageLabels');
-            if(!target || !labels) return;
-            const checked={};
-            target.querySelectorAll('[data-map-label]').forEach(cb=>checked[cb.dataset.mapLabel]=cb.checked);
-            labels.querySelectorAll('[data-label-key]').forEach(el=>{el.style.display=checked[el.dataset.labelKey]===false?'none':'block';});
+        // Filter kategori hanya untuk halaman Peta Taburan.
+        const target=document.getElementById('mapPageFilter');
+        const labels=document.getElementById('mapPageLabels');
+        if(!target || !labels) return;
+        const checked={};
+        target.querySelectorAll('[data-map-label]').forEach(cb=>checked[cb.dataset.mapLabel]=cb.checked);
+        labels.querySelectorAll('[data-label-key]').forEach(el=>{
+            el.style.display=checked[el.dataset.labelKey]===false?'none':'block';
         });
     }
 
     function updateMapCaseLabels(){
-        renderMapFilter('dashboardMapFilter','dashboardMapLabels');
+        // Jangan letak filter pada Dashboard.
         renderMapFilter('mapPageFilter','mapPageLabels');
     }
 
