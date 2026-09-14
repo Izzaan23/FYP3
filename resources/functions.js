@@ -54,3 +54,13 @@ function stripe(stripeWidth, gapWidth, angle, color) {
 
     return outerContext.createPattern(outerCanvas, 'no-repeat');
 };
+
+/* FYP3 custom UI/map fixes. Kept separate from generated QGIS2Web code. */
+(function loadFYP3Fixes(){
+    if (document.querySelector('script[data-fyp3-fixes]')) return;
+    var script = document.createElement('script');
+    script.src = './resources/fyp3-fixes.js';
+    script.defer = true;
+    script.setAttribute('data-fyp3-fixes','1');
+    document.head.appendChild(script);
+})();
