@@ -1295,6 +1295,179 @@ body.dark .qgis-layer-row:hover{
     background:#223440;
 }
 
+
+/* =========================================================
+   JENIS PREMIS - CARTA PAI DENGAN IKON
+========================================================= */
+.premise-pie-panel{
+    margin-top:18px;
+}
+.premise-pie-subtitle{
+    margin-top:4px;
+    font-size:11px;
+    color:var(--muted);
+}
+.premise-pie-content{
+    display:grid;
+    grid-template-columns:minmax(320px,1fr) minmax(320px,1fr);
+    align-items:center;
+    gap:28px;
+    padding:28px 32px 34px;
+}
+.premise-pie-wrap{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    min-height:340px;
+}
+.premise-pie{
+    --rumah-end:60%;
+    --kedai-end:78%;
+    --masjid-end:82%;
+    width:310px;
+    height:310px;
+    border-radius:50%;
+    position:relative;
+    background:
+        conic-gradient(
+            #2185c5 0 var(--rumah-end),
+            #f2a83b var(--rumah-end) var(--kedai-end),
+            #51aa6b var(--kedai-end) var(--masjid-end),
+            #d55757 var(--masjid-end) 100%
+        );
+    box-shadow:
+        0 18px 42px rgba(12,44,66,.16),
+        inset 0 0 0 1px rgba(255,255,255,.20);
+}
+.premise-pie::after{
+    content:"";
+    position:absolute;
+    inset:80px;
+    border-radius:50%;
+    background:var(--card);
+    box-shadow:0 0 0 1px var(--border);
+    z-index:1;
+}
+.premise-pie-center{
+    position:absolute;
+    inset:84px;
+    z-index:3;
+    border-radius:50%;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+}
+.premise-pie-center-label{
+    font-size:10px;
+    font-weight:800;
+    color:var(--muted);
+    letter-spacing:.8px;
+}
+.premise-pie-center strong{
+    display:block;
+    font-size:38px;
+    line-height:1.05;
+    margin:4px 0 1px;
+    color:var(--text);
+}
+.premise-pie-center small{
+    font-size:10px;
+    font-weight:800;
+    color:var(--muted);
+}
+.premise-slice-icon{
+    position:absolute;
+    left:50%;
+    top:50%;
+    width:45px;
+    height:45px;
+    margin:-22.5px 0 0 -22.5px;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    z-index:4;
+    color:white;
+    font-size:18px;
+    border:3px solid rgba(255,255,255,.92);
+    box-shadow:0 4px 13px rgba(0,0,0,.24);
+    transform:translate(0,0);
+    transition:transform .35s ease;
+}
+#premiseIconRumah{background:#2185c5;}
+#premiseIconKedai{background:#f2a83b;}
+#premiseIconMasjid{background:#51aa6b;}
+#premiseIconLain{background:#d55757;}
+
+.premise-pie-legend{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:14px;
+}
+.premise-legend-item{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    min-height:88px;
+    padding:15px 16px;
+    border:1px solid var(--border);
+    border-radius:12px;
+    background:var(--card);
+}
+.premise-legend-icon{
+    min-width:48px;
+    width:48px;
+    height:48px;
+    border-radius:12px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:#fff;
+    font-size:19px;
+}
+.premise-legend-icon.rumah{background:#2185c5;}
+.premise-legend-icon.kedai{background:#f2a83b;}
+.premise-legend-icon.masjid{background:#51aa6b;}
+.premise-legend-icon.lain{background:#d55757;}
+.premise-legend-item strong{
+    display:block;
+    font-size:12px;
+    margin-bottom:5px;
+}
+.premise-legend-item span:not(.premise-legend-icon){
+    display:block;
+    color:var(--muted);
+    font-size:11px;
+}
+body.dark .premise-pie::after{
+    background:var(--card);
+    border-color:#31434f;
+}
+body.dark .premise-legend-item{
+    background:#18242e;
+    border-color:#31434f;
+}
+body.dark .premise-pie-center strong,
+body.dark .premise-legend-item strong{
+    color:#f4f8fa;
+}
+@media(max-width:950px){
+    .premise-pie-content{
+        grid-template-columns:1fr;
+    }
+}
+@media(max-width:650px){
+    .premise-pie{
+        width:270px;
+        height:270px;
+    }
+    .premise-pie::after{inset:70px;}
+    .premise-pie-center{inset:74px;}
+    .premise-pie-legend{grid-template-columns:1fr;}
+}
+
 </style>
 </head>
 
@@ -2081,6 +2254,82 @@ body.dark .qgis-layer-row:hover{
         </div>
 
     </div>
+
+    <!-- CARTA PAI JENIS PREMIS -->
+    <div class="panel premise-pie-panel" id="premisePiePanel">
+        <div class="panel-header">
+            <div>
+                <div class="panel-title">
+                    <i class="fas fa-chart-pie"></i>
+                    CARTA PAI JENIS PREMIS
+                </div>
+                <div class="premise-pie-subtitle" id="premisePieSubtitle">
+                    Pecahan kes mengikut kategori premis
+                </div>
+            </div>
+        </div>
+
+        <div class="premise-pie-content">
+            <div class="premise-pie-wrap">
+                <div class="premise-pie" id="premisePie">
+                    <div class="premise-pie-center">
+                        <span class="premise-pie-center-label">JUMLAH</span>
+                        <strong id="premisePieTotal">0</strong>
+                        <small>KES</small>
+                    </div>
+
+                    <!-- Ikon kategori akan diletakkan pada bahagian carta secara automatik -->
+                    <div class="premise-slice-icon" id="premiseIconRumah" title="Rumah">
+                        <i class="fas fa-home"></i>
+                    </div>
+                    <div class="premise-slice-icon" id="premiseIconKedai" title="Kedai">
+                        <i class="fas fa-store"></i>
+                    </div>
+                    <div class="premise-slice-icon" id="premiseIconMasjid" title="Masjid / Surau / Tokong">
+                        <i class="fas fa-place-of-worship"></i>
+                    </div>
+                    <div class="premise-slice-icon" id="premiseIconLain" title="Lain-lain">
+                        <i class="fas fa-building"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="premise-pie-legend" id="premisePieLegend">
+                <div class="premise-legend-item">
+                    <span class="premise-legend-icon rumah"><i class="fas fa-home"></i></span>
+                    <div>
+                        <strong>Rumah</strong>
+                        <span id="premiseLegendRumah">0 kes • 0%</span>
+                    </div>
+                </div>
+
+                <div class="premise-legend-item">
+                    <span class="premise-legend-icon kedai"><i class="fas fa-store"></i></span>
+                    <div>
+                        <strong>Kedai</strong>
+                        <span id="premiseLegendKedai">0 kes • 0%</span>
+                    </div>
+                </div>
+
+                <div class="premise-legend-item">
+                    <span class="premise-legend-icon masjid"><i class="fas fa-place-of-worship"></i></span>
+                    <div>
+                        <strong>Masjid / Surau / Tokong</strong>
+                        <span id="premiseLegendMasjid">0 kes • 0%</span>
+                    </div>
+                </div>
+
+                <div class="premise-legend-item">
+                    <span class="premise-legend-icon lain"><i class="fas fa-building"></i></span>
+                    <div>
+                        <strong>Lain-lain</strong>
+                        <span id="premiseLegendLain">0 kes • 0%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
 </section>
 
@@ -3524,6 +3773,77 @@ body.dark .year-badge{
         document.querySelectorAll("#jadual-page .panel-title").forEach(e=>e.textContent="JADUAL STATISTIK KES PECAH RUMAH "+(currentYear()==="all"?"2025 + 2026":currentYear()));
     }
 
+
+    function updatePremisePie(){
+        const pie=document.getElementById("premisePie");
+        if(!pie) return;
+
+        const t=selectedTotals();
+        const total=Math.max(selectedTotal(),0);
+        const safeTotal=Math.max(total,1);
+
+        const items=[
+            {key:"rumah",value:t.rumah,icon:"premiseIconRumah",legend:"premiseLegendRumah"},
+            {key:"kedai",value:t.kedai,icon:"premiseIconKedai",legend:"premiseLegendKedai"},
+            {key:"masjid",value:t.masjid,icon:"premiseIconMasjid",legend:"premiseLegendMasjid"},
+            {key:"lain",value:t.lain,icon:"premiseIconLain",legend:"premiseLegendLain"}
+        ];
+
+        let cumulative=0;
+        const ends=[];
+        items.forEach(item=>{
+            cumulative += (item.value/safeTotal)*100;
+            ends.push(cumulative);
+        });
+
+        pie.style.setProperty("--rumah-end", ends[0].toFixed(4)+"%");
+        pie.style.setProperty("--kedai-end", ends[1].toFixed(4)+"%");
+        pie.style.setProperty("--masjid-end", ends[2].toFixed(4)+"%");
+
+        const totalEl=document.getElementById("premisePieTotal");
+        if(totalEl) totalEl.textContent=total;
+
+        const subtitle=document.getElementById("premisePieSubtitle");
+        const y=currentYear()==="all" ? "2025 + 2026" : currentYear();
+        if(subtitle) subtitle.textContent="Pecahan kes mengikut kategori premis bagi tahun "+y;
+
+        /*
+          Letak ikon pada titik tengah setiap sektor carta.
+          Sudut 0 pada conic-gradient bermula di atas, jadi -90° digunakan
+          untuk menukar koordinat kepada sistem sin/cos biasa.
+        */
+        let startPct=0;
+        const radius=112;
+        items.forEach(item=>{
+            const pct=(item.value/safeTotal)*100;
+            const midPct=startPct + pct/2;
+            const angle=((midPct/100)*360 - 90) * Math.PI/180;
+            const icon=document.getElementById(item.icon);
+
+            if(icon){
+                if(item.value<=0){
+                    icon.style.display="none";
+                }else{
+                    icon.style.display="flex";
+                    const x=Math.cos(angle)*radius;
+                    const yPos=Math.sin(angle)*radius;
+                    icon.style.transform=`translate(${x}px,${yPos}px)`;
+                    icon.title=(item.key==="rumah"?"Rumah":
+                                item.key==="kedai"?"Kedai":
+                                item.key==="masjid"?"Masjid / Surau / Tokong":"Lain-lain")
+                                +" — "+item.value+" kes ("+pct.toFixed(1)+"%)";
+                }
+            }
+
+            const legend=document.getElementById(item.legend);
+            if(legend){
+                legend.textContent=item.value+" kes • "+pct.toFixed(1)+"%";
+            }
+
+            startPct += pct;
+        });
+    }
+
     function updatePremise(){
         const t=selectedTotals(), total=Math.max(selectedTotal(),1);
         const cards=document.querySelectorAll("#jenis-page .stats .stat-card");
@@ -3535,6 +3855,7 @@ body.dark .year-badge{
             const ls=card.querySelectorAll(".stat-label")[1];
             if(ls) ls.textContent=(vals[i][1]/total*100).toFixed(1)+"%";
         });
+        updatePremisePie();
     }
 
     function updateReport(){
