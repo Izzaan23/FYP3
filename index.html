@@ -4122,7 +4122,7 @@ body.dark .year-badge{
     function updatePremise(){
         const t=selectedTotals(), total=Math.max(selectedTotal(),1);
         const cards=document.querySelectorAll("#jenis-page .stats .stat-card");
-        const vals=[["RUMAH",t.rumah],["KEDAI",t.kedai],["MASJID/SURAU/TOKONG",t.masjid],["LAIN-LAIN",t.lain]];
+        const vals=[["RUMAH",t.rumah],["KEDAI",t.kedai],["MASJID/KUIL/TOKONG",t.masjid],["LAIN-LAIN",t.lain]];
         cards.forEach((card,i)=>{
             if(!vals[i])return;
             card.querySelector(".stat-label").textContent=vals[i][0];
