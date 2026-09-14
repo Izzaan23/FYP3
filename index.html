@@ -1975,71 +1975,9 @@ body.dark .complaint-status{background:#1c3528;}
         <div class="chart-container"
              style="height:500px">
 
-            <div class="chart">
-
-                <div class="bar" style="height:72%">
-                    <strong>69</strong>
-                    <span>JAN</span>
+            <div class="chart" id="trendPageChart">
+                    <!-- Bars are generated automatically from the selected year. -->
                 </div>
-
-                <div class="bar" style="height:66%">
-                    <strong>65</strong>
-                    <span>FEB</span>
-                </div>
-
-                <div class="bar" style="height:53%">
-                    <strong>52</strong>
-                    <span>MAC</span>
-                </div>
-
-                <div class="bar" style="height:67%">
-                    <strong>64</strong>
-                    <span>APR</span>
-                </div>
-
-                <div class="bar" style="height:59%">
-                    <strong>58</strong>
-                    <span>MEI</span>
-                </div>
-
-                <div class="bar" style="height:52%">
-                    <strong>51</strong>
-                    <span>JUN</span>
-                </div>
-
-                <div class="bar" style="height:40%">
-                    <strong>39</strong>
-                    <span>JUL</span>
-                </div>
-
-                <div class="bar" style="height:70%">
-                    <strong>68</strong>
-                    <span>OGOS</span>
-                </div>
-
-                <div class="bar" style="height:45%">
-                    <strong>44</strong>
-                    <span>SEP</span>
-                </div>
-
-                <div class="bar" style="height:42%">
-                    <strong>41</strong>
-                    <span>OKT</span>
-                </div>
-
-                <div class="bar" style="height:32%">
-                    <strong>31</strong>
-                    <span>NOV</span>
-                </div>
-
-                <div class="bar" style="height:22%">
-                    <strong>22</strong>
-                    <span>DIS</span>
-                </div>
-
-            </div>
-
-        </div>
 
     </div>
 
@@ -2897,6 +2835,7 @@ function showPage(pageId, element){
     }
 
     moveMapContainer(pageId);
+    if(pageId === "trend-page" && typeof updateTrendPage === "function") updateTrendPage();
 
     /*
        OpenLayers perlu resize semula apabila
@@ -3532,9 +3471,30 @@ body.dark .year-badge{
         if(p2) p2.textContent="Berdasarkan data yang dipaparkan, kategori "+highest[0].toLowerCase()+" merupakan kategori dengan jumlah kes tertinggi.";
     }
 
+    function updateTrendPage(){
+        const chart=document.getElementById("trendPageChart");
+        if(!chart) return;
+        const rows=selectedRows();
+        const vals=rows.map(r=>r.rumah+r.kedai+r.masjid+r.lain);
+        const max=Math.max(...vals,1);
+        chart.innerHTML=rows.map((r,i)=>{
+            const n=vals[i];
+            const h=n>0 ? (n/max*78+8) : 0;
+            return `<div class="bar" style="height:${h}%">`+
+                   `<strong>${n}</strong><span>${monthShort[r.month]}</span></div>`;
+        }).join("");
+
+        const year=currentYear()==="all"?"2025 + 2026":currentYear();
+        const title=document.querySelector("#trend-page .panel-title");
+        if(title) title.textContent="Trend Kes Pecah Rumah "+year;
+        const subtitle=document.querySelector("#trend-page .page-subtitle");
+        if(subtitle) subtitle.textContent="Perubahan jumlah kes mengikut bulan bagi tahun "+year;
+    }
+
     function updateYearData(){
         addYearSelector();
         updateDashboard();
+        updateTrendPage();
         updateTable();
         updatePremise();
         updateReport();
