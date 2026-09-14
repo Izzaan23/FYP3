@@ -4333,53 +4333,7 @@ body.dark .year-badge{
             </div>
 
             <div style="height:1px;background:#e2e8ee;margin:14px 0 0"></div>
-
-            <div class="custom-layer-head"
-                 style="display:flex;align-items:center;justify-content:space-between;
-                        padding:13px 8px 10px;cursor:pointer;font-weight:800;font-size:12px;
-                        user-select:none">
-                <span><i class="fas fa-layer-group" style="margin-right:7px"></i>Kawalan Layer</span>
-                <i class="fas fa-chevron-up custom-layer-arrow"></i>
-            </div>
-
-            <div class="custom-layer-body">
-                <div style="font-size:10px;color:#7a8793;line-height:1.4;padding:0 8px 8px">
-                    Hidupkan atau matikan layer QGIS2Web pada peta.
-                </div>
-
-                <div class="qgis-layer-list">
-                    <label class="qgis-layer-row">
-                        <span>Google Satellite</span>
-                        <input type="checkbox" data-qgis-layer="satellite">
-                    </label>
-                    <label class="qgis-layer-row">
-                        <span>Sempadan Mukim</span>
-                        <input type="checkbox" data-qgis-layer="mukim">
-                    </label>
-                    <label class="qgis-layer-row">
-                        <span>Kes Mengikut Parlimen</span>
-                        <input type="checkbox" data-qgis-layer="parlimen">
-                    </label>
-                    <label class="qgis-layer-row">
-                        <span>Kawasan Kediaman 3</span>
-                        <input type="checkbox" data-qgis-layer="residential3">
-                    </label>
-                    <label class="qgis-layer-row">
-                        <span>Kawasan Kediaman 2</span>
-                        <input type="checkbox" data-qgis-layer="residential2">
-                    </label>
-                    <label class="qgis-layer-row">
-                        <span>Kawasan Kediaman 1</span>
-                        <input type="checkbox" data-qgis-layer="residential1">
-                    </label>
-                    <label class="qgis-layer-row">
-                        <span>Balai Polis</span>
-                        <input type="checkbox" data-qgis-layer="polis">
-                    </label>
-                </div>
-            </div>`;
-
-        cleanupDuplicateMapControls(target);
+            `;
 
         const select=target.querySelector("select");
         select.value=y;
@@ -4423,7 +4377,7 @@ body.dark .year-badge{
             tries++;
             if(typeof map!=="undefined" && map && map.getLayers){
                 clearInterval(timer);
-                bindLayerControl(target);
+
             }else if(tries>30){
                 clearInterval(timer);
             }
