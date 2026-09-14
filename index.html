@@ -1645,6 +1645,8 @@ body.dark .complaint-status{background:#1c3528;}
 
             <div class="map-dashboard">
 
+                <div class="map-case-labels" id="dashboardMapLabels"></div>
+                <div class="map-filter-panel" id="dashboardMapFilter"></div>
                 <div id="map"></div>
 
             </div>
@@ -1934,6 +1936,9 @@ body.dark .complaint-status{background:#1c3528;}
     </div>
 
     <div class="map-page-container" id="mapPageHost">
+
+        <div class="map-case-labels" id="mapPageLabels"></div>
+        <div class="map-filter-panel" id="mapPageFilter"></div>
 
         <!-- QGIS2Web #map is moved here when this page is opened -->
 
@@ -3198,6 +3203,41 @@ function exportTable(){
      Added without removing the original QGIS2Web code.
 ===================================================== -->
 <style>
+/* =====================================================
+   MAP CASE FILTER + CATEGORY LABELS
+===================================================== */
+.map-dashboard, .map-page-container{position:relative;}
+.map-filter-panel{
+    position:absolute;
+    top:12px;
+    right:12px;
+    z-index:1000;
+    width:245px;
+    background:rgba(255,255,255,.96);
+    border:1px solid #dbe5eb;
+    border-radius:12px;
+    box-shadow:0 8px 24px rgba(0,0,0,.18);
+    padding:12px;
+    color:#10202b;
+    font-size:12px;
+}
+.map-filter-title{font-weight:800;font-size:13px;margin-bottom:8px;display:flex;align-items:center;gap:7px;}
+.map-filter-year{width:100%;padding:7px 9px;border:1px solid #cbd7df;border-radius:7px;background:#fff;color:#17232d;margin-bottom:9px;}
+.map-filter-options{display:grid;grid-template-columns:1fr 1fr;gap:6px 8px;}
+.map-filter-options label{display:flex;align-items:center;gap:6px;cursor:pointer;white-space:nowrap;}
+.map-filter-options input{accent-color:#1687c9;}
+.map-case-labels{position:absolute;top:12px;left:12px;z-index:999;display:flex;flex-direction:column;gap:7px;pointer-events:none;}
+.map-case-label{background:rgba(255,255,255,.94);border-left:4px solid #1687c9;border-radius:8px;padding:7px 10px;min-width:175px;box-shadow:0 5px 15px rgba(0,0,0,.14);font-size:12px;color:#17232d;}
+.map-case-label strong{display:block;font-size:13px;margin-bottom:2px;}
+.map-case-label span{font-weight:700;color:#1687c9;}
+body.dark .map-filter-panel{background:rgba(24,38,48,.97);border-color:#3b4c58;color:#f2f6f8;}
+body.dark .map-filter-year{background:#25343f;color:#fff;border-color:#465966;}
+body.dark .map-case-label{background:rgba(24,38,48,.96);color:#f2f6f8;box-shadow:0 5px 15px rgba(0,0,0,.35);}
+body.dark .map-case-label span{color:#67c2ff;}
+@media(max-width:700px){.map-filter-panel{width:205px}.map-case-label{min-width:145px}.map-case-labels{top:auto;bottom:12px;left:12px}.map-filter-panel{top:12px;right:12px}.map-filter-options{grid-template-columns:1fr;}}
+</style>
+
+<style>
 .year-control{
     display:flex;
     align-items:center;
@@ -3491,8 +3531,77 @@ body.dark .year-badge{
         if(subtitle) subtitle.textContent="Perubahan jumlah kes mengikut bulan bagi tahun "+year;
     }
 
+    function mapFilterYear(){
+        return currentYear();
+    }
+
+    function mapFilterRows(){
+        const y=mapFilterYear();
+        return y==="all" ? getCombined() : getData(y);
+    }
+
+    function mapFilterTotals(){
+        return mapFilterRows().reduce((a,r)=>{
+            a.rumah+=r.rumah; a.kedai+=r.kedai; a.masjid+=r.masjid; a.lain+=r.lain;
+            return a;
+        },{rumah:0,kedai:0,masjid:0,lain:0});
+    }
+
+    function renderMapFilter(targetId, labelsId){
+        const target=document.getElementById(targetId), labels=document.getElementById(labelsId);
+        if(!target || !labels) return;
+        const y=mapFilterYear();
+        const yearText=y==="all"?"2025 + 2026":y;
+        const t=mapFilterTotals();
+        target.innerHTML=`
+            <div class="map-filter-title"><i class="fas fa-filter"></i> Filter Paparan Peta</div>
+            <select class="map-filter-year" id="${targetId}-year">
+                <option value="2025">2025</option>
+                <option value="2026">2026</option>
+                <option value="all">2025 + 2026</option>
+            </select>
+            <div class="map-filter-options">
+                <label><input type="checkbox" data-map-label="rumah" checked> Rumah</label>
+                <label><input type="checkbox" data-map-label="kedai" checked> Kedai</label>
+                <label><input type="checkbox" data-map-label="masjid" checked> Masjid/Kuil/Tokong</label>
+                <label><input type="checkbox" data-map-label="lain" checked> Lain-lain</label>
+            </div>`;
+        const select=target.querySelector('select');
+        select.value=y;
+        select.addEventListener('change',function(){
+            const main=document.getElementById('yearSelect');
+            if(main){main.value=this.value; main.dispatchEvent(new Event('change'));}
+            else {localStorage.setItem('webgis-year',this.value); updateYearData();}
+        });
+        target.querySelectorAll('[data-map-label]').forEach(cb=>cb.addEventListener('change',()=>syncMapLabels()));
+
+        labels.innerHTML=`
+            <div class="map-case-label" data-label-key="rumah"><strong>Rumah</strong><span>${t.rumah} kes</span></div>
+            <div class="map-case-label" data-label-key="kedai"><strong>Kedai</strong><span>${t.kedai} kes</span></div>
+            <div class="map-case-label" data-label-key="masjid"><strong>Masjid/Kuil/Tokong</strong><span>${t.masjid} kes</span></div>
+            <div class="map-case-label" data-label-key="lain"><strong>Lain-lain</strong><span>${t.lain} kes</span></div>`;
+        labels.dataset.year=yearText;
+        syncMapLabels();
+    }
+
+    function syncMapLabels(){
+        ['dashboardMapFilter','mapPageFilter'].forEach((filterId,i)=>{
+            const target=document.getElementById(filterId), labels=document.getElementById(i===0?'dashboardMapLabels':'mapPageLabels');
+            if(!target || !labels) return;
+            const checked={};
+            target.querySelectorAll('[data-map-label]').forEach(cb=>checked[cb.dataset.mapLabel]=cb.checked);
+            labels.querySelectorAll('[data-label-key]').forEach(el=>{el.style.display=checked[el.dataset.labelKey]===false?'none':'block';});
+        });
+    }
+
+    function updateMapCaseLabels(){
+        renderMapFilter('dashboardMapFilter','dashboardMapLabels');
+        renderMapFilter('mapPageFilter','mapPageLabels');
+    }
+
     function updateYearData(){
         addYearSelector();
+        updateMapCaseLabels();
         updateDashboard();
         updateTrendPage();
         updateTable();
