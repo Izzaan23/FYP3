@@ -1252,6 +1252,49 @@ body.dark .complaint-status{background:#1c3528;}
     .form-group.full{grid-column:auto;}
 }
 
+
+/* =========================================================
+   QGIS2WEB LAYER ON/OFF CONTROL - FIX
+========================================================= */
+.qgis-layer-list{
+    display:flex;
+    flex-direction:column;
+}
+.qgis-layer-row{
+    display:flex !important;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    padding:11px 8px;
+    border-top:1px solid #edf0f2;
+    cursor:pointer;
+    font-size:11px;
+    color:#31414d;
+}
+.qgis-layer-row:hover{
+    background:#f5f9fb;
+}
+.qgis-layer-row input[type="checkbox"]{
+    width:15px;
+    height:15px;
+    min-width:15px;
+    cursor:pointer;
+    accent-color:#1687c9;
+    pointer-events:auto !important;
+}
+.custom-layer-head,
+.custom-layer-body,
+.qgis-layer-row{
+    pointer-events:auto !important;
+}
+body.dark .qgis-layer-row{
+    color:#eef4f8;
+    border-color:#31434f;
+}
+body.dark .qgis-layer-row:hover{
+    background:#223440;
+}
+
 </style>
 </head>
 
@@ -3547,41 +3590,248 @@ body.dark .year-badge{
         },{rumah:0,kedai:0,masjid:0,lain:0});
     }
 
+    function getQgisLayerEntries(){
+        const entries=[];
+        if(typeof map==="undefined" || !map || !map.getLayers) return entries;
+
+        function walk(collection){
+            if(!collection || !collection.getArray) return;
+            collection.getArray().forEach(function(layer){
+                if(!layer) return;
+
+                // QGIS2Web layer groups can contain other layers.
+                if(layer.getLayers && layer.getLayers()){
+                    walk(layer.getLayers());
+                    return;
+                }
+
+                let title="";
+                try{
+                    title=(layer.get && (
+                        layer.get("title") ||
+                        layer.get("name") ||
+                        layer.get("id")
+                    )) || "";
+                }catch(e){}
+
+                entries.push({
+                    layer:layer,
+                    title:String(title || "")
+                });
+            });
+        }
+
+        walk(map.getLayers());
+        return entries;
+    }
+
+    function normaliseLayerName(name){
+        return String(name || "")
+            .toLowerCase()
+            .replace(/[_\-]+/g," ")
+            .replace(/\s+/g," ")
+            .trim();
+    }
+
+    function findQgisLayer(key){
+        const aliases={
+            satellite:["google satellite","google","satellite"],
+            mukim:["mukimclipped","sempadan mukim","mukim"],
+            parlimen:["parlimenpeninsular","kes mengikut parlimen","parlimen"],
+            residential3:["landuse3","kawasan kediaman 3","residential 3"],
+            residential2:["landuse2","kawasan kediaman 2","residential 2"],
+            residential1:["landuse1","kawasan kediaman 1","residential 1"],
+            polis:["balai polis","balai_polis","balai polis "]
+        };
+
+        const wanted=aliases[key] || [key];
+        const entries=getQgisLayerEntries();
+
+        for(const entry of entries){
+            const n=normaliseLayerName(entry.title);
+            if(wanted.some(a=>n.includes(normaliseLayerName(a)))) return entry.layer;
+        }
+
+        // Fallback to QGIS2Web global layer variable names.
+        const globals={
+            satellite:["layer_GoogleSatellite_0","layer_GoogleSatellite"],
+            mukim:["layer_mukimclipped_1"],
+            parlimen:["layer_parlimenpeninsular_2018_parlimen_2"],
+            residential3:["layer_landuse3landuse_residential_3"],
+            residential2:["layer_landuse2landuse_residential_4"],
+            residential1:["layer_landuse1landuse_residential_5"],
+            polis:["layer_balai_polis__6"]
+        };
+
+        for(const varName of (globals[key] || [])){
+            try{
+                if(window[varName]) return window[varName];
+            }catch(e){}
+        }
+        return null;
+    }
+
+    function setQgisLayerVisibility(key, visible){
+        const layer=findQgisLayer(key);
+        if(layer && typeof layer.setVisible==="function"){
+            layer.setVisible(!!visible);
+            if(typeof map!=="undefined" && map && map.render) map.render();
+            return true;
+        }
+        console.warn("Layer QGIS2Web tidak dijumpai:",key);
+        return false;
+    }
+
+    function getQgisLayerVisibility(key){
+        const layer=findQgisLayer(key);
+        if(layer && typeof layer.getVisible==="function") return layer.getVisible();
+        return true;
+    }
+
+    function bindLayerControl(target){
+        target.querySelectorAll("[data-qgis-layer]").forEach(function(cb){
+            const key=cb.dataset.qgisLayer;
+            cb.checked=getQgisLayerVisibility(key);
+
+            cb.addEventListener("change",function(e){
+                e.stopPropagation();
+                const ok=setQgisLayerVisibility(key,this.checked);
+                if(!ok){
+                    this.checked=!this.checked;
+                    if(typeof showNotification==="function"){
+                        showNotification("Layer tidak dijumpai. Semak nama layer QGIS2Web.");
+                    }
+                }
+            });
+        });
+
+        const head=target.querySelector(".custom-layer-head");
+        const body=target.querySelector(".custom-layer-body");
+        const icon=target.querySelector(".custom-layer-arrow");
+        if(head && body){
+            head.addEventListener("click",function(e){
+                if(e.target && e.target.tagName==="INPUT") return;
+                const closed=body.style.display==="none";
+                body.style.display=closed ? "block" : "none";
+                if(icon) icon.className=closed ?
+                    "fas fa-chevron-up custom-layer-arrow" :
+                    "fas fa-chevron-down custom-layer-arrow";
+            });
+        }
+    }
+
     function renderMapFilter(targetId, labelsId){
         const target=document.getElementById(targetId), labels=document.getElementById(labelsId);
         if(!target || !labels) return;
         const y=mapFilterYear();
         const yearText=y==="all"?"2025 + 2026":y;
         const t=mapFilterTotals();
+
         target.innerHTML=`
             <div class="map-filter-title"><i class="fas fa-filter"></i> Filter Paparan Peta</div>
+
             <select class="map-filter-year" id="${targetId}-year">
                 <option value="2025">2025</option>
                 <option value="2026">2026</option>
                 <option value="all">2025 + 2026</option>
             </select>
+
+            <div style="font-size:11px;font-weight:800;color:#7a8793;margin:12px 0 7px">
+                PAPARAN LABEL STATISTIK
+            </div>
+
             <div class="map-filter-options">
                 <label><input type="checkbox" data-map-label="rumah" checked> Rumah</label>
                 <label><input type="checkbox" data-map-label="kedai" checked> Kedai</label>
                 <label><input type="checkbox" data-map-label="masjid" checked> Masjid/Kuil/Tokong</label>
                 <label><input type="checkbox" data-map-label="lain" checked> Lain-lain</label>
+            </div>
+
+            <div style="height:1px;background:#e2e8ee;margin:14px 0 0"></div>
+
+            <div class="custom-layer-head"
+                 style="display:flex;align-items:center;justify-content:space-between;
+                        padding:13px 8px 10px;cursor:pointer;font-weight:800;font-size:12px;
+                        user-select:none">
+                <span><i class="fas fa-layer-group" style="margin-right:7px"></i>Kawalan Layer</span>
+                <i class="fas fa-chevron-up custom-layer-arrow"></i>
+            </div>
+
+            <div class="custom-layer-body">
+                <div style="font-size:10px;color:#7a8793;line-height:1.4;padding:0 8px 8px">
+                    Hidupkan atau matikan layer QGIS2Web pada peta.
+                </div>
+
+                <div class="qgis-layer-list">
+                    <label class="qgis-layer-row">
+                        <span>Google Satellite</span>
+                        <input type="checkbox" data-qgis-layer="satellite">
+                    </label>
+                    <label class="qgis-layer-row">
+                        <span>Sempadan Mukim</span>
+                        <input type="checkbox" data-qgis-layer="mukim">
+                    </label>
+                    <label class="qgis-layer-row">
+                        <span>Kes Mengikut Parlimen</span>
+                        <input type="checkbox" data-qgis-layer="parlimen">
+                    </label>
+                    <label class="qgis-layer-row">
+                        <span>Kawasan Kediaman 3</span>
+                        <input type="checkbox" data-qgis-layer="residential3">
+                    </label>
+                    <label class="qgis-layer-row">
+                        <span>Kawasan Kediaman 2</span>
+                        <input type="checkbox" data-qgis-layer="residential2">
+                    </label>
+                    <label class="qgis-layer-row">
+                        <span>Kawasan Kediaman 1</span>
+                        <input type="checkbox" data-qgis-layer="residential1">
+                    </label>
+                    <label class="qgis-layer-row">
+                        <span>Balai Polis</span>
+                        <input type="checkbox" data-qgis-layer="polis">
+                    </label>
+                </div>
             </div>`;
-        const select=target.querySelector('select');
+
+        const select=target.querySelector("select");
         select.value=y;
-        select.addEventListener('change',function(){
-            const main=document.getElementById('yearSelect');
-            if(main){main.value=this.value; main.dispatchEvent(new Event('change'));}
-            else {localStorage.setItem('webgis-year',this.value); updateYearData();}
+        select.addEventListener("change",function(){
+            const main=document.getElementById("yearSelect");
+            if(main){
+                main.value=this.value;
+                main.dispatchEvent(new Event("change"));
+            }else{
+                localStorage.setItem("webgis-year",this.value);
+                updateYearData();
+            }
         });
-        target.querySelectorAll('[data-map-label]').forEach(cb=>cb.addEventListener('change',()=>syncMapLabels()));
+
+        target.querySelectorAll("[data-map-label]").forEach(
+            cb=>cb.addEventListener("change",()=>syncMapLabels())
+        );
 
         labels.innerHTML=`
             <div class="map-case-label" data-label-key="rumah"><strong>Rumah</strong><span>${t.rumah} kes</span></div>
             <div class="map-case-label" data-label-key="kedai"><strong>Kedai</strong><span>${t.kedai} kes</span></div>
             <div class="map-case-label" data-label-key="masjid"><strong>Masjid/Kuil/Tokong</strong><span>${t.masjid} kes</span></div>
             <div class="map-case-label" data-label-key="lain"><strong>Lain-lain</strong><span>${t.lain} kes</span></div>`;
+
         labels.dataset.year=yearText;
         syncMapLabels();
+
+        // QGIS2Web map/layers are loaded by layers.js + qgis2web.js.
+        // Bind after they exist; retry briefly if map is still initializing.
+        let tries=0;
+        const timer=setInterval(function(){
+            tries++;
+            if(typeof map!=="undefined" && map && map.getLayers){
+                clearInterval(timer);
+                bindLayerControl(target);
+            }else if(tries>30){
+                clearInterval(timer);
+            }
+        },100);
     }
 
     function syncMapLabels(){
