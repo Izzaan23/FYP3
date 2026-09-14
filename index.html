@@ -1468,6 +1468,168 @@ body.dark .premise-legend-item strong{
     .premise-pie-legend{grid-template-columns:1fr;}
 }
 
+
+/* =========================================================
+   PETA TABURAN - DATA DI LUAR MAP
+========================================================= */
+.map-page-layout{
+    display:grid;
+    grid-template-columns:minmax(190px,220px) minmax(0,1fr) minmax(260px,300px);
+    gap:14px;
+    align-items:start;
+}
+.map-summary-top{
+    grid-column:1 / 3;
+    display:grid;
+    grid-template-columns:repeat(4,minmax(0,1fr));
+    gap:10px;
+}
+.map-summary-card{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:12px;
+    padding:13px 14px;
+    display:flex;
+    align-items:center;
+    gap:11px;
+    min-height:78px;
+    box-shadow:var(--shadow);
+}
+.map-summary-icon{
+    width:42px;
+    height:42px;
+    min-width:42px;
+    border-radius:10px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:#fff;
+    font-size:18px;
+}
+.map-summary-card.rumah .map-summary-icon{background:#2185c5;}
+.map-summary-card.kedai .map-summary-icon{background:#e45757;}
+.map-summary-card.masjid .map-summary-icon{background:#43a85c;}
+.map-summary-card.lain .map-summary-icon{background:#e88618;}
+.map-summary-card strong{
+    display:block;
+    font-size:12px;
+    margin-bottom:3px;
+}
+.map-summary-card span{
+    display:block;
+    font-size:18px;
+    font-weight:800;
+    color:#1687c9;
+}
+.map-summary-card small{
+    display:block;
+    font-size:10px;
+    color:var(--muted);
+    margin-top:1px;
+}
+.area-summary-panel{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:12px;
+    box-shadow:var(--shadow);
+    overflow:hidden;
+}
+.area-summary-title{
+    padding:13px 14px;
+    border-bottom:1px solid var(--border);
+    font-size:12px;
+    font-weight:800;
+}
+.area-summary-body{
+    padding:12px;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+}
+.area-card{
+    border-radius:10px;
+    padding:13px 14px;
+    border:1px solid var(--border);
+    background:#f8fbfd;
+}
+.area-card.barat{border-left:5px solid #e53935;}
+.area-card.selatan{border-left:5px solid #1687c9;}
+.area-card-label{
+    font-size:11px;
+    font-weight:800;
+    margin-bottom:5px;
+}
+.area-card-value{
+    font-size:26px;
+    font-weight:900;
+    line-height:1;
+}
+.area-card.barat .area-card-value{color:#e53935;}
+.area-card.selatan .area-card-value{color:#1687c9;}
+.area-card-note{
+    margin-top:5px;
+    font-size:10px;
+    color:var(--muted);
+}
+.area-data-warning{
+    margin-top:3px;
+    font-size:10px;
+    line-height:1.45;
+    color:var(--muted);
+}
+.map-main-column{
+    min-width:0;
+}
+.map-page-container{
+    height:calc(100vh - 280px) !important;
+    min-height:500px;
+}
+#mapPageLabels{
+    display:none !important;
+}
+#mapPageFilter{
+    position:static !important;
+    width:auto !important;
+    max-width:none !important;
+    margin:0 !important;
+    transform:none !important;
+}
+body.dark .map-summary-card,
+body.dark .area-summary-panel,
+body.dark .area-card{
+    background:#18242e !important;
+    border-color:#31434f !important;
+    color:#eef4f8 !important;
+}
+body.dark .area-card{background:#1d2a34 !important;}
+@media(max-width:1200px){
+    .map-page-layout{
+        grid-template-columns:200px minmax(0,1fr);
+    }
+    .map-summary-top{
+        grid-column:1 / 3;
+    }
+    .map-filter-column{
+        grid-column:1 / 3;
+    }
+}
+@media(max-width:800px){
+    .map-page-layout{
+        grid-template-columns:1fr;
+    }
+    .map-summary-top,
+    .map-filter-column{
+        grid-column:1;
+    }
+    .map-summary-top{
+        grid-template-columns:1fr 1fr;
+    }
+    .map-page-container{
+        min-height:420px;
+        height:58vh !important;
+    }
+}
+
 </style>
 </head>
 
@@ -2129,37 +2291,100 @@ body.dark .premise-legend-item strong{
     id="map-page">
 
     <div class="page-header">
-
         <div>
-            <h1 class="page-title">
-                Peta Taburan
-            </h1>
-
+            <h1 class="page-title">Peta Taburan</h1>
             <div class="page-subtitle">
-                Peta interaktif taburan kes pecah rumah
+                Peta interaktif taburan kes pecah rumah mengikut kawasan di Ipoh
             </div>
         </div>
 
-        <button
-            class="panel-action"
-            onclick="resetMap()">
-
+        <button class="panel-action" onclick="resetMap()">
             <i class="fas fa-sync"></i>
             Reset Peta
-
         </button>
-
     </div>
 
-    <div class="map-page-container" id="mapPageHost">
+    <div class="map-page-layout">
 
-        <div class="map-case-labels" id="mapPageLabels"></div>
-        <div class="map-filter-panel" id="mapPageFilter"></div>
+        <!-- DATA JENIS PREMIS DI LUAR MAP -->
+        <div class="map-summary-top">
+            <div class="map-summary-card rumah">
+                <div class="map-summary-icon"><i class="fas fa-home"></i></div>
+                <div>
+                    <strong>Rumah</strong>
+                    <span id="mapTopRumah">0</span>
+                    <small>kes</small>
+                </div>
+            </div>
 
-        <!-- QGIS2Web #map is moved here when this page is opened -->
+            <div class="map-summary-card kedai">
+                <div class="map-summary-icon"><i class="fas fa-store"></i></div>
+                <div>
+                    <strong>Kedai</strong>
+                    <span id="mapTopKedai">0</span>
+                    <small>kes</small>
+                </div>
+            </div>
+
+            <div class="map-summary-card masjid">
+                <div class="map-summary-icon"><i class="fas fa-place-of-worship"></i></div>
+                <div>
+                    <strong>Masjid / Kuil / Tokong</strong>
+                    <span id="mapTopMasjid">0</span>
+                    <small>kes</small>
+                </div>
+            </div>
+
+            <div class="map-summary-card lain">
+                <div class="map-summary-icon"><i class="fas fa-ellipsis-h"></i></div>
+                <div>
+                    <strong>Lain-lain</strong>
+                    <span id="mapTopLain">0</span>
+                    <small>kes</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- IPOH BARAT / IPOH SELATAN DI LUAR MAP -->
+        <div class="area-summary-panel">
+            <div class="area-summary-title">
+                <i class="fas fa-map-marked-alt"></i>
+                Kes Mengikut Kawasan
+            </div>
+            <div class="area-summary-body">
+                <div class="area-card barat">
+                    <div class="area-card-label">Ipoh Barat</div>
+                    <div class="area-card-value" id="ipohBaratCases">—</div>
+                    <div class="area-card-note" id="ipohBaratPct">Data kawasan belum dimasukkan</div>
+                </div>
+
+                <div class="area-card selatan">
+                    <div class="area-card-label">Ipoh Selatan</div>
+                    <div class="area-card-value" id="ipohSelatanCases">—</div>
+                    <div class="area-card-note" id="ipohSelatanPct">Data kawasan belum dimasukkan</div>
+                </div>
+
+                <div class="area-data-warning">
+                    Jumlah Ipoh Barat dan Ipoh Selatan akan berubah ikut tahun selepas
+                    nilai sebenar dimasukkan dalam <b>WEBGIS_AREA_DATA</b>.
+                </div>
+            </div>
+        </div>
+
+        <!-- MAP -->
+        <div class="map-main-column">
+            <div class="map-page-container" id="mapPageHost">
+                <div class="map-case-labels" id="mapPageLabels"></div>
+                <!-- QGIS2Web #map is moved here when this page is opened -->
+            </div>
+        </div>
+
+        <!-- FILTER DI LUAR MAP -->
+        <div class="map-filter-column">
+            <div class="map-filter-panel" id="mapPageFilter"></div>
+        </div>
 
     </div>
-
 </section>
 
 
@@ -4009,7 +4234,50 @@ body.dark .year-badge{
         return true;
     }
 
+
+    function cleanupDuplicateMapControls(target){
+        if(!target) return;
+
+        /* Pastikan hanya SATU header Kawalan Layer wujud.
+           Simpan header yang benar-benar mempunyai .custom-layer-body selepasnya. */
+        const heads=Array.from(target.querySelectorAll(".custom-layer-head"));
+        if(heads.length>1){
+            let keep=heads.find(function(h){
+                let n=h.nextElementSibling;
+                while(n && n.classList && !n.classList.contains("custom-layer-body")){
+                    n=n.nextElementSibling;
+                }
+                return n && n.classList && n.classList.contains("custom-layer-body");
+            }) || heads[heads.length-1];
+
+            heads.forEach(function(h){
+                if(h!==keep) h.remove();
+            });
+        }
+
+        /* Jika tajuk PAPARAN LABEL STATISTIK pernah ditambah dua kali
+           oleh versi lama, kekalkan satu sahaja. */
+        const children=Array.from(target.children);
+        const labelTitles=children.filter(function(el){
+            return el.textContent &&
+                   el.textContent.trim().toUpperCase()==="PAPARAN LABEL STATISTIK";
+        });
+        if(labelTitles.length>1){
+            labelTitles.slice(1).forEach(function(el){ el.remove(); });
+        }
+
+        /* Pastikan hanya satu body senarai layer. */
+        const bodies=Array.from(target.querySelectorAll(".custom-layer-body"));
+        if(bodies.length>1){
+            const keepBody=bodies[bodies.length-1];
+            bodies.forEach(function(b){
+                if(b!==keepBody) b.remove();
+            });
+        }
+    }
+
     function bindLayerControl(target){
+        cleanupDuplicateMapControls(target);
         target.querySelectorAll("[data-qgis-layer]").forEach(function(cb){
             const key=cb.dataset.qgisLayer;
             cb.checked=getQgisLayerVisibility(key);
@@ -4056,10 +4324,6 @@ body.dark .year-badge{
                 <option value="2026">2026</option>
                 <option value="all">2025 + 2026</option>
             </select>
-
-            <div style="font-size:11px;font-weight:800;color:#7a8793;margin:12px 0 7px">
-                PAPARAN LABEL STATISTIK
-            </div>
 
             <div class="map-filter-options">
                 <label><input type="checkbox" data-map-label="rumah" checked> Rumah</label>
@@ -4115,6 +4379,8 @@ body.dark .year-badge{
                 </div>
             </div>`;
 
+        cleanupDuplicateMapControls(target);
+
         const select=target.querySelector("select");
         select.value=y;
         select.addEventListener("change",function(){
@@ -4143,6 +4409,15 @@ body.dark .year-badge{
 
         // QGIS2Web map/layers are loaded by layers.js + qgis2web.js.
         // Bind after they exist; retry briefly if map is still initializing.
+        /* Lindungi panel daripada duplicate yang mungkin ditambah semula
+           oleh script versi lama selepas page load. */
+        if(!target.__layerDedupeObserver){
+            target.__layerDedupeObserver=new MutationObserver(function(){
+                cleanupDuplicateMapControls(target);
+            });
+            target.__layerDedupeObserver.observe(target,{childList:true,subtree:false});
+        }
+
         let tries=0;
         const timer=setInterval(function(){
             tries++;
@@ -4203,6 +4478,89 @@ body.dark .year-badge{
         }
     },400);
 })();
+</script>
+
+
+<script id="outside-map-summary-script">
+/* =========================================================
+   DATA KES IPOH BARAT / IPOH SELATAN
+   Masukkan JUMLAH SEBENAR di sini apabila data rasmi tersedia.
+   Jangan gunakan nombor contoh sebagai data sebenar.
+========================================================= */
+window.WEBGIS_AREA_DATA = window.WEBGIS_AREA_DATA || {
+    "2025": { barat: null, selatan: null },
+    "2026": { barat: null, selatan: null }
+};
+
+function updateOutsideMapSummary(){
+    if(typeof selectedTotals!=="function") return;
+
+    const totals=selectedTotals();
+    const year=(typeof currentYear==="function") ? String(currentYear()) : "2025";
+
+    const mapEls={
+        rumah:document.getElementById("mapTopRumah"),
+        kedai:document.getElementById("mapTopKedai"),
+        masjid:document.getElementById("mapTopMasjid"),
+        lain:document.getElementById("mapTopLain")
+    };
+    if(mapEls.rumah) mapEls.rumah.textContent=totals.rumah ?? 0;
+    if(mapEls.kedai) mapEls.kedai.textContent=totals.kedai ?? 0;
+    if(mapEls.masjid) mapEls.masjid.textContent=totals.masjid ?? 0;
+    if(mapEls.lain) mapEls.lain.textContent=totals.lain ?? 0;
+
+    let area;
+    if(year==="all"){
+        const a=window.WEBGIS_AREA_DATA["2025"] || {};
+        const b=window.WEBGIS_AREA_DATA["2026"] || {};
+        area={
+            barat:(a.barat!=null && b.barat!=null) ? Number(a.barat)+Number(b.barat) : null,
+            selatan:(a.selatan!=null && b.selatan!=null) ? Number(a.selatan)+Number(b.selatan) : null
+        };
+    }else{
+        area=window.WEBGIS_AREA_DATA[year] || {};
+    }
+
+    const barat=(area.barat!=null && !isNaN(Number(area.barat))) ? Number(area.barat) : null;
+    const selatan=(area.selatan!=null && !isNaN(Number(area.selatan))) ? Number(area.selatan) : null;
+    const totalArea=(barat!=null && selatan!=null) ? barat+selatan : null;
+
+    const bVal=document.getElementById("ipohBaratCases");
+    const sVal=document.getElementById("ipohSelatanCases");
+    const bPct=document.getElementById("ipohBaratPct");
+    const sPct=document.getElementById("ipohSelatanPct");
+
+    if(bVal) bVal.textContent=barat==null ? "—" : barat;
+    if(sVal) sVal.textContent=selatan==null ? "—" : selatan;
+
+    if(totalArea && bPct && sPct){
+        bPct.textContent=((barat/totalArea)*100).toFixed(1)+"% daripada dua kawasan";
+        sPct.textContent=((selatan/totalArea)*100).toFixed(1)+"% daripada dua kawasan";
+    }else{
+        if(bPct) bPct.textContent="Data kawasan belum dimasukkan";
+        if(sPct) sPct.textContent="Data kawasan belum dimasukkan";
+    }
+}
+
+document.addEventListener("DOMContentLoaded",function(){
+    setTimeout(updateOutsideMapSummary,100);
+});
+
+/* Sinkron dengan penukaran tahun yang sedia ada */
+document.addEventListener("change",function(e){
+    if(e.target && e.target.tagName==="SELECT"){
+        setTimeout(updateOutsideMapSummary,0);
+    }
+});
+
+/* Backup sync jika tahun ditukar melalui fungsi lain */
+setInterval(function(){
+    const y=(typeof currentYear==="function") ? String(currentYear()) : "2025";
+    if(window.__outsideMapYear!==y){
+        window.__outsideMapYear=y;
+        updateOutsideMapSummary();
+    }
+},400);
 </script>
 
 </body>
