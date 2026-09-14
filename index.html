@@ -1034,6 +1034,113 @@ body.dark .donut::after{
     background:#18242e;
 }
 
+
+/* =========================================================
+   DARK MODE - VISIBILITY FIX (STRONG OVERRIDES)
+========================================================= */
+
+body.dark,
+body.dark main,
+body.dark .page,
+body.dark .content{
+    background:#101820 !important;
+    color:#eef4f8 !important;
+}
+
+body.dark .panel,
+body.dark .stat-card,
+body.dark .chart-card,
+body.dark .report-card,
+body.dark .summary-card{
+    background:#18242e !important;
+    color:#eef4f8 !important;
+    border-color:#31434f !important;
+}
+
+body.dark .panel h1,
+body.dark .panel h2,
+body.dark .panel h3,
+body.dark .panel h4,
+body.dark .panel h5,
+body.dark .panel h6,
+body.dark .panel-title,
+body.dark .page-title,
+body.dark .card-title{
+    color:#ffffff !important;
+}
+
+body.dark .page-subtitle,
+body.dark .stat-label,
+body.dark .muted,
+body.dark small{
+    color:#c2ced6 !important;
+}
+
+/* Statistik / jadual */
+body.dark .data-table{
+    background:#18242e !important;
+    color:#eef4f8 !important;
+}
+
+body.dark .data-table th{
+    background:#223440 !important;
+    color:#ffffff !important;
+    border-bottom:1px solid #667985 !important;
+}
+
+body.dark .data-table td{
+    background:#18242e !important;
+    color:#e8eef3 !important;
+    border-bottom:1px solid #42545f !important;
+}
+
+body.dark .data-table tr:nth-child(even) td{
+    background:#1b2a34 !important;
+}
+
+body.dark .data-table tr:hover td{
+    background:#29404e !important;
+    color:#ffffff !important;
+}
+
+/* Tetapan */
+body.dark .settings{
+    background:#18242e !important;
+    color:#eef4f8 !important;
+}
+
+body.dark .settings-title h3,
+body.dark .settings-title h3 span,
+body.dark .setting-row > span,
+body.dark .setting-row > label{
+    color:#f5f8fa !important;
+}
+
+body.dark .setting-section h4{
+    color:#9eabb5 !important;
+}
+
+body.dark .setting-row{
+    color:#eef4f8 !important;
+    border-color:#31434f !important;
+}
+
+body.dark .setting-row button{
+    background:#e9f3f8 !important;
+    color:#0879b6 !important;
+}
+
+body.dark .language-select{
+    background:#253640 !important;
+    color:#ffffff !important;
+    border-color:#49606d !important;
+}
+
+body.dark .language-select option{
+    background:#253640 !important;
+    color:#ffffff !important;
+}
+
 /* =========================================================
    LANGUAGE + COMPLAINT
 ========================================================= */
@@ -2504,6 +2611,16 @@ body.dark .complaint-status{background:#1c3528;}
 </div>
 
 
+
+/* =========================================================
+   WEBGIS_LANGUAGE_FINAL_FIX
+   Pastikan bahasa kekal selepas semua komponen dimuatkan.
+========================================================= */
+window.addEventListener("load", function(){
+    const savedLang = localStorage.getItem("webgis-language") || "ms";
+    changeLanguage(savedLang);
+});
+
 <!-- =====================================================
      QGIS2WEB SCRIPTS
 ===================================================== -->
@@ -2650,21 +2767,95 @@ function translateAllVisibleText(lang){
 }
 
 function changeLanguage(lang){
-    const d=translations[lang]||translations.ms;
-    document.documentElement.lang=lang;
-    document.querySelectorAll("[data-i18n]").forEach(el=>{
-        const k=el.getAttribute("data-i18n");
-        if(d[k]) el.textContent=d[k];
+
+    const d = translations[lang] || translations.ms;
+
+    document.documentElement.lang = lang;
+
+    /* Semua elemen yang menggunakan data-i18n */
+    document.querySelectorAll("[data-i18n]").forEach(function(el){
+        const key = el.getAttribute("data-i18n");
+        if(d[key] !== undefined){
+            el.textContent = d[key];
+        }
     });
-    document.querySelectorAll("[data-i18n-placeholder]").forEach(el=>{
-        const k=el.getAttribute("data-i18n-placeholder");
-        if(d[k]) el.setAttribute("placeholder",d[k]);
+
+    /* Placeholder */
+    document.querySelectorAll("[data-i18n-placeholder]").forEach(function(el){
+        const key = el.getAttribute("data-i18n-placeholder");
+        if(d[key] !== undefined){
+            el.setAttribute("placeholder", d[key]);
+        }
     });
+
+    /* Select bahasa */
+    const select = document.getElementById("languageSelect");
+    if(select){
+        select.value = lang;
+        select.options[0].text = "🇲🇾 " + (lang==="ms" ? "Bahasa Melayu" : "Bahasa Melayu");
+        select.options[1].text = "🇬🇧 " + (lang==="en" ? "English" : "English");
+        select.options[2].text = "🇨🇳 " + (lang==="zh" ? "普通话" : "Mandarin");
+    }
+
+    /* Teks yang belum mempunyai data-i18n */
     translateAllVisibleText(lang);
-    const s=document.getElementById("languageSelect");
-    if(s) s.value=lang;
-    localStorage.setItem("webgis-language",lang);
+
+    /* Paksa bahagian Tetapan ikut bahasa semasa */
+    const settingsMap = {
+        ms:{
+            title:"Tetapan", display:"Paparan", dark:"Dark Mode",
+            sidebar:"Sidebar", collapse:"Runtuhkan", fullscreen:"Fullscreen",
+            map:"Peta", resetMap:"Reset Peta", reset:"Reset",
+            layer:"Kawalan Layer", open:"Buka", system:"Sistem",
+            version:"Versi Sistem", language:"Bahasa"
+        },
+        en:{
+            title:"Settings", display:"Display", dark:"Dark Mode",
+            sidebar:"Sidebar", collapse:"Collapse", fullscreen:"Fullscreen",
+            map:"Map", resetMap:"Reset Map", reset:"Reset",
+            layer:"Layer Control", open:"Open", system:"System",
+            version:"System Version", language:"Language"
+        },
+        zh:{
+            title:"设置", display:"显示", dark:"深色模式",
+            sidebar:"侧边栏", collapse:"收起", fullscreen:"全屏",
+            map:"地图", resetMap:"重置地图", reset:"重置",
+            layer:"图层控制", open:"打开", system:"系统",
+            version:"系统版本", language:"语言"
+        }
+    };
+
+    const s = settingsMap[lang] || settingsMap.ms;
+
+    const settingsTitle = document.querySelector(".settings-title h3 span");
+    const settingHeaders = document.querySelectorAll(".setting-section h4");
+    const rows = document.querySelectorAll(".settings .setting-row");
+
+    if(settingsTitle) settingsTitle.textContent = s.title;
+    if(settingHeaders[0]) settingHeaders[0].textContent = s.display;
+    if(settingHeaders[1]) settingHeaders[1].textContent = s.map;
+    if(settingHeaders[2]) settingHeaders[2].textContent = s.system;
+
+    if(rows[0]) rows[0].querySelector("span").textContent = s.dark;
+    if(rows[1]){
+        rows[1].querySelector("span").textContent = s.sidebar;
+        const b=rows[1].querySelector("button"); if(b) b.textContent=s.collapse;
+    }
+    if(rows[2]) rows[2].querySelector("span").textContent = s.fullscreen;
+    if(rows[3]){
+        rows[3].querySelector("span").textContent = s.resetMap;
+        const b=rows[3].querySelector("button"); if(b) b.textContent=s.reset;
+    }
+    if(rows[4]){
+        rows[4].querySelector("span").textContent = s.layer;
+        const b=rows[4].querySelector("button"); if(b) b.textContent=s.open;
+    }
+    if(rows[5]) rows[5].querySelector("span").textContent = s.version;
+    if(rows[6]) rows[6].querySelector("span").textContent = s.language;
+
+    localStorage.setItem("webgis-language", lang);
 }
+
 
 /* =====================================================
    QGIS2WEB MAP CONTAINER - SINGLE #map
@@ -3060,6 +3251,316 @@ function exportTable(){
 
 }
 
+</script>
+
+
+<!-- =====================================================
+     DATA 2025 + 2026 / YEAR FILTER
+     Added without removing the original QGIS2Web code.
+===================================================== -->
+<style>
+.year-control{
+    display:flex;
+    align-items:center;
+    gap:7px;
+    margin-right:4px;
+}
+.year-control label{
+    font-size:12px;
+    font-weight:700;
+    color:#d9e7f2;
+}
+#yearSelect{
+    min-width:100px;
+    padding:8px 10px;
+    border:1px solid rgba(255,255,255,.22);
+    border-radius:8px;
+    background:#193247;
+    color:#fff;
+    outline:none;
+    cursor:pointer;
+}
+body.dark #yearSelect{
+    background:#25343f;
+    color:#fff;
+    border-color:#3b4c58;
+}
+.year-badge{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    margin-left:10px;
+    padding:6px 10px;
+    border-radius:999px;
+    background:#eaf5fb;
+    color:#0878bd;
+    font-size:12px;
+    font-weight:700;
+}
+body.dark .year-badge{
+    background:#243845;
+    color:#67c2ff;
+}
+@media(max-width:900px){
+    .year-control label{display:none}
+    #yearSelect{min-width:86px}
+}
+</style>
+
+<script>
+(function(){
+    /* Data copied from the uploaded CSV files. */
+    window.WEBGIS_DATA = {
+        "2025": [
+            ["JANUARI",45,14,0,10],
+            ["FEBRUARI",50,5,0,10],
+            ["MAC",43,3,0,6],
+            ["APRIL",46,6,1,13],
+            ["MEI",32,9,0,21],
+            ["JUN",35,4,2,17],
+            ["JULAI",32,2,0,9],
+            ["OGOS",44,8,0,14],
+            ["SEPTEMBER",34,8,1,2],
+            ["OKTOBER",35,3,1,2],
+            ["NOVEMBER",23,2,1,3],
+            ["DISEMBER",15,1,0,5]
+        ],
+        "2026": [
+            ["JANUARI",31,4,0,4],
+            ["FEBRUARI",30,2,0,0],
+            ["FEBRUARI",0,0,1,17],
+            ["MAC",25,5,0,9]
+        ]
+    };
+
+    const monthOrder=["JANUARI","FEBRUARI","MAC","APRIL","MEI","JUN","JULAI","OGOS","SEPTEMBER","OKTOBER","NOVEMBER","DISEMBER"];
+    const monthShort={JANUARI:"JAN",FEBRUARI:"FEB",MAC:"MAC",APRIL:"APR",MEI:"MEI",JUN:"JUN",JULAI:"JUL",OGOS:"OGOS",SEPTEMBER:"SEP",OKTOBER:"OKT",NOVEMBER:"NOV",DISEMBER:"DIS"};
+
+    function getData(year){
+        const rows=WEBGIS_DATA[year]||[];
+        const out={};
+        monthOrder.forEach(m=>out[m]={month:m,rumah:0,kedai:0,masjid:0,lain:0});
+        rows.forEach(r=>{
+            const m=String(r[0]).trim().toUpperCase();
+            if(!out[m]) out[m]={month:m,rumah:0,kedai:0,masjid:0,lain:0};
+            out[m].rumah+=Number(r[1])||0;
+            out[m].kedai+=Number(r[2])||0;
+            out[m].masjid+=Number(r[3])||0;
+            out[m].lain+=Number(r[4])||0;
+        });
+        return monthOrder.map(m=>out[m]);
+    }
+
+    function totals(year){
+        return getData(year).reduce((a,r)=>{
+            a.rumah+=r.rumah;a.kedai+=r.kedai;a.masjid+=r.masjid;a.lain+=r.lain;
+            return a;
+        },{rumah:0,kedai:0,masjid:0,lain:0});
+    }
+
+    function totalCases(year){
+        const t=totals(year);
+        return t.rumah+t.kedai+t.masjid+t.lain;
+    }
+
+    function highestMonth(year){
+        return getData(year).reduce((best,r)=>{
+            const n=r.rumah+r.kedai+r.masjid+r.lain;
+            return n>best.n?{month:r.month,n:n}:best;
+        },{month:"-",n:-1});
+    }
+
+    function currentYear(){
+        return (document.getElementById("yearSelect")||{}).value || localStorage.getItem("webgis-year") || "2025";
+    }
+
+    function addYearSelector(){
+        const actions=document.querySelector(".header-actions");
+        if(!actions || document.getElementById("yearSelect")) return;
+        const wrap=document.createElement("div");
+        wrap.className="year-control";
+        wrap.innerHTML='<label for="yearSelect">Tahun</label><select id="yearSelect" aria-label="Pilih tahun"><option value="2025">2025</option><option value="2026">2026</option><option value="all">2025 + 2026</option></select>';
+        const search=actions.querySelector(".search-box");
+        if(search) actions.insertBefore(wrap,search);
+        else actions.insertBefore(wrap,actions.firstChild);
+        const saved=localStorage.getItem("webgis-year");
+        document.getElementById("yearSelect").value=(saved==="2026"||saved==="all")?saved:"2025";
+        document.getElementById("yearSelect").addEventListener("change",function(){
+            localStorage.setItem("webgis-year",this.value);
+            updateYearData();
+        });
+    }
+
+    function getCombined(){
+        const a=getData("2025"), b=getData("2026");
+        return a.map((r,i)=>({
+            month:r.month,
+            rumah:r.rumah+b[i].rumah,
+            kedai:r.kedai+b[i].kedai,
+            masjid:r.masjid+b[i].masjid,
+            lain:r.lain+b[i].lain
+        }));
+    }
+
+    function selectedRows(){
+        const y=currentYear();
+        if(y==="all") return getCombined();
+        return getData(y);
+    }
+
+    function selectedTotals(){
+        return selectedRows().reduce((a,r)=>{
+            a.rumah+=r.rumah;a.kedai+=r.kedai;a.masjid+=r.masjid;a.lain+=r.lain;return a;
+        },{rumah:0,kedai:0,masjid:0,lain:0});
+    }
+
+    function selectedTotal(){
+        const t=selectedTotals(); return t.rumah+t.kedai+t.masjid+t.lain;
+    }
+
+    function updateYearLabels(){
+        const y=currentYear();
+        const label=y==="all"?"2025 + 2026":y;
+        document.querySelectorAll(".year-badge").forEach(e=>e.textContent=label);
+        document.querySelectorAll(".data-year-text").forEach(e=>e.textContent=label);
+        const title=document.querySelector(".header-title");
+        if(title){
+            const lang=document.documentElement.lang||"ms";
+            const map={
+                ms:"SISTEM WEB GIS JENAYAH PECAH RUMAH DI IPOH TAHUN ",
+                en:"WEB GIS SYSTEM FOR HOUSEBREAKING CRIME IN IPOH YEAR ",
+                zh:"怡保入屋盗窃罪案 Web GIS 系统 "
+            };
+            title.textContent=(map[lang]||map.ms)+label;
+        }
+        const brand=document.querySelector(".brand-text");
+        if(brand) brand.innerHTML="WEB GIS<br>IPoh "+label;
+    }
+
+    function updateDashboard(){
+        const t=selectedTotals(), total=selectedTotal();
+        const cards=document.querySelectorAll("#dashboard .stats .stat-card");
+        if(cards.length>=4){
+            cards[0].querySelector(".stat-number").textContent=total;
+            cards[1].querySelector(".stat-number").textContent=t.rumah;
+            cards[2].querySelector(".stat-number").textContent=t.kedai;
+            cards[3].querySelector(".stat-number").textContent=t.masjid;
+            const changes=cards[0].querySelector(".stat-change"); if(changes) changes.lastChild.textContent=" Data "+currentYear();
+            const c4=cards[3].querySelector(".stat-change"); if(c4) c4.lastChild.textContent=" Data "+currentYear();
+        }
+
+        const bars=document.querySelectorAll("#dashboard .dashboard-grid .panel:nth-child(2) .chart .bar");
+        const rows=selectedRows(), max=Math.max(...rows.map(r=>r.rumah+r.kedai+r.masjid+r.lain),1);
+        if(bars.length){
+            bars.forEach((bar,i)=>{
+                const r=rows[i];
+                if(!r){bar.style.display="none";return;}
+                bar.style.display="";
+                const n=r.rumah+r.kedai+r.masjid+r.lain;
+                bar.style.height=(n/max*78+8)+"%";
+                const strong=bar.querySelector("strong"), span=bar.querySelector("span");
+                if(strong) strong.textContent=n;
+                if(span) span.textContent=monthShort[r.month];
+            });
+        }
+        const center=document.querySelector("#dashboard .donut-center");
+        if(center) center.textContent=total;
+        const donut=document.querySelector("#dashboard .donut");
+        if(donut){
+            const p1=t.rumah/Math.max(total,1)*100, p2=p1+t.kedai/Math.max(total,1)*100, p3=p2+t.masjid/Math.max(total,1)*100;
+            donut.style.background=`conic-gradient(#2586c1 0 ${p1}%,#e8a23a ${p1}% ${p2}%,#55a868 ${p2}% ${p3}%,#c64e4e ${p3}% 100%)`;
+        }
+        const labels=document.querySelectorAll("#dashboard .dashboard-grid .panel");
+        if(labels[1]){const pt=labels[1].querySelector(".panel-title");if(pt)pt.textContent="TREND BULANAN ("+(currentYear()==="all"?"2025 + 2026":currentYear())+")";}
+        if(labels[2]){
+            const pt=labels[2].querySelector(".panel-title");if(pt)pt.textContent="KES MENGIKUT JENIS PREMIS";
+        }
+    }
+
+    function updateTable(){
+        const rows=selectedRows(), table=document.getElementById("statisticsTable");
+        if(table){
+            const body=table.querySelector("tbody");
+            if(body){
+                body.innerHTML=rows.map(r=>{
+                    const n=r.rumah+r.kedai+r.masjid+r.lain;
+                    return `<tr><td>${r.month}</td><td>${n}</td><td>${r.rumah}</td><td>${r.kedai}</td><td>${r.masjid}</td><td>${r.lain}</td></tr>`;
+                }).join("");
+            }
+        }
+        const firstTable=document.querySelector("#dashboard .data-table");
+        if(firstTable){
+            const body=firstTable.querySelector("tbody");
+            if(body){
+                body.innerHTML=rows.slice(0,4).map(r=>{
+                    const n=r.rumah+r.kedai+r.masjid+r.lain;
+                    return `<tr><td>${r.month}</td><td>${n}</td><td>${r.rumah}</td><td>${r.kedai}</td><td>${r.masjid}</td><td>${r.lain}</td></tr>`;
+                }).join("");
+            }
+        }
+        document.querySelectorAll("#jadual-page .page-subtitle").forEach(e=>e.textContent="Statistik bulanan kes pecah rumah tahun "+(currentYear()==="all"?"2025 + 2026":currentYear()));
+        document.querySelectorAll("#jadual-page .panel-title").forEach(e=>e.textContent="JADUAL STATISTIK KES PECAH RUMAH "+(currentYear()==="all"?"2025 + 2026":currentYear()));
+    }
+
+    function updatePremise(){
+        const t=selectedTotals(), total=Math.max(selectedTotal(),1);
+        const cards=document.querySelectorAll("#jenis-page .stats .stat-card");
+        const vals=[["RUMAH",t.rumah],["KEDAI",t.kedai],["MASJID/SURAU/TOKONG",t.masjid],["LAIN-LAIN",t.lain]];
+        cards.forEach((card,i)=>{
+            if(!vals[i])return;
+            card.querySelector(".stat-label").textContent=vals[i][0];
+            card.querySelector(".stat-number").textContent=vals[i][1];
+            const ls=card.querySelectorAll(".stat-label")[1];
+            if(ls) ls.textContent=(vals[i][1]/total*100).toFixed(1)+"%";
+        });
+    }
+
+    function updateReport(){
+        const total=selectedTotal(), rows=selectedRows(), hm=rows.reduce((best,r)=>{
+            const n=r.rumah+r.kedai+r.masjid+r.lain;return n>best.n?{m:r.month,n:n}:best;
+        },{m:"-",n:-1});
+        const t=selectedTotals();
+        const highest=[["Rumah",t.rumah],["Kedai",t.kedai],["Masjid/Surau/Tokong",t.masjid],["Lain-lain",t.lain]].sort((a,b)=>b[1]-a[1])[0];
+        const cards=document.querySelectorAll("#laporan-page .stats .stat-card");
+        if(cards[0]) cards[0].querySelector(".stat-number").textContent=total;
+        if(cards[1]) cards[1].querySelector(".stat-number").textContent=highest[0];
+        if(cards[2]) cards[2].querySelector(".stat-number").textContent=hm.n;
+        const p1=document.querySelector("#laporan-page [data-i18n='reportText1']");
+        const p2=document.querySelector("#laporan-page [data-i18n='reportText2']");
+        const y=currentYear()==="all"?"2025 + 2026":currentYear();
+        if(p1) p1.textContent="Sistem Web GIS ini memaparkan taburan dan statistik kes pecah rumah di kawasan Ipoh bagi tahun "+y+". Sistem menggabungkan maklumat spatial, statistik bulanan dan kategori premis dalam satu paparan interaktif.";
+        if(p2) p2.textContent="Berdasarkan data yang dipaparkan, kategori "+highest[0].toLowerCase()+" merupakan kategori dengan jumlah kes tertinggi.";
+    }
+
+    function updateYearData(){
+        addYearSelector();
+        updateDashboard();
+        updateTable();
+        updatePremise();
+        updateReport();
+        updateYearLabels();
+    }
+
+    window.updateYearData=updateYearData;
+    document.addEventListener("DOMContentLoaded",function(){
+        setTimeout(updateYearData,80);
+        setTimeout(function(){
+            const ls=document.getElementById("languageSelect");
+            if(ls && !ls.dataset.yearSync){
+                ls.dataset.yearSync="1";
+                ls.addEventListener("change",function(){ setTimeout(updateYearData,20); });
+            }
+        },120);
+    });
+    setTimeout(updateYearData,250);
+    setTimeout(function(){
+        const ls=document.getElementById("languageSelect");
+        if(ls && !ls.dataset.yearSync){
+            ls.dataset.yearSync="1";
+            ls.addEventListener("change",function(){ setTimeout(updateYearData,20); });
+        }
+    },400);
+})();
 </script>
 
 </body>
