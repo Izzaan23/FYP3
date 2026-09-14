@@ -3041,18 +3041,18 @@ body.dark .admin-cloud-note{background:#1d3441;color:#c8d3d9}
     </div>
     <div class="panel-body">
       <div class="admin-cloud-note" id="adminModeNote">
-        Akses ke senarai aduan adalah untuk pengguna berdaftar sahaja.
-        Log masuk menggunakan email dan kata laluan admin Firebase.
+        Akses Pengurusan Aduan adalah untuk admin sahaja.
+        Email admin telah ditetapkan. Masukkan kata laluan untuk log masuk.
       </div>
 
       <div class="admin-login-grid">
         <div class="form-group">
           <label>Email Admin</label>
-          <input type="email" id="adminEmail" placeholder="admin@email.com">
+          <input type="email" id="adminEmail" value="admin@gmail.com" readonly>
         </div>
         <div class="form-group">
           <label>Kata Laluan</label>
-          <input type="password" id="adminPassword" placeholder="Kata laluan Firebase Auth">
+          <input type="password" id="adminPassword" placeholder="Masukkan kata laluan admin">
         </div>
       </div>
 
@@ -4904,27 +4904,37 @@ function badge(s){
 }
 
 async function adminLogin(){
-    if(!window.__firebaseReady){
-        showNotification("Firebase belum dikonfigurasi. Masukkan FIREBASE_CONFIG terlebih dahulu.");
-        return;
-    }
-
     const email=document.getElementById("adminEmail").value.trim();
     const password=document.getElementById("adminPassword").value;
 
-    if(!email||!password){
-        showNotification("Masukkan email dan kata laluan admin");
+    if(email!=="admin@gmail.com" || password!=="admin"){
+        showNotification("Email atau kata laluan tidak betul");
         return;
     }
 
-    try{
-        await window.__firebaseAuth.signInWithEmailAndPassword(email,password);
-        showAdminDashboard();
-        await loadAdminComplaints();
-    }catch(e){
-        console.error(e);
-        showNotification("Log masuk admin gagal");
+    /*
+      Login tetap ini hanya untuk prototaip/FYP.
+      Jika Firebase Authentication sudah dikonfigurasi, cuba login Firebase juga.
+    */
+    if(window.__firebaseReady){
+        try{
+            await window.__firebaseAuth.signInWithEmailAndPassword(email,password);
+            showAdminDashboard();
+            await loadAdminComplaints();
+            return;
+        }catch(e){
+            console.error(e);
+            showNotification("Akaun admin belum dicipta dalam Firebase Authentication");
+            return;
+        }
     }
+
+    // Tanpa Firebase, benarkan paparan admin tetapi tiada data cloud boleh dibaca.
+    window.__prototypeAdminLoggedIn=true;
+    showAdminDashboard();
+    window.__adminComplaints=[];
+    renderAdminComplaints();
+    showNotification("Log masuk prototaip berjaya. Sambungkan Firebase untuk melihat aduan online.");
 }
 
 function showAdminDashboard(){
