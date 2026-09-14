@@ -1946,6 +1946,10 @@ body.dark .complaint-status{background:#1c3528;}
                 <i class="fas fa-layer-group"></i>
                 <span data-i18n="layerControl">Kawalan Layer</span>
             </div>
+            <div class="map-layer-actions">
+                <button type="button" onclick="setAllMapLayers(true)">✓ Semua ON</button>
+                <button type="button" onclick="setAllMapLayers(false)">✕ Semua OFF</button>
+            </div>
             <div class="map-layer-list" id="mapPageLayerList">
                 <div class="map-layer-loading">Memuatkan layer...</div>
             </div>
@@ -2817,6 +2821,9 @@ function changeLanguage(lang){
 .map-layer-control{position:absolute;top:16px;left:16px;z-index:1200;width:260px;max-height:calc(100% - 32px);overflow:hidden;background:rgba(255,255,255,.97);border:1px solid #dce5ec;border-radius:14px;box-shadow:0 8px 24px rgba(0,0,0,.16);color:#17212b;}
 .map-layer-control-header{display:flex;align-items:center;gap:9px;padding:13px 15px;font-weight:800;font-size:15px;border-bottom:1px solid #e5ebf0;background:#f8fafc;}
 .map-layer-control-header i{color:#1687c9;}
+.map-layer-actions{display:flex;gap:6px;padding:8px 10px;border-bottom:1px solid #e5ebf0;background:#fff;}
+.map-layer-actions button{flex:1;border:1px solid #d6e1e8;background:#f3f8fb;color:#1687c9;border-radius:7px;padding:6px 5px;font-size:11px;font-weight:700;cursor:pointer;}
+.map-layer-actions button:hover{background:#e6f3fa;}
 .map-layer-list{max-height:320px;overflow-y:auto;padding:8px 10px 10px;}
 .map-layer-row{display:flex;align-items:center;gap:9px;padding:9px 7px;border-bottom:1px solid #edf1f4;font-size:13px;cursor:pointer;}
 .map-layer-row:last-child{border-bottom:0;}
@@ -2826,6 +2833,8 @@ function changeLanguage(lang){
 .map-layer-loading{padding:12px 8px;color:#7a8793;font-size:13px;}
 body.dark-mode .map-layer-control{background:#172630;border-color:#304452;color:#f3f7fa;}
 body.dark-mode .map-layer-control-header{background:#1d303c;border-color:#304452;}
+body.dark-mode .map-layer-actions{background:#172630;border-color:#304452;}
+body.dark-mode .map-layer-actions button{background:#203642;border-color:#38515f;color:#d9f1ff;}
 body.dark-mode .map-layer-row{border-color:#2b3e49;}
 body.dark-mode .map-layer-row:hover{background:#213641;}
 @media(max-width:700px){.map-layer-control{top:10px;left:10px;width:220px;}.map-layer-list{max-height:260px;}}
@@ -3679,31 +3688,140 @@ function getLayerDisplayName(layer,index){
 }
 function addOneLayerControl(layer,label,host){
   if(!layer||!host)return;
-  const row=document.createElement('label'); row.className='map-layer-row';
-  const cb=document.createElement('input'); cb.type='checkbox'; cb.checked=layer.getVisible?layer.getVisible():true;
-  cb.addEventListener('change',function(){if(layer.setVisible)layer.setVisible(this.checked);});
-  const text=document.createElement('span'); text.className='map-layer-name'; text.textContent=label;
-  row.appendChild(cb); row.appendChild(text); host.appendChild(row);
+  const row=document.createElement('label');
+  row.className='map-layer-row';
+  const cb=document.createElement('input');
+  cb.type='checkbox';
+  cb.checked=layer.getVisible ? layer.getVisible() : true;
+  cb.setAttribute('aria-label','Paparkan '+label);
+  cb.addEventListener('change',function(){
+    if(layer.setVisible) layer.setVisible(this.checked);
+  });
+  const text=document.createElement('span');
+  text.className='map-layer-name';
+  text.textContent=label;
+  row.appendChild(cb);
+  row.appendChild(text);
+  host.appendChild(row);
 }
 function buildMapLayerControl(){
   const host=document.getElementById('mapPageLayerList');
   if(!host||typeof map==='undefined'||!map||!map.getLayers)return false;
-  const layers=map.getLayers().getArray(); host.innerHTML='';
+  const layers=map.getLayers().getArray();
+  host.innerHTML='';
   if(!layers.length){host.innerHTML='<div class="map-layer-loading">Tiada layer ditemui.</div>';return true;}
+
+  // Satu checkbox untuk setiap layer sebenar OpenLayers.
   let count=0;
   layers.forEach(function(layer,index){
-    if(layer.getLayers&&layer.getLayers().getArray){
+    if(layer.getLayers && layer.getLayers().getArray){
       const children=layer.getLayers().getArray();
-      if(children.length){children.forEach(function(child,j){addOneLayerControl(child,getLayerDisplayName(child,j),host);count++;});}
-      else {addOneLayerControl(layer,getLayerDisplayName(layer,index),host);count++;}
-    }else{addOneLayerControl(layer,getLayerDisplayName(layer,index),host);count++;}
+      if(children.length){
+        children.forEach(function(child,j){
+          addOneLayerControl(child,getLayerDisplayName(child,index+j),host);
+          count++;
+        });
+      }else{
+        addOneLayerControl(layer,getLayerDisplayName(layer,index),host);
+        count++;
+      }
+    }else{
+      addOneLayerControl(layer,getLayerDisplayName(layer,index),host);
+      count++;
+    }
   });
   if(!count)host.innerHTML='<div class="map-layer-loading">Tiada layer ditemui.</div>';
   return true;
 }
-function initMapLayerControl(){
-  let tries=0; const timer=setInterval(function(){tries++;if(buildMapLayerControl()||tries>30)clearInterval(timer);},300);
+function setAllMapLayers(visible){
+  const host=document.getElementById('mapPageLayerList');
+  if(!host)return;
+  host.querySelectorAll('input[type="checkbox"]').forEach(function(cb){
+    cb.checked=visible;
+    cb.dispatchEvent(new Event('change'));
+  });
 }
+function initMapLayerControl(){
+  let tries=0;
+  const timer=setInterval(function(){
+    tries++;
+    if(buildMapLayerControl()||tries>30)clearInterval(timer);
+  },300);
+}
+
+</script>
+
+
+<script>
+/* =====================================================
+   NAVIGATION FIX - pastikan semua menu boleh dibuka
+   dan Layer Control kekal hanya pada Peta Taburan.
+===================================================== */
+(function(){
+  function safeShowPage(pageId, item){
+    var pages=document.querySelectorAll('.page');
+    pages.forEach(function(p){ p.classList.remove('active'); });
+    var target=document.getElementById(pageId);
+    if(!target) return false;
+    target.classList.add('active');
+
+    document.querySelectorAll('.menu-item').forEach(function(m){m.classList.remove('active');});
+    if(item) item.classList.add('active');
+
+    /* Map hanya dipindahkan ke host yang wujud. */
+    if(typeof moveMapContainer==='function') moveMapContainer(pageId);
+
+    var layerPanel=document.getElementById('mapPageLayerControl');
+    if(layerPanel) layerPanel.style.display=(pageId==='map-page')?'block':'none';
+
+    if(pageId==='map-page' && typeof initMapLayerControl==='function'){
+      setTimeout(function(){initMapLayerControl();},250);
+    }
+    if(pageId==='trend-page' && typeof updateTrendPage==='function'){
+      setTimeout(updateTrendPage,50);
+    }
+    setTimeout(function(){
+      if(typeof map!=='undefined' && map && typeof map.updateSize==='function') map.updateSize();
+    },350);
+    return false;
+  }
+
+  window.showPage=safeShowPage;
+  window.showPageById=function(pageId){
+    var item=document.querySelector('.menu-item[data-page="'+pageId+'"]');
+    if(!item){
+      document.querySelectorAll('.menu-item').forEach(function(m){
+        var oc=m.getAttribute('onclick')||'';
+        if(oc.indexOf("'"+pageId+"'")!==-1) item=m;
+      });
+    }
+    safeShowPage(pageId,item);
+  };
+
+  function bindMenu(){
+    document.querySelectorAll('.menu-item').forEach(function(item){
+      if(item.dataset.navFixed==='1') return;
+      item.dataset.navFixed='1';
+      var oc=item.getAttribute('onclick')||'';
+      var match=oc.match(/showPage\(['\"]([^'\"]+)['\"]/);
+      if(!match) return;
+      var pageId=match[1];
+      item.dataset.page=pageId;
+      item.removeAttribute('onclick');
+      item.addEventListener('click',function(e){
+        e.preventDefault();
+        e.stopPropagation();
+        safeShowPage(pageId,item);
+      });
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded',function(){
+    bindMenu();
+    var panel=document.getElementById('mapPageLayerControl');
+    if(panel) panel.style.display=document.getElementById('map-page')?.classList.contains('active')?'block':'none';
+  });
+})();
 </script>
 
 </body>
