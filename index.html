@@ -3019,27 +3019,7 @@ body.dark .admin-cloud-note{background:#1d3441;color:#c8d3d9}
         </div>
     </div>
 
-<div class="panel complaint-check-panel">
-  <div class="panel-header">
-    <div class="panel-title"><i class="fas fa-search"></i> Semak Status Aduan</div>
-  </div>
-  <div class="panel-body">
-    <div class="complaint-check-grid">
-      <div class="form-group">
-        <label>No. Rujukan Aduan</label>
-        <input type="text" id="checkComplaintId" placeholder="Contoh: ADUAN-20260914-1234">
-      </div>
-      <div class="form-group">
-        <label>No. Telefon</label>
-        <input type="tel" id="checkComplaintPhone" placeholder="No. telefon yang digunakan">
-      </div>
-      <button type="button" class="btn-primary" onclick="checkComplaintStatus()">
-        <i class="fas fa-search"></i> Semak
-      </button>
-    </div>
-    <div class="complaint-check-result" id="complaintCheckResult"></div>
-  </div>
-</div>
+
 </section>
 
 
@@ -3048,7 +3028,7 @@ body.dark .admin-cloud-note{background:#1d3441;color:#c8d3d9}
   <div class="page-header">
     <div>
       <h1 class="page-title">Pengurusan Aduan</h1>
-      <div class="page-subtitle">Semak, tapis dan kemas kini status aduan orang awam.</div>
+      <div class="page-subtitle">Akses terhad kepada pengguna yang mempunyai email dan kata laluan admin sahaja.</div>
     </div>
     <button class="panel-action admin-hidden" id="adminLogoutBtn" onclick="adminLogout()">
       <i class="fas fa-sign-out-alt"></i> Log Keluar
@@ -3061,8 +3041,8 @@ body.dark .admin-cloud-note{background:#1d3441;color:#c8d3d9}
     </div>
     <div class="panel-body">
       <div class="admin-cloud-note" id="adminModeNote">
-        Sistem akan menggunakan Firebase apabila konfigurasi Firebase telah dimasukkan.
-        Jika belum, Mode Demo Lokal hanya menunjukkan aduan pada browser/peranti ini.
+        Akses ke senarai aduan adalah untuk pengguna berdaftar sahaja.
+        Log masuk menggunakan email dan kata laluan admin Firebase.
       </div>
 
       <div class="admin-login-grid">
@@ -3077,7 +3057,7 @@ body.dark .admin-cloud-note{background:#1d3441;color:#c8d3d9}
       </div>
 
       <div class="form-actions">
-        <button type="button" class="btn-secondary" onclick="openLocalAdminDemo()">Mode Demo Lokal</button>
+        
         <button type="button" class="btn-primary" onclick="adminLogin()"><i class="fas fa-sign-in-alt"></i> Log Masuk</button>
       </div>
     </div>
@@ -3585,11 +3565,6 @@ async function submitComplaint(event){
         const idEl=document.getElementById("complaintSuccessId");
         if(idEl) idEl.textContent=c.id;
         if(box) box.classList.add("show");
-
-        const checkId=document.getElementById("checkComplaintId");
-        const checkPhone=document.getElementById("checkComplaintPhone");
-        if(checkId) checkId.value=c.id;
-        if(checkPhone) checkPhone.value=c.phone;
 
         showNotification("Aduan berjaya direkodkan: "+c.id);
     }catch(err){
@@ -4928,58 +4903,9 @@ function badge(s){
     return s==="Selesai" ? "done" : s==="Dalam Semakan" ? "review" : "";
 }
 
-async function getComplaintById(id){
-    id=String(id||"").trim();
-    if(!id) return null;
-
-    if(window.__firebaseReady){
-        const snap=await window.__firebaseDb.collection("complaints").doc(id).get();
-        return snap.exists ? snap.data() : null;
-    }
-
-    const r=JSON.parse(localStorage.getItem("webgis-complaints")||"[]");
-    return r.find(x=>String(x.id)===id)||null;
-}
-
-async function checkComplaintStatus(){
-    const id=document.getElementById("checkComplaintId").value.trim();
-    const phone=document.getElementById("checkComplaintPhone").value.trim();
-    const result=document.getElementById("complaintCheckResult");
-
-    if(!id||!phone){
-        showNotification("Masukkan no. rujukan dan no. telefon");
-        return;
-    }
-
-    try{
-        const c=await getComplaintById(id);
-
-        if(!c || String(c.phone)!==phone){
-            result.innerHTML="<strong>Aduan tidak dijumpai.</strong><div style='margin-top:5px'>Semak semula no. rujukan dan no. telefon.</div>";
-            result.classList.add("show");
-            return;
-        }
-
-        result.innerHTML=`
-            <div style="display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap">
-                <strong>${esc(c.id)}</strong>
-                <span class="complaint-status-badge ${badge(c.status)}">${esc(c.status||"Diterima")}</span>
-            </div>
-            <div style="margin-top:10px"><b>Kategori:</b> ${esc(c.category)}</div>
-            <div style="margin-top:5px"><b>Lokasi:</b> ${esc(c.location)}</div>
-            <div style="margin-top:5px"><b>Tarikh:</b> ${esc(c.date)}</div>
-            <div style="margin-top:5px"><b>Butiran:</b> ${esc(c.description)}</div>
-        `;
-        result.classList.add("show");
-    }catch(e){
-        console.error(e);
-        showNotification("Gagal menyemak status aduan");
-    }
-}
-
 async function adminLogin(){
     if(!window.__firebaseReady){
-        showNotification("Firebase belum dikonfigurasi. Gunakan Mode Demo Lokal atau masukkan FIREBASE_CONFIG.");
+        showNotification("Firebase belum dikonfigurasi. Masukkan FIREBASE_CONFIG terlebih dahulu.");
         return;
     }
 
@@ -4999,11 +4925,6 @@ async function adminLogin(){
         console.error(e);
         showNotification("Log masuk admin gagal");
     }
-}
-
-function openLocalAdminDemo(){
-    showAdminDashboard();
-    loadAdminComplaints();
 }
 
 function showAdminDashboard(){
@@ -5026,15 +4947,18 @@ async function adminLogout(){
 
 async function loadAdminComplaints(){
     try{
-        let records=[];
-
-        if(window.__firebaseReady && window.__firebaseAuth.currentUser){
-            const snap=await window.__firebaseDb.collection("complaints").orderBy("createdAt","desc").get();
-            snap.forEach(doc=>records.push(doc.data()));
-        }else{
-            records=JSON.parse(localStorage.getItem("webgis-complaints")||"[]")
-                .sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
+        if(!window.__firebaseReady || !window.__firebaseAuth.currentUser){
+            showNotification("Sila log masuk sebagai admin terlebih dahulu");
+            return;
         }
+
+        const records=[];
+        const snap=await window.__firebaseDb
+            .collection("complaints")
+            .orderBy("createdAt","desc")
+            .get();
+
+        snap.forEach(doc=>records.push(doc.data()));
 
         window.__adminComplaints=records;
         renderAdminComplaints();
@@ -5090,16 +5014,13 @@ function updateAdminCounts(){
 }
 
 async function updateComplaintStatus(id,status){
-    try{
-        if(window.__firebaseReady && window.__firebaseAuth.currentUser){
-            await window.__firebaseDb.collection("complaints").doc(id).update({status});
-        }else{
-            const r=JSON.parse(localStorage.getItem("webgis-complaints")||"[]");
-            const item=r.find(x=>x.id===id);
-            if(item) item.status=status;
-            localStorage.setItem("webgis-complaints",JSON.stringify(r));
-        }
+    if(!window.__firebaseReady || !window.__firebaseAuth.currentUser){
+        showNotification("Akses tidak dibenarkan");
+        return;
+    }
 
+    try{
+        await window.__firebaseDb.collection("complaints").doc(id).update({status});
         await loadAdminComplaints();
         showNotification("Status aduan dikemas kini");
     }catch(e){
@@ -5109,17 +5030,15 @@ async function updateComplaintStatus(id,status){
 }
 
 async function deleteComplaintRecord(id){
+    if(!window.__firebaseReady || !window.__firebaseAuth.currentUser){
+        showNotification("Akses tidak dibenarkan");
+        return;
+    }
+
     if(!confirm("Padam aduan "+id+"?")) return;
 
     try{
-        if(window.__firebaseReady && window.__firebaseAuth.currentUser){
-            await window.__firebaseDb.collection("complaints").doc(id).delete();
-        }else{
-            let r=JSON.parse(localStorage.getItem("webgis-complaints")||"[]");
-            r=r.filter(x=>x.id!==id);
-            localStorage.setItem("webgis-complaints",JSON.stringify(r));
-        }
-
+        await window.__firebaseDb.collection("complaints").doc(id).delete();
         await loadAdminComplaints();
         showNotification("Aduan dipadam");
     }catch(e){
@@ -5135,6 +5054,29 @@ document.addEventListener("DOMContentLoaded",function(){
         const n=document.getElementById("adminModeNote");
         if(n) n.textContent="Firebase dikesan. Log masuk menggunakan akaun admin Firebase Authentication.";
     }
+});
+</script>
+
+
+<script id="admin-access-guard">
+document.addEventListener("DOMContentLoaded",function(){
+    const adminPage=document.getElementById("admin-aduan-page");
+    if(!adminPage) return;
+
+    const observer=new MutationObserver(function(){
+        if(adminPage.classList.contains("active")){
+            const loggedIn=window.__firebaseReady &&
+                           window.__firebaseAuth &&
+                           window.__firebaseAuth.currentUser;
+            if(!loggedIn){
+                document.getElementById("adminDashboardView")?.classList.add("admin-hidden");
+                document.getElementById("adminLoginView")?.classList.remove("admin-hidden");
+                document.getElementById("adminLogoutBtn")?.classList.add("admin-hidden");
+            }
+        }
+    });
+
+    observer.observe(adminPage,{attributes:true,attributeFilter:["class"]});
 });
 </script>
 
