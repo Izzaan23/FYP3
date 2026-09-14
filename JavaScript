@@ -1,8 +1,15 @@
-const FIREBASE_CONFIG = {
-    apiKey: "PASTE_FIREBASE_API_KEY",
-    authDomain: "PASTE_PROJECT.firebaseapp.com",
-    projectId: "PASTE_PROJECT_ID",
-    storageBucket: "PASTE_PROJECT.appspot.com",
-    messagingSenderId: "PASTE_SENDER_ID",
-    appId: "PASTE_APP_ID"
-};
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    match /complaints/{complaintId} {
+
+      // Orang awam boleh hantar aduan
+      allow create: if true;
+
+      // Hanya pengguna yang login boleh lihat / ubah / padam
+      allow read, update, delete: if request.auth != null;
+    }
+  }
+}
