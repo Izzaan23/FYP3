@@ -1849,7 +1849,7 @@ body.dark .complaint-status{background:#1c3528;}
                         <th>JUMLAH KES</th>
                         <th>RUMAH</th>
                         <th>KEDAI</th>
-                        <th>MASJID/KUIL/TOKONG</th>
+                        <th>MASJID/SURAU/TOKONG</th>
                         <th>LAIN-LAIN</th>
                     </tr>
 
@@ -1949,11 +1949,23 @@ body.dark .complaint-status{background:#1c3528;}
                 <span class="area-name">Ipoh Selatan</span>
                 <strong id="ipohSelatanCases">372</strong>
                 <small class="area-case-unit">kes</small>
+                <div class="area-breakdown">
+                    <div><span>Rumah</span><b id="ipohSelatanRumah">251</b></div>
+                    <div><span>Kedai</span><b id="ipohSelatanKedai">41</b></div>
+                    <div><span>Masjid/Kuil/Tokong</span><b id="ipohSelatanMasjid">3</b></div>
+                    <div><span>Lain-lain</span><b id="ipohSelatanLain">77</b></div>
+                </div>
             </article>
             <article class="area-card area-card-barat">
                 <span class="area-name">Ipoh Barat</span>
                 <strong id="ipohBaratCases">245</strong>
                 <small class="area-case-unit">kes</small>
+                <div class="area-breakdown">
+                    <div><span>Rumah</span><b id="ipohBaratRumah">183</b></div>
+                    <div><span>Kedai</span><b id="ipohBaratKedai">24</b></div>
+                    <div><span>Masjid/Kuil/Tokong</span><b id="ipohBaratMasjid">3</b></div>
+                    <div><span>Lain-lain</span><b id="ipohBaratLain">35</b></div>
+                </div>
             </article>
         </div>
     </div>
@@ -2048,7 +2060,7 @@ body.dark .complaint-status{background:#1c3528;}
         </div>
 
         <div class="stat-card">
-            <div class="stat-label">MASJID/KUIL/TOKONG</div>
+            <div class="stat-label">MASJID/SURAU/TOKONG</div>
             <div class="stat-number">6</div>
             <div class="stat-label">1.0%</div>
         </div>
@@ -2126,7 +2138,7 @@ body.dark .complaint-status{background:#1c3528;}
                         <th>JUMLAH KES</th>
                         <th>RUMAH</th>
                         <th>KEDAI</th>
-                        <th>MASJID/KUIL/TOKONG</th>
+                        <th>MASJID/SURAU/TOKONG</th>
                         <th>LAIN-LAIN</th>
                     </tr>
 
@@ -2667,7 +2679,7 @@ const uiTextTranslations={
     "RUMAH":["HOUSE","住宅"],
     "KEDAI":["SHOP","商店"],
     "MASJID / SURAU / TOKONG":["MOSQUE / PRAYER HALL / TEMPLE","清真寺 / 祈祷室 / 寺庙"],
-    "MASJID/KUIL/TOKONG":["MOSQUE / PRAYER HALL / TEMPLE","清真寺 / 祈祷室 / 寺庙"],
+    "MASJID/SURAU/TOKONG":["MOSQUE / PRAYER HALL / TEMPLE","清真寺 / 祈祷室 / 寺庙"],
     "LAIN-LAIN":["OTHERS","其他"],
     "Data 2025":["2025 Data","2025年数据"],
     "PETA TABURAN KES":["CASE DISTRIBUTION MAP","案件分布地图"],
@@ -3323,6 +3335,13 @@ body.dark .map-case-label span{color:#67c2ff;}
 .area-versus{display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#8090a0;text-transform:uppercase;letter-spacing:.7px;}
 .area-card strong{font-size:28px;line-height:1;margin-top:5px;}
 .area-card small{font-size:11px;opacity:.9;}
+.area-breakdown{grid-column:1 / -1;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px 16px;margin-top:11px;padding-top:10px;font-size:11px;}
+.area-breakdown div{display:flex;align-items:center;justify-content:space-between;gap:10px;}
+.area-breakdown span{font-weight:500;}
+.area-breakdown b{font-size:12px;}
+.area-card-selatan .area-breakdown{border-top:1px solid rgba(255,255,255,.28);}
+.area-card-barat .area-breakdown{border-top:1px solid #d8e3ea;}
+@media(max-width:700px){.area-breakdown{grid-template-columns:1fr;}}
 @media(max-width:600px){.area-comparison-grid{grid-template-columns:1fr}.area-versus{display:none}.area-card strong{font-size:24px}}
 
 .premise-chart-panel{margin-top:18px;}
@@ -3423,6 +3442,19 @@ body.dark .year-badge{
         "2026": {barat:57, selatan:71}
     };
 
+    /* Pecahan kategori mengikut kawasan daripada fail 2025 dan 2026.
+       Rekod IPOH TIMUR dipaparkan sebagai IPOH SELATAN mengikut struktur sistem sedia ada. */
+    window.WEBGIS_AREA_CATEGORY_DATA = {
+        "2025": {
+            selatan:{rumah:251,kedai:41,masjid:3,lain:77},
+            barat:{rumah:183,kedai:24,masjid:3,lain:35}
+        },
+        "2026": {
+            selatan:{rumah:61,kedai:6,masjid:0,lain:4},
+            barat:{rumah:25,kedai:5,masjid:1,lain:26}
+        }
+    };
+
     const monthOrder=["JANUARI","FEBRUARI","MAC","APRIL","MEI","JUN","JULAI","OGOS","SEPTEMBER","OKTOBER","NOVEMBER","DISEMBER"];
     const monthShort={JANUARI:"JAN",FEBRUARI:"FEB",MAC:"MAC",APRIL:"APR",MEI:"MEI",JUN:"JUN",JULAI:"JUL",OGOS:"OGOS",SEPTEMBER:"SEP",OKTOBER:"OKT",NOVEMBER:"NOV",DISEMBER:"DIS"};
 
@@ -3517,8 +3549,36 @@ body.dark .year-badge{
         }),{barat:0,selatan:0});
     }
 
+    function selectedAreaCategoryTotals(){
+        const y=currentYear();
+        if(y!=="all"){
+            return WEBGIS_AREA_CATEGORY_DATA[y] || {
+                selatan:{rumah:0,kedai:0,masjid:0,lain:0},
+                barat:{rumah:0,kedai:0,masjid:0,lain:0}
+            };
+        }
+        return Object.values(WEBGIS_AREA_CATEGORY_DATA).reduce((sum,row)=>({
+            selatan:{
+                rumah:sum.selatan.rumah+row.selatan.rumah,
+                kedai:sum.selatan.kedai+row.selatan.kedai,
+                masjid:sum.selatan.masjid+row.selatan.masjid,
+                lain:sum.selatan.lain+row.selatan.lain
+            },
+            barat:{
+                rumah:sum.barat.rumah+row.barat.rumah,
+                kedai:sum.barat.kedai+row.barat.kedai,
+                masjid:sum.barat.masjid+row.barat.masjid,
+                lain:sum.barat.lain+row.barat.lain
+            }
+        }),{
+            selatan:{rumah:0,kedai:0,masjid:0,lain:0},
+            barat:{rumah:0,kedai:0,masjid:0,lain:0}
+        });
+    }
+
     function updateAreaComparison(){
         const data=selectedAreaTotals();
+        const categoryData=selectedAreaCategoryTotals();
         const y=currentYear()==="all"?"2025 + 2026":currentYear();
         const lang=document.documentElement.lang||"ms";
         const copy={
@@ -3532,6 +3592,28 @@ body.dark .year-badge{
         const west=document.getElementById("ipohBaratCases"), south=document.getElementById("ipohSelatanCases");
         if(west) west.textContent=data.barat;
         if(south) south.textContent=data.selatan;
+
+        const areaCategoryEls={
+            selatan:{
+                rumah:document.getElementById("ipohSelatanRumah"),
+                kedai:document.getElementById("ipohSelatanKedai"),
+                masjid:document.getElementById("ipohSelatanMasjid"),
+                lain:document.getElementById("ipohSelatanLain")
+            },
+            barat:{
+                rumah:document.getElementById("ipohBaratRumah"),
+                kedai:document.getElementById("ipohBaratKedai"),
+                masjid:document.getElementById("ipohBaratMasjid"),
+                lain:document.getElementById("ipohBaratLain")
+            }
+        };
+        ["selatan","barat"].forEach(area=>{
+            ["rumah","kedai","masjid","lain"].forEach(cat=>{
+                if(areaCategoryEls[area][cat]){
+                    areaCategoryEls[area][cat].textContent=categoryData[area][cat];
+                }
+            });
+        });
         const title=document.getElementById("housingTotalTitle");
         const housingTotal=document.getElementById("housingTotalCases");
         const subtitle=document.getElementById("areaComparisonSubtitle");
@@ -3630,7 +3712,7 @@ body.dark .year-badge{
     function updatePremise(){
         const t=selectedTotals(), total=Math.max(selectedTotal(),1);
         const cards=document.querySelectorAll("#jenis-page .stats .stat-card");
-        const vals=[["RUMAH",t.rumah],["KEDAI",t.kedai],["MASJID/KUIL/TOKONG",t.masjid],["LAIN-LAIN",t.lain]];
+        const vals=[["RUMAH",t.rumah],["KEDAI",t.kedai],["MASJID/SURAU/TOKONG",t.masjid],["LAIN-LAIN",t.lain]];
         cards.forEach((card,i)=>{
             if(!vals[i])return;
             card.querySelector(".stat-label").textContent=vals[i][0];
