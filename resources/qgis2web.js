@@ -4,15 +4,15 @@ var map = new ol.Map({
     renderer: 'canvas',
     layers: layersList,
     view: new ol.View({
-         maxZoom: 28, minZoom: 1
+        constrainResolution: true,
+        maxZoom: 28,
+        minZoom: 1,
+        
     })
 });
 
 //initial view - epsg:3857 coordinates if not "Match project CRS"
-map.getView().fit([11241333.707520, 501689.379320, 11276141.796581, 519135.821475], map.getSize());
-
-//full zooms only
-map.getView().setProperties({constrainResolution: true});
+map.getView().fit([11249085.760376, 509264.129887, 11265140.746557, 517297.880476], map.getSize());
 
 //change cursor
 function pointerOnFeature(evt) {
@@ -153,7 +153,10 @@ var doHover = false;
 function createPopupField(currentFeature, currentFeatureKeys, layer) {
     var popupText = '';
     for (var i = 0; i < currentFeatureKeys.length; i++) {
-        if (currentFeatureKeys[i] != 'geometry' && currentFeatureKeys[i] != 'layerObject' && currentFeatureKeys[i] != 'idO') {
+        if (currentFeatureKeys[i] != 'geometry' &&
+            currentFeatureKeys[i] != 'layerObject' &&
+            currentFeatureKeys[i] != 'idO' &&
+            currentFeatureKeys[i] != '_mvtLayer_') {
             var popupField = '';
             if (layer.get('fieldLabels')[currentFeatureKeys[i]] == "hidden field") {
                 continue;
@@ -518,6 +521,12 @@ var bottomRightContainerDiv = document.getElementById('bottom-right-container')
 
 //layerswitcher
 
+var layerSwitcher = new ol.control.LayerSwitcher({
+    tipLabel: "Layers",
+    target: 'top-right-container'
+});
+map.addControl(layerSwitcher);
+    
 
 
 

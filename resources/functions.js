@@ -1,6 +1,6 @@
 var createTextStyle = function(feature, resolution, labelText, labelFont,
                                labelFill, placement, bufferColor,
-                               bufferWidth) {
+                               bufferWidth, textAlign, offsetX, offsetY, overflow, repeat) {
 
     if (feature.hide || !labelText) {
         return; 
@@ -19,10 +19,12 @@ var createTextStyle = function(feature, resolution, labelText, labelFont,
         font: labelFont,
         text: labelText,
         textBaseline: "middle",
-        textAlign: "left",
-        offsetX: 8,
-        offsetY: 3,
+        textAlign: textAlign,
+        offsetX: offsetX,
+        offsetY: offsetY,
         placement: placement,
+        overflow: overflow,
+        repeat: repeat,
         maxAngle: 0,
         fill: new ol.style.Fill({
           color: labelFill
@@ -54,13 +56,3 @@ function stripe(stripeWidth, gapWidth, angle, color) {
 
     return outerContext.createPattern(outerCanvas, 'no-repeat');
 };
-
-/* FYP3 custom UI/map fixes. Kept separate from generated QGIS2Web code. */
-(function loadFYP3Fixes(){
-    if (document.querySelector('script[data-fyp3-fixes]')) return;
-    var script = document.createElement('script');
-    script.src = './resources/fyp3-fixes.js';
-    script.defer = true;
-    script.setAttribute('data-fyp3-fixes','1');
-    document.head.appendChild(script);
-})();
