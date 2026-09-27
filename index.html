@@ -1252,480 +1252,6 @@ body.dark .complaint-status{background:#1c3528;}
     .form-group.full{grid-column:auto;}
 }
 
-
-/* =========================================================
-   QGIS2WEB LAYER ON/OFF CONTROL - FIX
-========================================================= */
-.qgis-layer-list{
-    display:flex;
-    flex-direction:column;
-}
-.qgis-layer-row{
-    display:flex !important;
-    align-items:center;
-    justify-content:space-between;
-    gap:12px;
-    padding:11px 8px;
-    border-top:1px solid #edf0f2;
-    cursor:pointer;
-    font-size:11px;
-    color:#31414d;
-}
-.qgis-layer-row:hover{
-    background:#f5f9fb;
-}
-.qgis-layer-row input[type="checkbox"]{
-    width:15px;
-    height:15px;
-    min-width:15px;
-    cursor:pointer;
-    accent-color:#1687c9;
-    pointer-events:auto !important;
-}
-.custom-layer-head,
-.custom-layer-body,
-.qgis-layer-row{
-    pointer-events:auto !important;
-}
-body.dark .qgis-layer-row{
-    color:#eef4f8;
-    border-color:#31434f;
-}
-body.dark .qgis-layer-row:hover{
-    background:#223440;
-}
-
-
-/* =========================================================
-   JENIS PREMIS - CARTA PAI DENGAN IKON
-========================================================= */
-.premise-pie-panel{
-    margin-top:18px;
-}
-.premise-pie-subtitle{
-    margin-top:4px;
-    font-size:11px;
-    color:var(--muted);
-}
-.premise-pie-content{
-    display:grid;
-    grid-template-columns:minmax(320px,1fr) minmax(320px,1fr);
-    align-items:center;
-    gap:28px;
-    padding:28px 32px 34px;
-}
-.premise-pie-wrap{
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    min-height:340px;
-}
-.premise-pie{
-    --rumah-end:60%;
-    --kedai-end:78%;
-    --masjid-end:82%;
-    width:310px;
-    height:310px;
-    border-radius:50%;
-    position:relative;
-    background:
-        conic-gradient(
-            #2185c5 0 var(--rumah-end),
-            #f2a83b var(--rumah-end) var(--kedai-end),
-            #51aa6b var(--kedai-end) var(--masjid-end),
-            #d55757 var(--masjid-end) 100%
-        );
-    box-shadow:
-        0 18px 42px rgba(12,44,66,.16),
-        inset 0 0 0 1px rgba(255,255,255,.20);
-}
-.premise-pie::after{
-    content:"";
-    position:absolute;
-    inset:80px;
-    border-radius:50%;
-    background:var(--card);
-    box-shadow:0 0 0 1px var(--border);
-    z-index:1;
-}
-.premise-pie-center{
-    position:absolute;
-    inset:84px;
-    z-index:3;
-    border-radius:50%;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    justify-content:center;
-    text-align:center;
-}
-.premise-pie-center-label{
-    font-size:10px;
-    font-weight:800;
-    color:var(--muted);
-    letter-spacing:.8px;
-}
-.premise-pie-center strong{
-    display:block;
-    font-size:38px;
-    line-height:1.05;
-    margin:4px 0 1px;
-    color:var(--text);
-}
-.premise-pie-center small{
-    font-size:10px;
-    font-weight:800;
-    color:var(--muted);
-}
-.premise-slice-icon{
-    position:absolute;
-    left:50%;
-    top:50%;
-    width:45px;
-    height:45px;
-    margin:-22.5px 0 0 -22.5px;
-    border-radius:50%;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    z-index:4;
-    color:white;
-    font-size:18px;
-    border:3px solid rgba(255,255,255,.92);
-    box-shadow:0 4px 13px rgba(0,0,0,.24);
-    transform:translate(0,0);
-    transition:transform .35s ease;
-}
-#premiseIconRumah{background:#2185c5;}
-#premiseIconKedai{background:#f2a83b;}
-#premiseIconMasjid{background:#51aa6b;}
-#premiseIconLain{background:#d55757;}
-
-.premise-pie-legend{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:14px;
-}
-.premise-legend-item{
-    display:flex;
-    align-items:center;
-    gap:12px;
-    min-height:88px;
-    padding:15px 16px;
-    border:1px solid var(--border);
-    border-radius:12px;
-    background:var(--card);
-}
-.premise-legend-icon{
-    min-width:48px;
-    width:48px;
-    height:48px;
-    border-radius:12px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    color:#fff;
-    font-size:19px;
-}
-.premise-legend-icon.rumah{background:#2185c5;}
-.premise-legend-icon.kedai{background:#f2a83b;}
-.premise-legend-icon.masjid{background:#51aa6b;}
-.premise-legend-icon.lain{background:#d55757;}
-.premise-legend-item strong{
-    display:block;
-    font-size:12px;
-    margin-bottom:5px;
-}
-.premise-legend-item span:not(.premise-legend-icon){
-    display:block;
-    color:var(--muted);
-    font-size:11px;
-}
-body.dark .premise-pie::after{
-    background:var(--card);
-    border-color:#31434f;
-}
-body.dark .premise-legend-item{
-    background:#18242e;
-    border-color:#31434f;
-}
-body.dark .premise-pie-center strong,
-body.dark .premise-legend-item strong{
-    color:#f4f8fa;
-}
-@media(max-width:950px){
-    .premise-pie-content{
-        grid-template-columns:1fr;
-    }
-}
-@media(max-width:650px){
-    .premise-pie{
-        width:270px;
-        height:270px;
-    }
-    .premise-pie::after{inset:70px;}
-    .premise-pie-center{inset:74px;}
-    .premise-pie-legend{grid-template-columns:1fr;}
-}
-
-
-/* =========================================================
-   PETA TABURAN - DATA DI LUAR MAP
-========================================================= */
-.map-page-layout{
-    display:grid;
-    grid-template-columns:minmax(190px,220px) minmax(0,1fr) minmax(260px,300px);
-    gap:14px;
-    align-items:start;
-}
-.map-summary-top{
-    grid-column:1 / 3;
-    display:grid;
-    grid-template-columns:repeat(4,minmax(0,1fr));
-    gap:10px;
-}
-.map-summary-card{
-    background:var(--card);
-    border:1px solid var(--border);
-    border-radius:12px;
-    padding:13px 14px;
-    display:flex;
-    align-items:center;
-    gap:11px;
-    min-height:78px;
-    box-shadow:var(--shadow);
-}
-.map-summary-icon{
-    width:42px;
-    height:42px;
-    min-width:42px;
-    border-radius:10px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    color:#fff;
-    font-size:18px;
-}
-.map-summary-card.rumah .map-summary-icon{background:#2185c5;}
-.map-summary-card.kedai .map-summary-icon{background:#e45757;}
-.map-summary-card.masjid .map-summary-icon{background:#43a85c;}
-.map-summary-card.lain .map-summary-icon{background:#e88618;}
-.map-summary-card strong{
-    display:block;
-    font-size:12px;
-    margin-bottom:3px;
-}
-.map-summary-card span{
-    display:block;
-    font-size:18px;
-    font-weight:800;
-    color:#1687c9;
-}
-.map-summary-card small{
-    display:block;
-    font-size:10px;
-    color:var(--muted);
-    margin-top:1px;
-}
-.area-summary-panel{
-    background:var(--card);
-    border:1px solid var(--border);
-    border-radius:12px;
-    box-shadow:var(--shadow);
-    overflow:hidden;
-}
-.area-summary-title{
-    padding:13px 14px;
-    border-bottom:1px solid var(--border);
-    font-size:12px;
-    font-weight:800;
-}
-.area-summary-body{
-    padding:12px;
-    display:flex;
-    flex-direction:column;
-    gap:10px;
-}
-.area-card{
-    border-radius:10px;
-    padding:13px 14px;
-    border:1px solid var(--border);
-    background:#f8fbfd;
-}
-.area-card.barat{border-left:5px solid #e53935;}
-.area-card.selatan{border-left:5px solid #1687c9;}
-.area-card-label{
-    font-size:11px;
-    font-weight:800;
-    margin-bottom:5px;
-}
-.area-card-value{
-    font-size:26px;
-    font-weight:900;
-    line-height:1;
-}
-.area-card.barat .area-card-value{color:#e53935;}
-.area-card.selatan .area-card-value{color:#1687c9;}
-.area-card-note{
-    margin-top:5px;
-    font-size:10px;
-    color:var(--muted);
-}
-.area-data-warning{
-    margin-top:3px;
-    font-size:10px;
-    line-height:1.45;
-    color:var(--muted);
-}
-.map-main-column{
-    min-width:0;
-}
-.map-page-container{
-    height:calc(100vh - 280px) !important;
-    min-height:500px;
-}
-#mapPageLabels{
-    display:none !important;
-}
-#mapPageFilter{
-    position:static !important;
-    width:auto !important;
-    max-width:none !important;
-    margin:0 !important;
-    transform:none !important;
-}
-body.dark .map-summary-card,
-body.dark .area-summary-panel,
-body.dark .area-card{
-    background:#18242e !important;
-    border-color:#31434f !important;
-    color:#eef4f8 !important;
-}
-body.dark .area-card{background:#1d2a34 !important;}
-@media(max-width:1200px){
-    .map-page-layout{
-        grid-template-columns:200px minmax(0,1fr);
-    }
-    .map-summary-top{
-        grid-column:1 / 3;
-    }
-    .map-filter-column{
-        grid-column:1 / 3;
-    }
-}
-@media(max-width:800px){
-    .map-page-layout{
-        grid-template-columns:1fr;
-    }
-    .map-summary-top,
-    .map-filter-column{
-        grid-column:1;
-    }
-    .map-summary-top{
-        grid-template-columns:1fr 1fr;
-    }
-    .map-page-container{
-        min-height:420px;
-        height:58vh !important;
-    }
-}
-
-
-/* HARD FIX: hide the obsolete LOWER duplicate Kawalan Layer block */
-#mapPageFilter .custom-layer-body{
-    display:none !important;
-}
-#mapPageFilter .custom-layer-head + .custom-layer-body{
-    display:none !important;
-}
-/* If old duplicate header directly precedes that obsolete body, JS removes it. */
-
-
-/* =========================================================
-   PETA TABURAN - BESARKAN PETA & BUANG FILTER
-========================================================= */
-#map-page .map-page-layout{
-    grid-template-columns:minmax(190px,220px) minmax(0,1fr) !important;
-    gap:14px !important;
-}
-#map-page .map-summary-top{
-    grid-column:1 / 3 !important;
-}
-#map-page .map-main-column{
-    grid-column:2 !important;
-}
-#map-page .area-summary-panel{
-    grid-column:1 !important;
-}
-#map-page .map-page-container{
-    height:calc(100vh - 245px) !important;
-    min-height:560px !important;
-}
-#map-page #mapPageFilter,
-#map-page .map-filter-column{
-    display:none !important;
-}
-@media(max-width:900px){
-    #map-page .map-page-layout{
-        grid-template-columns:1fr !important;
-    }
-    #map-page .map-summary-top,
-    #map-page .area-summary-panel,
-    #map-page .map-main-column{
-        grid-column:1 !important;
-    }
-    #map-page .map-summary-top{
-        grid-template-columns:repeat(2,minmax(0,1fr)) !important;
-    }
-    #map-page .map-page-container{
-        height:65vh !important;
-        min-height:460px !important;
-    }
-}
-
-
-/* =========================================================
-   SISTEM ADUAN - SEMAK STATUS + ADMIN
-========================================================= */
-.complaint-success{display:none;margin-top:16px;padding:14px 16px;border-radius:10px;background:#eaf8ef;border:1px solid #bfe7cc;color:#245b35;font-size:12px}
-.complaint-success.show{display:block}
-.complaint-success strong{font-size:16px}
-body.dark .complaint-success{background:#193728;border-color:#315d42;color:#d6f5df}
-
-.complaint-check-panel{margin-top:18px}
-.complaint-check-grid{display:grid;grid-template-columns:1fr 1fr auto;gap:10px;align-items:end}
-.complaint-check-result{margin-top:14px;padding:14px;border:1px solid var(--border);border-radius:10px;background:var(--card);display:none}
-.complaint-check-result.show{display:block}
-.complaint-status-badge{display:inline-flex;padding:5px 9px;border-radius:999px;font-size:10px;font-weight:800;background:#e8f2f8;color:#126a9a}
-.complaint-status-badge.review{background:#fff4d8;color:#986a00}
-.complaint-status-badge.done{background:#e8f7ed;color:#267343}
-
-.admin-login-card{max-width:520px;margin:40px auto 0}
-.admin-login-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.admin-toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
-.admin-toolbar input,.admin-toolbar select{border:1px solid var(--border);background:var(--card);color:var(--text);border-radius:8px;padding:9px 11px;font-size:12px}
-.admin-toolbar input{min-width:240px;flex:1}
-.admin-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:14px}
-.admin-stat-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px}
-.admin-stat-card strong{display:block;font-size:22px;margin-top:4px}
-.admin-table-wrap{overflow:auto}
-.admin-complaint-table{width:100%;min-width:950px;border-collapse:collapse;font-size:11px}
-.admin-complaint-table th,.admin-complaint-table td{padding:10px 11px;border-bottom:1px solid var(--border);text-align:left;vertical-align:top}
-.admin-complaint-table th{background:#f2f6f9;color:#52616d;font-weight:800}
-body.dark .admin-complaint-table th{background:#223440;color:#fff}
-.admin-complaint-table select{border:1px solid var(--border);background:var(--card);color:var(--text);border-radius:6px;padding:6px 7px;font-size:10px}
-.admin-action-btn{border:none;border-radius:6px;padding:6px 8px;cursor:pointer;font-size:10px;margin-right:4px}
-.admin-action-view{background:#e7f3fa;color:#0879b6}
-.admin-action-delete{background:#fdeaea;color:#b52b2b}
-.admin-cloud-note{margin-bottom:14px;padding:10px 12px;border-radius:8px;background:#eef7fb;color:#50616d;font-size:10px;line-height:1.5}
-body.dark .admin-cloud-note{background:#1d3441;color:#c8d3d9}
-.admin-hidden{display:none!important}
-
-@media(max-width:800px){
-  .complaint-check-grid,.admin-login-grid{grid-template-columns:1fr}
-  .admin-stats{grid-template-columns:1fr 1fr}
-}
-
 </style>
 </head>
 
@@ -1906,12 +1432,6 @@ body.dark .admin-cloud-note{background:#1d3441;color:#c8d3d9}
 
         </div>
 
-        <div class="menu-item" onclick="showPage('admin-aduan-page',this)">
-            <div class="menu-icon"><i class="fas fa-user-shield"></i></div>
-            <div class="menu-text">Pengurusan Aduan</div>
-        </div>
-
-
 
     </div>
 
@@ -2069,7 +1589,7 @@ body.dark .admin-cloud-note{background:#1d3441;color:#c8d3d9}
 
                 <div>
                     <div class="stat-label">
-                        MASJID / KUIL / TOKONG
+                        MASJID / SURAU / TOKONG
                     </div>
 
                     <div class="stat-number">
@@ -2329,7 +1849,7 @@ body.dark .admin-cloud-note{background:#1d3441;color:#c8d3d9}
                         <th>JUMLAH KES</th>
                         <th>RUMAH</th>
                         <th>KEDAI</th>
-                        <th>MASJID/KUIL/TOKONG</th>
+                        <th>MASJID/SURAU/TOKONG</th>
                         <th>LAIN-LAIN</th>
                     </tr>
 
@@ -2393,97 +1913,60 @@ body.dark .admin-cloud-note{background:#1d3441;color:#c8d3d9}
     id="map-page">
 
     <div class="page-header">
+
         <div>
-            <h1 class="page-title">Peta Taburan</h1>
+            <h1 class="page-title">
+                Peta Taburan
+            </h1>
+
             <div class="page-subtitle">
-                Peta interaktif taburan kes pecah rumah mengikut kawasan di Ipoh
+                Peta interaktif taburan kes pecah rumah
             </div>
         </div>
 
-        <button class="panel-action" onclick="resetMap()">
+        <button
+            class="panel-action"
+            onclick="resetMap()">
+
             <i class="fas fa-sync"></i>
             Reset Peta
+
         </button>
-    </div>
-
-    <div class="map-page-layout">
-
-        <!-- DATA JENIS PREMIS DI LUAR MAP -->
-        <div class="map-summary-top">
-            <div class="map-summary-card rumah">
-                <div class="map-summary-icon"><i class="fas fa-home"></i></div>
-                <div>
-                    <strong>Rumah</strong>
-                    <span id="mapTopRumah">0</span>
-                    <small>kes</small>
-                </div>
-            </div>
-
-            <div class="map-summary-card kedai">
-                <div class="map-summary-icon"><i class="fas fa-store"></i></div>
-                <div>
-                    <strong>Kedai</strong>
-                    <span id="mapTopKedai">0</span>
-                    <small>kes</small>
-                </div>
-            </div>
-
-            <div class="map-summary-card masjid">
-                <div class="map-summary-icon"><i class="fas fa-place-of-worship"></i></div>
-                <div>
-                    <strong>Masjid / Kuil / Tokong</strong>
-                    <span id="mapTopMasjid">0</span>
-                    <small>kes</small>
-                </div>
-            </div>
-
-            <div class="map-summary-card lain">
-                <div class="map-summary-icon"><i class="fas fa-ellipsis-h"></i></div>
-                <div>
-                    <strong>Lain-lain</strong>
-                    <span id="mapTopLain">0</span>
-                    <small>kes</small>
-                </div>
-            </div>
-        </div>
-
-        <!-- IPOH BARAT / IPOH SELATAN DI LUAR MAP -->
-        <div class="area-summary-panel">
-            <div class="area-summary-title">
-                <i class="fas fa-map-marked-alt"></i>
-                Kes Mengikut Kawasan
-            </div>
-            <div class="area-summary-body">
-                <div class="area-card barat">
-                    <div class="area-card-label">Ipoh Barat</div>
-                    <div class="area-card-value" id="ipohBaratCases">—</div>
-                    <div class="area-card-note" id="ipohBaratPct">Data kawasan belum dimasukkan</div>
-                </div>
-
-                <div class="area-card selatan">
-                    <div class="area-card-label">Ipoh Selatan</div>
-                    <div class="area-card-value" id="ipohSelatanCases">—</div>
-                    <div class="area-card-note" id="ipohSelatanPct">Data kawasan belum dimasukkan</div>
-                </div>
-
-                <div class="area-data-warning">
-                    Jumlah Ipoh Barat dan Ipoh Selatan akan berubah ikut tahun selepas
-                    nilai sebenar dimasukkan dalam <b>WEBGIS_AREA_DATA</b>.
-                </div>
-            </div>
-        </div>
-
-        <!-- MAP -->
-        <div class="map-main-column">
-            <div class="map-page-container" id="mapPageHost">
-                <div class="map-case-labels" id="mapPageLabels"></div>
-                <!-- QGIS2Web #map is moved here when this page is opened -->
-            </div>
-        </div>
-
-        <!-- FILTER DI LUAR MAP -->
 
     </div>
+
+    <div class="area-comparison panel" id="areaComparison" aria-live="polite">
+        <div class="area-comparison-head">
+            <div>
+                <div class="panel-title" id="housingTotalTitle">JUMLAH KES PERUMAHAN</div>
+                <div class="housing-total"><strong id="housingTotalCases">434</strong> <span class="area-case-unit">kes</span></div>
+                <div class="page-subtitle" id="areaComparisonSubtitle">Kes mengikut kawasan bagi tahun 2025</div>
+            </div>
+            <span class="year-badge" id="areaComparisonYear">2025</span>
+        </div>
+        <div class="area-comparison-grid">
+            <article class="area-card area-card-barat">
+                <span class="area-name">Ipoh Barat</span>
+                <strong id="ipohBaratCases">245</strong>
+                <small class="area-case-unit">kes</small>
+            </article>
+            <article class="area-card area-card-selatan">
+                <span class="area-name">Ipoh Selatan</span>
+                <strong id="ipohSelatanCases">372</strong>
+                <small class="area-case-unit">kes</small>
+            </article>
+        </div>
+    </div>
+
+    <div class="map-page-container" id="mapPageHost">
+
+        <div class="map-case-labels" id="mapPageLabels"></div>
+        <div class="map-filter-panel" id="mapPageFilter"></div>
+
+        <!-- QGIS2Web #map is moved here when this page is opened -->
+
+    </div>
+
 </section>
 
 
@@ -2555,105 +2038,47 @@ body.dark .admin-cloud-note{background:#1d3441;color:#c8d3d9}
 
         <div class="stat-card">
             <div class="stat-label">RUMAH</div>
-            <div class="stat-number">648</div>
-            <div class="stat-label">90.3%</div>
+            <div class="stat-number">434</div>
+            <div class="stat-label">70.3%</div>
         </div>
 
         <div class="stat-card">
             <div class="stat-label">KEDAI</div>
-            <div class="stat-number">130</div>
-            <div class="stat-label">18.1%</div>
+            <div class="stat-number">65</div>
+            <div class="stat-label">10.5%</div>
         </div>
 
         <div class="stat-card">
-            <div class="stat-label">MASJID/KUIL/TOKONG</div>
-            <div class="stat-number">9</div>
-            <div class="stat-label">1.3%</div>
+            <div class="stat-label">MASJID/SURAU/TOKONG</div>
+            <div class="stat-number">6</div>
+            <div class="stat-label">1.0%</div>
         </div>
 
         <div class="stat-card">
             <div class="stat-label">LAIN-LAIN</div>
-            <div class="stat-number">53</div>
-            <div class="stat-label">7.4%</div>
+            <div class="stat-number">112</div>
+            <div class="stat-label">18.2%</div>
         </div>
 
     </div>
 
-    <!-- CARTA PAI JENIS PREMIS -->
-    <div class="panel premise-pie-panel" id="premisePiePanel">
+    <div class="panel premise-chart-panel">
         <div class="panel-header">
             <div>
-                <div class="panel-title">
-                    <i class="fas fa-chart-pie"></i>
-                    CARTA PAI JENIS PREMIS
-                </div>
-                <div class="premise-pie-subtitle" id="premisePieSubtitle">
-                    Pecahan kes mengikut kategori premis
-                </div>
+                <div class="panel-title" id="premisePieTitle">CARTA PAI JENIS PREMIS</div>
+                <div class="page-subtitle" id="premisePieSubtitle">Pecahan kes mengikut kategori premis bagi tahun 2025</div>
             </div>
+            <span class="year-badge" id="premisePieYear">2025</span>
         </div>
-
-        <div class="premise-pie-content">
+        <div class="premise-chart-body">
             <div class="premise-pie-wrap">
-                <div class="premise-pie" id="premisePie">
-                    <div class="premise-pie-center">
-                        <span class="premise-pie-center-label">JUMLAH</span>
-                        <strong id="premisePieTotal">0</strong>
-                        <small>KES</small>
-                    </div>
-
-                    <!-- Ikon kategori akan diletakkan pada bahagian carta secara automatik -->
-                    <div class="premise-slice-icon" id="premiseIconRumah" title="Rumah">
-                        <i class="fas fa-home"></i>
-                    </div>
-                    <div class="premise-slice-icon" id="premiseIconKedai" title="Kedai">
-                        <i class="fas fa-store"></i>
-                    </div>
-                    <div class="premise-slice-icon" id="premiseIconMasjid" title="Masjid / Kuil / Tokong">
-                        <i class="fas fa-place-of-worship"></i>
-                    </div>
-                    <div class="premise-slice-icon" id="premiseIconLain" title="Lain-lain">
-                        <i class="fas fa-building"></i>
-                    </div>
+                <div class="premise-pie" id="premisePie" role="img" aria-label="Carta pai jenis premis">
+                    <div class="premise-pie-center"><strong id="premisePieTotal">617</strong><span>Jumlah Kes</span></div>
                 </div>
             </div>
-
-            <div class="premise-pie-legend" id="premisePieLegend">
-                <div class="premise-legend-item">
-                    <span class="premise-legend-icon rumah"><i class="fas fa-home"></i></span>
-                    <div>
-                        <strong>Rumah</strong>
-                        <span id="premiseLegendRumah">0 kes • 0%</span>
-                    </div>
-                </div>
-
-                <div class="premise-legend-item">
-                    <span class="premise-legend-icon kedai"><i class="fas fa-store"></i></span>
-                    <div>
-                        <strong>Kedai</strong>
-                        <span id="premiseLegendKedai">0 kes • 0%</span>
-                    </div>
-                </div>
-
-                <div class="premise-legend-item">
-                    <span class="premise-legend-icon masjid"><i class="fas fa-place-of-worship"></i></span>
-                    <div>
-                        <strong>Masjid / Kuil / Tokong</strong>
-                        <span id="premiseLegendMasjid">0 kes • 0%</span>
-                    </div>
-                </div>
-
-                <div class="premise-legend-item">
-                    <span class="premise-legend-icon lain"><i class="fas fa-building"></i></span>
-                    <div>
-                        <strong>Lain-lain</strong>
-                        <span id="premiseLegendLain">0 kes • 0%</span>
-                    </div>
-                </div>
-            </div>
+            <div class="premise-pie-legend" id="premisePieLegend"></div>
         </div>
     </div>
-
 
 </section>
 
@@ -2702,7 +2127,7 @@ body.dark .admin-cloud-note{background:#1d3441;color:#c8d3d9}
                         <th>JUMLAH KES</th>
                         <th>RUMAH</th>
                         <th>KEDAI</th>
-                        <th>MASJID/KUIL/TOKONG</th>
+                        <th>MASJID/SURAU/TOKONG</th>
                         <th>LAIN-LAIN</th>
                     </tr>
 
@@ -2996,13 +2421,6 @@ body.dark .admin-cloud-note{background:#1d3441;color:#c8d3d9}
                         <button type="submit" class="btn-primary"><i class="fas fa-paper-plane"></i> <span data-i18n="submitComplaint">Hantar Aduan</span></button>
                     </div>
                 </form>
-<div class="complaint-success" id="complaintSuccessBox">
-  <div>Aduan berjaya dihantar.</div>
-  <div style="margin-top:5px">No. rujukan anda:</div>
-  <strong id="complaintSuccessId">-</strong>
-  <div style="margin-top:5px">Simpan nombor ini untuk semak status aduan.</div>
-</div>
-
             </div>
         </div>
 
@@ -3018,88 +2436,8 @@ body.dark .admin-cloud-note{background:#1d3441;color:#c8d3d9}
             </div>
         </div>
     </div>
-
-
 </section>
 
-
-
-<section class="page" id="admin-aduan-page">
-  <div class="page-header">
-    <div>
-      <h1 class="page-title">Pengurusan Aduan</h1>
-      <div class="page-subtitle">Akses terhad kepada pengguna yang mempunyai email dan kata laluan admin sahaja.</div>
-    </div>
-    <button class="panel-action admin-hidden" id="adminLogoutBtn" onclick="adminLogout()">
-      <i class="fas fa-sign-out-alt"></i> Log Keluar
-    </button>
-  </div>
-
-  <div id="adminLoginView" class="panel admin-login-card">
-    <div class="panel-header">
-      <div class="panel-title"><i class="fas fa-lock"></i> Log Masuk Admin</div>
-    </div>
-    <div class="panel-body">
-      <div class="admin-cloud-note" id="adminModeNote">
-        Akses Pengurusan Aduan adalah untuk admin sahaja.
-        Email admin telah ditetapkan. Masukkan kata laluan untuk log masuk.
-      </div>
-
-      <div class="admin-login-grid">
-        <div class="form-group">
-          <label>Email Admin</label>
-          <input type="email" id="adminEmail" value="admin@gmail.com" readonly>
-        </div>
-        <div class="form-group">
-          <label>Kata Laluan</label>
-          <input type="password" id="adminPassword" placeholder="Masukkan kata laluan admin">
-        </div>
-      </div>
-
-      <div class="form-actions">
-        
-        <button type="button" class="btn-primary" onclick="adminLogin()"><i class="fas fa-sign-in-alt"></i> Log Masuk</button>
-      </div>
-    </div>
-  </div>
-
-  <div id="adminDashboardView" class="admin-hidden">
-    <div class="admin-stats">
-      <div class="admin-stat-card"><span>Jumlah Aduan</span><strong id="adminTotalCount">0</strong></div>
-      <div class="admin-stat-card"><span>Diterima</span><strong id="adminReceivedCount">0</strong></div>
-      <div class="admin-stat-card"><span>Dalam Semakan</span><strong id="adminReviewCount">0</strong></div>
-      <div class="admin-stat-card"><span>Selesai</span><strong id="adminDoneCount">0</strong></div>
-    </div>
-
-    <div class="panel">
-      <div class="panel-header"><div class="panel-title"><i class="fas fa-inbox"></i> Senarai Aduan</div></div>
-      <div class="panel-body">
-        <div class="admin-toolbar">
-          <input type="text" id="adminComplaintSearch" placeholder="Cari ID, nama, lokasi, kategori..." oninput="renderAdminComplaints()">
-          <select id="adminComplaintStatusFilter" onchange="renderAdminComplaints()">
-            <option value="all">Semua Status</option>
-            <option value="Diterima">Diterima</option>
-            <option value="Dalam Semakan">Dalam Semakan</option>
-            <option value="Selesai">Selesai</option>
-          </select>
-          <button class="btn-secondary" onclick="loadAdminComplaints()"><i class="fas fa-sync"></i> Refresh</button>
-        </div>
-
-        <div class="admin-table-wrap">
-          <table class="admin-complaint-table">
-            <thead>
-              <tr>
-                <th>ID</th><th>Tarikh</th><th>Nama</th><th>Telefon</th><th>Kategori</th>
-                <th>Lokasi</th><th>Butiran</th><th>Status</th><th>Gambar</th><th>Tindakan</th>
-              </tr>
-            </thead>
-            <tbody id="adminComplaintRows"><tr><td colspan="10">Tiada data.</td></tr></tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
 
 </main>
 
@@ -3201,7 +2539,7 @@ body.dark .admin-cloud-note{background:#1d3441;color:#c8d3d9}
                     Kawalan Layer
                 </span>
 
-                <button onclick="showNotification('Kawalan layer QGIS2Web tersedia pada peta')" data-i18n="open">Buka</button>
+                <button onclick="openLayerControl()" data-i18n="open">Buka</button>
 
             </div>
 
@@ -3306,12 +2644,6 @@ window.addEventListener("DOMContentLoaded",function(){
 <script src="./resources/qgis2web.js"></script>
 
 
-
-<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-storage-compat.js"></script>
-
 <!-- =====================================================
      WEBSITE FUNCTIONS
 ===================================================== -->
@@ -3343,8 +2675,8 @@ const uiTextTranslations={
     "Analisis premis":["Premise analysis","场所分析"],
     "RUMAH":["HOUSE","住宅"],
     "KEDAI":["SHOP","商店"],
-    "MASJID / KUIL / TOKONG":["MOSQUE / PRAYER HALL / TEMPLE","清真寺 / 祈祷室 / 寺庙"],
-    "MASJID/KUIL/TOKONG":["MOSQUE / PRAYER HALL / TEMPLE","清真寺 / 祈祷室 / 寺庙"],
+    "MASJID / SURAU / TOKONG":["MOSQUE / PRAYER HALL / TEMPLE","清真寺 / 祈祷室 / 寺庙"],
+    "MASJID/SURAU/TOKONG":["MOSQUE / PRAYER HALL / TEMPLE","清真寺 / 祈祷室 / 寺庙"],
     "LAIN-LAIN":["OTHERS","其他"],
     "Data 2025":["2025 Data","2025年数据"],
     "PETA TABURAN KES":["CASE DISTRIBUTION MAP","案件分布地图"],
@@ -3517,63 +2849,7 @@ function moveMapContainer(pageId){const el=document.getElementById("map");if(!el
 /* =====================================================
    ADUAN WARGA
 ===================================================== */
-async function submitComplaint(event){
-    event.preventDefault();
-    const btn=event.submitter;
-    if(btn) btn.disabled=true;
-
-    try{
-        const c={
-            id:createComplaintId(),
-            name:document.getElementById("complaintName").value.trim(),
-            phone:document.getElementById("complaintPhone").value.trim(),
-            email:document.getElementById("complaintEmail").value.trim(),
-            category:document.getElementById("complaintCategory").value,
-            location:document.getElementById("complaintLocation").value.trim(),
-            description:document.getElementById("complaintDescription").value.trim(),
-            date:new Date().toLocaleString("ms-MY"),
-            createdAt:Date.now(),
-            status:"Diterima",
-            photoUrl:""
-        };
-
-        if(!c.name||!c.phone||!c.location||!c.description){
-            showNotification("Sila lengkapkan semua maklumat wajib");
-            return;
-        }
-
-        const photoInput=document.getElementById("complaintPhoto");
-        const file=photoInput&&photoInput.files?photoInput.files[0]:null;
-
-        if(window.__firebaseReady){
-            if(file){
-                const storageRef=window.__firebaseStorage.ref()
-                    .child("complaints/"+c.id+"/"+file.name.replace(/[^\w.\-]/g,"_"));
-                await storageRef.put(file);
-                c.photoUrl=await storageRef.getDownloadURL();
-            }
-            await window.__firebaseDb.collection("complaints").doc(c.id).set(c);
-        }else{
-            const records=JSON.parse(localStorage.getItem("webgis-complaints")||"[]");
-            records.push(c);
-            localStorage.setItem("webgis-complaints",JSON.stringify(records));
-        }
-
-        document.getElementById("complaintForm").reset();
-
-        const box=document.getElementById("complaintSuccessBox");
-        const idEl=document.getElementById("complaintSuccessId");
-        if(idEl) idEl.textContent=c.id;
-        if(box) box.classList.add("show");
-
-        showNotification("Aduan berjaya direkodkan: "+c.id);
-    }catch(err){
-        console.error(err);
-        showNotification("Aduan gagal dihantar. Sila cuba semula.");
-    }finally{
-        if(btn) btn.disabled=false;
-    }
-}
+function submitComplaint(event){event.preventDefault();const c={id:"ADUAN-"+Date.now(),name:document.getElementById("complaintName").value.trim(),phone:document.getElementById("complaintPhone").value.trim(),email:document.getElementById("complaintEmail").value.trim(),category:document.getElementById("complaintCategory").value,location:document.getElementById("complaintLocation").value.trim(),description:document.getElementById("complaintDescription").value.trim(),date:new Date().toLocaleString("ms-MY"),status:"Diterima"};if(!c.name||!c.phone||!c.location||!c.description){showNotification("Sila lengkapkan semua maklumat wajib");return;}const records=JSON.parse(localStorage.getItem("webgis-complaints")||"[]");records.push(c);localStorage.setItem("webgis-complaints",JSON.stringify(records));document.getElementById("complaintForm").reset();showNotification("Aduan berjaya direkodkan: "+c.id);}
 
 /* =====================================================
    NAVIGATION
@@ -3991,15 +3267,55 @@ function exportTable(){
 .map-filter-options{display:grid;grid-template-columns:1fr 1fr;gap:6px 8px;}
 .map-filter-options label{display:flex;align-items:center;gap:6px;cursor:pointer;white-space:nowrap;}
 .map-filter-options input{accent-color:#1687c9;}
+.map-layer-details{margin-top:10px;border-top:1px solid #dce5ea;padding-top:9px;}
+.map-layer-details summary{display:flex;align-items:center;justify-content:space-between;gap:8px;cursor:pointer;font-weight:800;list-style:none;}
+.map-layer-details summary::-webkit-details-marker{display:none;}
+.map-layer-details summary::after{content:"\25BC";font-size:9px;transition:transform .2s;}
+.map-layer-details[open] summary::after{transform:rotate(180deg);}
+.map-layer-list{display:grid;gap:7px;margin-top:9px;max-height:160px;overflow:auto;padding-right:3px;}
+.map-layer-list label{display:flex;align-items:flex-start;gap:7px;line-height:1.3;cursor:pointer;}
+.map-layer-empty{color:#6d7b84;font-size:11px;line-height:1.4;}
 .map-case-labels{position:absolute;top:12px;left:12px;z-index:999;display:flex;flex-direction:column;gap:7px;pointer-events:none;}
 .map-case-label{background:rgba(255,255,255,.94);border-left:4px solid #1687c9;border-radius:8px;padding:7px 10px;min-width:175px;box-shadow:0 5px 15px rgba(0,0,0,.14);font-size:12px;color:#17232d;}
 .map-case-label strong{display:block;font-size:13px;margin-bottom:2px;}
 .map-case-label span{font-weight:700;color:#1687c9;}
 body.dark .map-filter-panel{background:rgba(24,38,48,.97);border-color:#3b4c58;color:#f2f6f8;}
 body.dark .map-filter-year{background:#25343f;color:#fff;border-color:#465966;}
+body.dark .map-layer-details{border-color:#3b4c58;}
+body.dark .map-layer-empty{color:#afbcc5;}
 body.dark .map-case-label{background:rgba(24,38,48,.96);color:#f2f6f8;box-shadow:0 5px 15px rgba(0,0,0,.35);}
 body.dark .map-case-label span{color:#67c2ff;}
 @media(max-width:700px){.map-filter-panel{width:205px}.map-case-label{min-width:145px}.map-case-labels{top:auto;bottom:12px;left:12px}.map-filter-panel{top:12px;right:12px}.map-filter-options{grid-template-columns:1fr;}}
+
+.area-comparison{margin-bottom:16px;padding:16px;overflow:visible;}
+.area-comparison-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:13px;}
+.area-comparison-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));align-items:center;gap:12px;}
+.housing-total{display:flex;align-items:baseline;gap:6px;margin-top:5px;color:#1687c9;}
+.housing-total strong{font-size:31px;line-height:1;}
+.housing-total span{font-size:12px;font-weight:700;}
+.area-card{border-radius:10px;padding:13px 16px;color:#fff;display:grid;grid-template-columns:1fr auto;align-items:end;gap:2px 10px;}
+.area-card-barat{background:linear-gradient(135deg,#0e6597,#1687c9);}
+.area-card-selatan{background:linear-gradient(135deg,#8d3e68,#c4517f);}
+.area-name{grid-column:1 / -1;font-size:12px;font-weight:700;opacity:.94;}
+.area-card strong{font-size:28px;line-height:1;margin-top:5px;}
+.area-card small{font-size:11px;opacity:.9;}
+@media(max-width:600px){.area-comparison-grid{grid-template-columns:1fr}.area-versus{display:none}.area-card strong{font-size:24px}}
+
+.premise-chart-panel{margin-top:18px;}
+.premise-chart-body{display:grid;grid-template-columns:minmax(260px,.8fr) minmax(300px,1.2fr);align-items:center;gap:26px;padding:26px;min-height:330px;}
+.premise-pie-wrap{display:flex;align-items:center;justify-content:center;}
+.premise-pie{width:245px;height:245px;border-radius:50%;position:relative;background:conic-gradient(#2586c1 0 70.3%,#e8a23a 70.3% 80.9%,#55a868 80.9% 81.9%,#c64e4e 81.9% 100%);box-shadow:0 10px 28px rgba(17,42,61,.14);transition:background .35s ease;}
+.premise-pie::after{content:"";position:absolute;inset:58px;border-radius:50%;background:var(--card);}
+.premise-pie-center{position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;}
+.premise-pie-center strong{font-size:29px;line-height:1;color:var(--text);}
+.premise-pie-center span{margin-top:6px;font-size:11px;color:var(--muted);font-weight:700;}
+.premise-pie-legend{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.premise-pie-item{display:grid;grid-template-columns:12px 1fr auto;align-items:center;gap:9px;padding:13px;border:1px solid var(--border);border-radius:10px;background:var(--card);}
+.premise-pie-swatch{width:11px;height:11px;border-radius:50%;}
+.premise-pie-label{font-size:11px;font-weight:700;color:var(--text);}
+.premise-pie-value{text-align:right;font-size:12px;color:var(--muted);}
+.premise-pie-value strong{display:block;font-size:17px;color:var(--text);}
+@media(max-width:750px){.premise-chart-body{grid-template-columns:1fr}.premise-pie-legend{grid-template-columns:1fr}.premise-pie{width:210px;height:210px}.premise-pie::after{inset:50px}}
 </style>
 
 <style>
@@ -4075,6 +3391,12 @@ body.dark .year-badge{
             ["FEBRUARI",0,0,1,17],
             ["MAC",25,5,0,9]
         ]
+    };
+
+    /* Nilai kawasan daripada fail; rekod IPOH TIMUR dipaparkan sebagai IPOH SELATAN mengikut pilihan pengguna. */
+    window.WEBGIS_AREA_DATA = {
+        "2025": {barat:245, selatan:372},
+        "2026": {barat:57, selatan:71}
     };
 
     const monthOrder=["JANUARI","FEBRUARI","MAC","APRIL","MEI","JUN","JULAI","OGOS","SEPTEMBER","OKTOBER","NOVEMBER","DISEMBER"];
@@ -4162,6 +3484,41 @@ body.dark .year-badge{
         const t=selectedTotals(); return t.rumah+t.kedai+t.masjid+t.lain;
     }
 
+    function selectedAreaTotals(){
+        const y=currentYear();
+        if(y!=="all") return WEBGIS_AREA_DATA[y] || {barat:0,selatan:0};
+        return Object.values(WEBGIS_AREA_DATA).reduce((sum,row)=>({
+            barat:sum.barat+row.barat,
+            selatan:sum.selatan+row.selatan
+        }),{barat:0,selatan:0});
+    }
+
+    function updateAreaComparison(){
+        const data=selectedAreaTotals();
+        const y=currentYear()==="all"?"2025 + 2026":currentYear();
+        const lang=document.documentElement.lang||"ms";
+        const copy={
+            ms:{title:"JUMLAH KES PERUMAHAN",subtitle:"Kes mengikut kawasan bagi tahun ",unit:"kes"},
+            en:{title:"TOTAL HOUSING CASES",subtitle:"Cases by area for ",unit:"cases"},
+            zh:{title:"住宅案件总数",subtitle:"各地区案件：",unit:"宗案件"}
+        }[lang]||null;
+        const text=copy||{
+            title:"JUMLAH KES PERUMAHAN",subtitle:"Kes mengikut kawasan bagi tahun ",unit:"kes"
+        };
+        const west=document.getElementById("ipohBaratCases"), south=document.getElementById("ipohSelatanCases");
+        if(west) west.textContent=data.barat;
+        if(south) south.textContent=data.selatan;
+        const title=document.getElementById("housingTotalTitle");
+        const housingTotal=document.getElementById("housingTotalCases");
+        const subtitle=document.getElementById("areaComparisonSubtitle");
+        const badge=document.getElementById("areaComparisonYear");
+        if(title) title.textContent=text.title;
+        if(housingTotal) housingTotal.textContent=selectedTotals().rumah;
+        if(subtitle) subtitle.textContent=text.subtitle+y;
+        if(badge) badge.textContent=y;
+        document.querySelectorAll(".area-case-unit").forEach(el=>el.textContent=text.unit);
+    }
+
     function updateYearLabels(){
         const y=currentYear();
         const label=y==="all"?"2025 + 2026":y;
@@ -4246,81 +3603,10 @@ body.dark .year-badge{
         document.querySelectorAll("#jadual-page .panel-title").forEach(e=>e.textContent="JADUAL STATISTIK KES PECAH RUMAH "+(currentYear()==="all"?"2025 + 2026":currentYear()));
     }
 
-
-    function updatePremisePie(){
-        const pie=document.getElementById("premisePie");
-        if(!pie) return;
-
-        const t=selectedTotals();
-        const total=Math.max(selectedTotal(),0);
-        const safeTotal=Math.max(total,1);
-
-        const items=[
-            {key:"rumah",value:t.rumah,icon:"premiseIconRumah",legend:"premiseLegendRumah"},
-            {key:"kedai",value:t.kedai,icon:"premiseIconKedai",legend:"premiseLegendKedai"},
-            {key:"masjid",value:t.masjid,icon:"premiseIconMasjid",legend:"premiseLegendMasjid"},
-            {key:"lain",value:t.lain,icon:"premiseIconLain",legend:"premiseLegendLain"}
-        ];
-
-        let cumulative=0;
-        const ends=[];
-        items.forEach(item=>{
-            cumulative += (item.value/safeTotal)*100;
-            ends.push(cumulative);
-        });
-
-        pie.style.setProperty("--rumah-end", ends[0].toFixed(4)+"%");
-        pie.style.setProperty("--kedai-end", ends[1].toFixed(4)+"%");
-        pie.style.setProperty("--masjid-end", ends[2].toFixed(4)+"%");
-
-        const totalEl=document.getElementById("premisePieTotal");
-        if(totalEl) totalEl.textContent=total;
-
-        const subtitle=document.getElementById("premisePieSubtitle");
-        const y=currentYear()==="all" ? "2025 + 2026" : currentYear();
-        if(subtitle) subtitle.textContent="Pecahan kes mengikut kategori premis bagi tahun "+y;
-
-        /*
-          Letak ikon pada titik tengah setiap sektor carta.
-          Sudut 0 pada conic-gradient bermula di atas, jadi -90° digunakan
-          untuk menukar koordinat kepada sistem sin/cos biasa.
-        */
-        let startPct=0;
-        const radius=112;
-        items.forEach(item=>{
-            const pct=(item.value/safeTotal)*100;
-            const midPct=startPct + pct/2;
-            const angle=((midPct/100)*360 - 90) * Math.PI/180;
-            const icon=document.getElementById(item.icon);
-
-            if(icon){
-                if(item.value<=0){
-                    icon.style.display="none";
-                }else{
-                    icon.style.display="flex";
-                    const x=Math.cos(angle)*radius;
-                    const yPos=Math.sin(angle)*radius;
-                    icon.style.transform=`translate(${x}px,${yPos}px)`;
-                    icon.title=(item.key==="rumah"?"Rumah":
-                                item.key==="kedai"?"Kedai":
-                                item.key==="masjid"?"Masjid / Kuil / Tokong":"Lain-lain")
-                                +" — "+item.value+" kes ("+pct.toFixed(1)+"%)";
-                }
-            }
-
-            const legend=document.getElementById(item.legend);
-            if(legend){
-                legend.textContent=item.value+" kes • "+pct.toFixed(1)+"%";
-            }
-
-            startPct += pct;
-        });
-    }
-
     function updatePremise(){
         const t=selectedTotals(), total=Math.max(selectedTotal(),1);
         const cards=document.querySelectorAll("#jenis-page .stats .stat-card");
-        const vals=[["RUMAH",t.rumah],["KEDAI",t.kedai],["MASJID/KUIL/TOKONG",t.masjid],["LAIN-LAIN",t.lain]];
+        const vals=[["RUMAH",t.rumah],["KEDAI",t.kedai],["MASJID/SURAU/TOKONG",t.masjid],["LAIN-LAIN",t.lain]];
         cards.forEach((card,i)=>{
             if(!vals[i])return;
             card.querySelector(".stat-label").textContent=vals[i][0];
@@ -4328,7 +3614,42 @@ body.dark .year-badge{
             const ls=card.querySelectorAll(".stat-label")[1];
             if(ls) ls.textContent=(vals[i][1]/total*100).toFixed(1)+"%";
         });
-        updatePremisePie();
+
+        const pie=document.getElementById("premisePie");
+        const pieTotal=document.getElementById("premisePieTotal");
+        const legend=document.getElementById("premisePieLegend");
+        const year=currentYear()==="all"?"2025 + 2026":currentYear();
+        const lang=document.documentElement.lang||"ms";
+        const words={
+            ms:{title:"CARTA PAI JENIS PREMIS",subtitle:"Pecahan kes mengikut kategori premis bagi tahun ",total:"Jumlah Kes",labels:["Rumah","Kedai","Masjid/Surau/Tokong","Lain-lain"]},
+            en:{title:"PREMISE TYPE PIE CHART",subtitle:"Breakdown of cases by premise category for ",total:"Total Cases",labels:["House","Shop","Mosque/Prayer Hall/Temple","Others"]},
+            zh:{title:"场所类型饼图",subtitle:"各场所类别案件分布：",total:"案件总数",labels:["住宅","商店","清真寺/祈祷室/寺庙","其他"]}
+        }[lang]||null;
+        const text=words||{title:"CARTA PAI JENIS PREMIS",subtitle:"Pecahan kes mengikut kategori premis bagi tahun ",total:"Jumlah Kes",labels:["Rumah","Kedai","Masjid/Surau/Tokong","Lain-lain"]};
+        const numbers=[t.rumah,t.kedai,t.masjid,t.lain];
+        const colors=["#2586c1","#e8a23a","#55a868","#c64e4e"];
+        let cursor=0;
+        const stops=numbers.map((value,i)=>{
+            const start=cursor;
+            cursor+=value/total*100;
+            return `${colors[i]} ${start}% ${cursor}%`;
+        });
+        if(pie){
+            pie.style.background=`conic-gradient(${stops.join(",")})`;
+            pie.setAttribute("aria-label",text.title+": "+year);
+        }
+        if(pieTotal) pieTotal.textContent=selectedTotal();
+        const centerLabel=document.querySelector("#jenis-page .premise-pie-center span");
+        if(centerLabel) centerLabel.textContent=text.total;
+        const title=document.getElementById("premisePieTitle");
+        const subtitle=document.getElementById("premisePieSubtitle");
+        const badge=document.getElementById("premisePieYear");
+        if(title) title.textContent=text.title;
+        if(subtitle) subtitle.textContent=text.subtitle+year;
+        if(badge) badge.textContent=year;
+        if(legend){
+            legend.innerHTML=numbers.map((value,i)=>`<div class="premise-pie-item"><span class="premise-pie-swatch" style="background:${colors[i]}"></span><span class="premise-pie-label">${text.labels[i]}</span><span class="premise-pie-value"><strong>${value}</strong>${(value/total*100).toFixed(1)}%</span></div>`).join("");
+        }
     }
 
     function updateReport(){
@@ -4336,7 +3657,7 @@ body.dark .year-badge{
             const n=r.rumah+r.kedai+r.masjid+r.lain;return n>best.n?{m:r.month,n:n}:best;
         },{m:"-",n:-1});
         const t=selectedTotals();
-        const highest=[["Rumah",t.rumah],["Kedai",t.kedai],["Masjid/Kuil/Tokong",t.masjid],["Lain-lain",t.lain]].sort((a,b)=>b[1]-a[1])[0];
+        const highest=[["Rumah",t.rumah],["Kedai",t.kedai],["Masjid/Surau/Tokong",t.masjid],["Lain-lain",t.lain]].sort((a,b)=>b[1]-a[1])[0];
         const cards=document.querySelectorAll("#laporan-page .stats .stat-card");
         if(cards[0]) cards[0].querySelector(".stat-number").textContent=total;
         if(cards[1]) cards[1].querySelector(".stat-number").textContent=highest[0];
@@ -4384,253 +3705,88 @@ body.dark .year-badge{
         },{rumah:0,kedai:0,masjid:0,lain:0});
     }
 
-    function getQgisLayerEntries(){
-        const entries=[];
-        if(typeof map==="undefined" || !map || !map.getLayers) return entries;
-
-        function walk(collection){
-            if(!collection || !collection.getArray) return;
-            collection.getArray().forEach(function(layer){
-                if(!layer) return;
-
-                // QGIS2Web layer groups can contain other layers.
-                if(layer.getLayers && layer.getLayers()){
-                    walk(layer.getLayers());
-                    return;
-                }
-
-                let title="";
-                try{
-                    title=(layer.get && (
-                        layer.get("title") ||
-                        layer.get("name") ||
-                        layer.get("id")
-                    )) || "";
-                }catch(e){}
-
-                entries.push({
-                    layer:layer,
-                    title:String(title || "")
-                });
-            });
-        }
-
-        walk(map.getLayers());
-        return entries;
-    }
-
-    function normaliseLayerName(name){
-        return String(name || "")
-            .toLowerCase()
-            .replace(/[_\-]+/g," ")
-            .replace(/\s+/g," ")
-            .trim();
-    }
-
-    function findQgisLayer(key){
-        const aliases={
-            satellite:["google satellite","google","satellite"],
-            mukim:["mukimclipped","sempadan mukim","mukim"],
-            parlimen:["parlimenpeninsular","kes mengikut parlimen","parlimen"],
-            residential3:["landuse3","kawasan kediaman 3","residential 3"],
-            residential2:["landuse2","kawasan kediaman 2","residential 2"],
-            residential1:["landuse1","kawasan kediaman 1","residential 1"],
-            polis:["balai polis","balai_polis","balai polis "]
-        };
-
-        const wanted=aliases[key] || [key];
-        const entries=getQgisLayerEntries();
-
-        for(const entry of entries){
-            const n=normaliseLayerName(entry.title);
-            if(wanted.some(a=>n.includes(normaliseLayerName(a)))) return entry.layer;
-        }
-
-        // Fallback to QGIS2Web global layer variable names.
-        const globals={
-            satellite:["layer_GoogleSatellite_0","layer_GoogleSatellite"],
-            mukim:["layer_mukimclipped_1"],
-            parlimen:["layer_parlimenpeninsular_2018_parlimen_2"],
-            residential3:["layer_landuse3landuse_residential_3"],
-            residential2:["layer_landuse2landuse_residential_4"],
-            residential1:["layer_landuse1landuse_residential_5"],
-            polis:["layer_balai_polis__6"]
-        };
-
-        for(const varName of (globals[key] || [])){
-            try{
-                if(window[varName]) return window[varName];
-            }catch(e){}
-        }
-        return null;
-    }
-
-    function setQgisLayerVisibility(key, visible){
-        const layer=findQgisLayer(key);
-        if(layer && typeof layer.setVisible==="function"){
-            layer.setVisible(!!visible);
-            if(typeof map!=="undefined" && map && map.render) map.render();
-            return true;
-        }
-        console.warn("Layer QGIS2Web tidak dijumpai:",key);
-        return false;
-    }
-
-    function getQgisLayerVisibility(key){
-        const layer=findQgisLayer(key);
-        if(layer && typeof layer.getVisible==="function") return layer.getVisible();
-        return true;
-    }
-
-
-    function cleanupDuplicateMapControls(target){
-        if(!target) return;
-
-        /* Pastikan hanya SATU header Kawalan Layer wujud.
-           Simpan header yang benar-benar mempunyai .custom-layer-body selepasnya. */
-        const heads=Array.from(target.querySelectorAll(".custom-layer-head"));
-        if(heads.length>1){
-            let keep=heads.find(function(h){
-                let n=h.nextElementSibling;
-                while(n && n.classList && !n.classList.contains("custom-layer-body")){
-                    n=n.nextElementSibling;
-                }
-                return n && n.classList && n.classList.contains("custom-layer-body");
-            }) || heads[heads.length-1];
-
-            heads.forEach(function(h){
-                if(h!==keep) h.remove();
-            });
-        }
-
-        /* Jika tajuk PAPARAN LABEL STATISTIK pernah ditambah dua kali
-           oleh versi lama, kekalkan satu sahaja. */
-        const children=Array.from(target.children);
-        const labelTitles=children.filter(function(el){
-            return el.textContent &&
-                   el.textContent.trim().toUpperCase()==="PAPARAN LABEL STATISTIK";
-        });
-        if(labelTitles.length>1){
-            labelTitles.slice(1).forEach(function(el){ el.remove(); });
-        }
-
-        /* Pastikan hanya satu body senarai layer. */
-        const bodies=Array.from(target.querySelectorAll(".custom-layer-body"));
-        if(bodies.length>1){
-            const keepBody=bodies[bodies.length-1];
-            bodies.forEach(function(b){
-                if(b!==keepBody) b.remove();
-            });
-        }
-    }
-
-    function bindLayerControl(target){
-        cleanupDuplicateMapControls(target);
-        target.querySelectorAll("[data-qgis-layer]").forEach(function(cb){
-            const key=cb.dataset.qgisLayer;
-            cb.checked=getQgisLayerVisibility(key);
-
-            cb.addEventListener("change",function(e){
-                e.stopPropagation();
-                const ok=setQgisLayerVisibility(key,this.checked);
-                if(!ok){
-                    this.checked=!this.checked;
-                    if(typeof showNotification==="function"){
-                        showNotification("Layer tidak dijumpai. Semak nama layer QGIS2Web.");
-                    }
-                }
-            });
-        });
-
-        const head=target.querySelector(".custom-layer-head");
-        const body=target.querySelector(".custom-layer-body");
-        const icon=target.querySelector(".custom-layer-arrow");
-        if(head && body){
-            head.addEventListener("click",function(e){
-                if(e.target && e.target.tagName==="INPUT") return;
-                const closed=body.style.display==="none";
-                body.style.display=closed ? "block" : "none";
-                if(icon) icon.className=closed ?
-                    "fas fa-chevron-up custom-layer-arrow" :
-                    "fas fa-chevron-down custom-layer-arrow";
-            });
-        }
-    }
-
     function renderMapFilter(targetId, labelsId){
         const target=document.getElementById(targetId), labels=document.getElementById(labelsId);
         if(!target || !labels) return;
         const y=mapFilterYear();
         const yearText=y==="all"?"2025 + 2026":y;
         const t=mapFilterTotals();
-
         target.innerHTML=`
             <div class="map-filter-title"><i class="fas fa-filter"></i> Filter Paparan Peta</div>
-
             <select class="map-filter-year" id="${targetId}-year">
                 <option value="2025">2025</option>
                 <option value="2026">2026</option>
                 <option value="all">2025 + 2026</option>
             </select>
-
             <div class="map-filter-options">
                 <label><input type="checkbox" data-map-label="rumah" checked> Rumah</label>
                 <label><input type="checkbox" data-map-label="kedai" checked> Kedai</label>
                 <label><input type="checkbox" data-map-label="masjid" checked> Masjid/Kuil/Tokong</label>
                 <label><input type="checkbox" data-map-label="lain" checked> Lain-lain</label>
             </div>
-
-            <div style="height:1px;background:#e2e8ee;margin:14px 0 0"></div>
-            `;
-
-        const select=target.querySelector("select");
+            <details class="map-layer-details">
+                <summary>Kawalan Layer</summary>
+                <div class="map-layer-list"><span class="map-layer-empty">Memuatkan layer peta...</span></div>
+            </details>`;
+        const select=target.querySelector('select');
         select.value=y;
-        select.addEventListener("change",function(){
-            const main=document.getElementById("yearSelect");
-            if(main){
-                main.value=this.value;
-                main.dispatchEvent(new Event("change"));
-            }else{
-                localStorage.setItem("webgis-year",this.value);
-                updateYearData();
-            }
+        select.addEventListener('change',function(){
+            const main=document.getElementById('yearSelect');
+            if(main){main.value=this.value; main.dispatchEvent(new Event('change'));}
+            else {localStorage.setItem('webgis-year',this.value); updateYearData();}
         });
-
-        target.querySelectorAll("[data-map-label]").forEach(
-            cb=>cb.addEventListener("change",()=>syncMapLabels())
-        );
+        target.querySelectorAll('[data-map-label]').forEach(cb=>cb.addEventListener('change',()=>syncMapLabels()));
 
         labels.innerHTML=`
             <div class="map-case-label" data-label-key="rumah"><strong>Rumah</strong><span>${t.rumah} kes</span></div>
             <div class="map-case-label" data-label-key="kedai"><strong>Kedai</strong><span>${t.kedai} kes</span></div>
             <div class="map-case-label" data-label-key="masjid"><strong>Masjid/Kuil/Tokong</strong><span>${t.masjid} kes</span></div>
             <div class="map-case-label" data-label-key="lain"><strong>Lain-lain</strong><span>${t.lain} kes</span></div>`;
-
         labels.dataset.year=yearText;
         syncMapLabels();
-
-        // QGIS2Web map/layers are loaded by layers.js + qgis2web.js.
-        // Bind after they exist; retry briefly if map is still initializing.
-        /* Lindungi panel daripada duplicate yang mungkin ditambah semula
-           oleh script versi lama selepas page load. */
-        if(!target.__layerDedupeObserver){
-            target.__layerDedupeObserver=new MutationObserver(function(){
-                cleanupDuplicateMapControls(target);
-            });
-            target.__layerDedupeObserver.observe(target,{childList:true,subtree:false});
-        }
-
-        let tries=0;
-        const timer=setInterval(function(){
-            tries++;
-            if(typeof map!=="undefined" && map && map.getLayers){
-                clearInterval(timer);
-
-            }else if(tries>30){
-                clearInterval(timer);
-            }
-        },100);
+        renderMapLayerControls(target);
     }
+
+    function renderMapLayerControls(target){
+        const list=target && target.querySelector(".map-layer-list");
+        if(!list) return;
+        if(typeof map==="undefined" || !map || !map.getLayers){
+            setTimeout(()=>renderMapLayerControls(target),300);
+            return;
+        }
+        const layers=[];
+        function collect(collection){
+            collection.getArray().forEach(layer=>{
+                if(layer.getLayers) collect(layer.getLayers());
+                else layers.push(layer);
+            });
+        }
+        collect(map.getLayers());
+        list.innerHTML="";
+        layers.forEach((layer,index)=>{
+            const name=layer.get("title") || layer.get("name") || "Layer "+(index+1);
+            const label=document.createElement("label");
+            const checkbox=document.createElement("input");
+            checkbox.type="checkbox";
+            checkbox.checked=layer.getVisible();
+            checkbox.addEventListener("change",()=>layer.setVisible(checkbox.checked));
+            const span=document.createElement("span");
+            span.textContent=name;
+            label.append(checkbox,span);
+            list.appendChild(label);
+        });
+        if(!layers.length) list.innerHTML='<span class="map-layer-empty">Tiada layer ditemui.</span>';
+    }
+
+    window.openLayerControl=function(){
+        closeSettings();
+        showPageById("map-page");
+        setTimeout(function(){
+            const details=document.querySelector("#mapPageFilter .map-layer-details");
+            if(details) details.open=true;
+            if(typeof map!=="undefined" && map) map.updateSize();
+        },250);
+    };
 
     function syncMapLabels(){
         // Filter kategori hanya untuk halaman Peta Taburan.
@@ -4652,6 +3808,7 @@ body.dark .year-badge{
     function updateYearData(){
         addYearSelector();
         updateMapCaseLabels();
+        updateAreaComparison();
         updateDashboard();
         updateTrendPage();
         updateTable();
@@ -4680,414 +3837,6 @@ body.dark .year-badge{
         }
     },400);
 })();
-</script>
-
-
-<script id="outside-map-summary-script">
-/* =========================================================
-   DATA KES IPOH BARAT / IPOH SELATAN
-   Masukkan JUMLAH SEBENAR di sini apabila data rasmi tersedia.
-   Jangan gunakan nombor contoh sebagai data sebenar.
-========================================================= */
-window.WEBGIS_AREA_DATA = window.WEBGIS_AREA_DATA || {
-    "2025": { barat: null, selatan: null },
-    "2026": { barat: null, selatan: null }
-};
-
-function updateOutsideMapSummary(){
-    if(typeof selectedTotals!=="function") return;
-
-    const totals=selectedTotals();
-    const year=(typeof currentYear==="function") ? String(currentYear()) : "2025";
-
-    const mapEls={
-        rumah:document.getElementById("mapTopRumah"),
-        kedai:document.getElementById("mapTopKedai"),
-        masjid:document.getElementById("mapTopMasjid"),
-        lain:document.getElementById("mapTopLain")
-    };
-    if(mapEls.rumah) mapEls.rumah.textContent=totals.rumah ?? 0;
-    if(mapEls.kedai) mapEls.kedai.textContent=totals.kedai ?? 0;
-    if(mapEls.masjid) mapEls.masjid.textContent=totals.masjid ?? 0;
-    if(mapEls.lain) mapEls.lain.textContent=totals.lain ?? 0;
-
-    let area;
-    if(year==="all"){
-        const a=window.WEBGIS_AREA_DATA["2025"] || {};
-        const b=window.WEBGIS_AREA_DATA["2026"] || {};
-        area={
-            barat:(a.barat!=null && b.barat!=null) ? Number(a.barat)+Number(b.barat) : null,
-            selatan:(a.selatan!=null && b.selatan!=null) ? Number(a.selatan)+Number(b.selatan) : null
-        };
-    }else{
-        area=window.WEBGIS_AREA_DATA[year] || {};
-    }
-
-    const barat=(area.barat!=null && !isNaN(Number(area.barat))) ? Number(area.barat) : null;
-    const selatan=(area.selatan!=null && !isNaN(Number(area.selatan))) ? Number(area.selatan) : null;
-    const totalArea=(barat!=null && selatan!=null) ? barat+selatan : null;
-
-    const bVal=document.getElementById("ipohBaratCases");
-    const sVal=document.getElementById("ipohSelatanCases");
-    const bPct=document.getElementById("ipohBaratPct");
-    const sPct=document.getElementById("ipohSelatanPct");
-
-    if(bVal) bVal.textContent=barat==null ? "—" : barat;
-    if(sVal) sVal.textContent=selatan==null ? "—" : selatan;
-
-    if(totalArea && bPct && sPct){
-        bPct.textContent=((barat/totalArea)*100).toFixed(1)+"% daripada dua kawasan";
-        sPct.textContent=((selatan/totalArea)*100).toFixed(1)+"% daripada dua kawasan";
-    }else{
-        if(bPct) bPct.textContent="Data kawasan belum dimasukkan";
-        if(sPct) sPct.textContent="Data kawasan belum dimasukkan";
-    }
-}
-
-document.addEventListener("DOMContentLoaded",function(){
-    setTimeout(updateOutsideMapSummary,100);
-});
-
-/* Sinkron dengan penukaran tahun yang sedia ada */
-document.addEventListener("change",function(e){
-    if(e.target && e.target.tagName==="SELECT"){
-        setTimeout(updateOutsideMapSummary,0);
-    }
-});
-
-/* Backup sync jika tahun ditukar melalui fungsi lain */
-setInterval(function(){
-    const y=(typeof currentYear==="function") ? String(currentYear()) : "2025";
-    if(window.__outsideMapYear!==y){
-        window.__outsideMapYear=y;
-        updateOutsideMapSummary();
-    }
-},400);
-</script>
-
-
-<script id="hard-remove-lower-layer-control">
-(function(){
-    function norm(s){
-        return String(s||"").replace(/\s+/g," ").trim().toLowerCase();
-    }
-
-    function removeLowerDuplicate(){
-        const panel=document.getElementById("mapPageFilter");
-        if(!panel) return;
-
-        /*
-          Remove the duplicate custom block added by older versions.
-          The unwanted lower block is identifiable by:
-          - .custom-layer-head / .custom-layer-body, OR
-          - helper text "Hidupkan atau matikan layer QGIS2Web pada peta."
-        */
-        panel.querySelectorAll(".custom-layer-body").forEach(function(body){
-            const txt=norm(body.textContent);
-            if(txt.includes("hidupkan atau matikan layer qgis2web")){
-                const prev=body.previousElementSibling;
-                if(prev && (
-                    prev.classList.contains("custom-layer-head") ||
-                    norm(prev.textContent).includes("kawalan layer")
-                )){
-                    prev.remove();
-                }
-                body.remove();
-            }
-        });
-
-        // If an orphan duplicate header remains after the lower body is removed,
-        // keep only the first "Kawalan Layer" header.
-        const candidates=Array.from(panel.querySelectorAll("div"))
-            .filter(function(el){
-                const own=Array.from(el.childNodes)
-                    .filter(n=>n.nodeType===Node.TEXT_NODE || (n.nodeType===Node.ELEMENT_NODE && n.tagName==="SPAN"))
-                    .map(n=>n.textContent||"").join(" ");
-                return norm(own)==="kawalan layer";
-            });
-
-        if(candidates.length>1){
-            candidates.slice(1).forEach(function(el){
-                // do not remove large containers
-                if(el.children.length<=3) el.remove();
-            });
-        }
-    }
-
-    function start(){
-        removeLowerDuplicate();
-
-        const panel=document.getElementById("mapPageFilter");
-        if(!panel) return;
-
-        const observer=new MutationObserver(function(){
-            removeLowerDuplicate();
-        });
-        observer.observe(panel,{childList:true,subtree:true});
-
-        // A few delayed passes cover scripts that render after page load.
-        [100,300,700,1500,3000].forEach(function(ms){
-            setTimeout(removeLowerDuplicate,ms);
-        });
-    }
-
-    if(document.readyState==="loading"){
-        document.addEventListener("DOMContentLoaded",start);
-    }else{
-        start();
-    }
-})();
-</script>
-
-
-<script id="complaint-cloud-admin-system">
-const FIREBASE_CONFIG={
-    apiKey:"PASTE_FIREBASE_API_KEY",
-    authDomain:"PASTE_PROJECT.firebaseapp.com",
-    projectId:"PASTE_PROJECT_ID",
-    storageBucket:"PASTE_PROJECT.appspot.com",
-    messagingSenderId:"PASTE_SENDER_ID",
-    appId:"PASTE_APP_ID"
-};
-
-window.__firebaseReady=false;
-window.__firebaseDb=null;
-window.__firebaseAuth=null;
-window.__firebaseStorage=null;
-window.__adminComplaints=[];
-
-function firebaseConfigReady(){
-    return FIREBASE_CONFIG.apiKey &&
-           !FIREBASE_CONFIG.apiKey.includes("PASTE_") &&
-           FIREBASE_CONFIG.projectId &&
-           !FIREBASE_CONFIG.projectId.includes("PASTE_");
-}
-
-function initComplaintBackend(){
-    if(!firebaseConfigReady() || typeof firebase==="undefined") return false;
-    try{
-        if(!firebase.apps.length) firebase.initializeApp(FIREBASE_CONFIG);
-        window.__firebaseDb=firebase.firestore();
-        window.__firebaseAuth=firebase.auth();
-        window.__firebaseStorage=firebase.storage();
-        window.__firebaseReady=true;
-
-        window.__firebaseAuth.onAuthStateChanged(function(user){
-            if(user){
-                showAdminDashboard();
-                loadAdminComplaints();
-            }
-        });
-        return true;
-    }catch(err){
-        console.error(err);
-        return false;
-    }
-}
-
-function createComplaintId(){
-    const d=new Date();
-    return `ADUAN-${d.getFullYear()}${String(d.getMonth()+1).padStart(2,"0")}${String(d.getDate()).padStart(2,"0")}-${Math.floor(Math.random()*9000)+1000}`;
-}
-
-function esc(v){
-    return String(v??"")
-        .replace(/&/g,"&amp;")
-        .replace(/</g,"&lt;")
-        .replace(/>/g,"&gt;")
-        .replace(/"/g,"&quot;")
-        .replace(/'/g,"&#039;");
-}
-
-function badge(s){
-    return s==="Selesai" ? "done" : s==="Dalam Semakan" ? "review" : "";
-}
-
-async function adminLogin(){
-    const email=document.getElementById("adminEmail").value.trim();
-    const password=document.getElementById("adminPassword").value;
-
-    if(email!=="admin@gmail.com" || password!=="admin"){
-        showNotification("Email atau kata laluan tidak betul");
-        return;
-    }
-
-    /*
-      Login tetap ini hanya untuk prototaip/FYP.
-      Jika Firebase Authentication sudah dikonfigurasi, cuba login Firebase juga.
-    */
-    if(window.__firebaseReady){
-        try{
-            await window.__firebaseAuth.signInWithEmailAndPassword(email,password);
-            showAdminDashboard();
-            await loadAdminComplaints();
-            return;
-        }catch(e){
-            console.error(e);
-            showNotification("Akaun admin belum dicipta dalam Firebase Authentication");
-            return;
-        }
-    }
-
-    // Tanpa Firebase, benarkan paparan admin tetapi tiada data cloud boleh dibaca.
-    window.__prototypeAdminLoggedIn=true;
-    showAdminDashboard();
-    window.__adminComplaints=[];
-    renderAdminComplaints();
-    showNotification("Log masuk prototaip berjaya. Sambungkan Firebase untuk melihat aduan online.");
-}
-
-function showAdminDashboard(){
-    document.getElementById("adminLoginView")?.classList.add("admin-hidden");
-    document.getElementById("adminDashboardView")?.classList.remove("admin-hidden");
-    document.getElementById("adminLogoutBtn")?.classList.remove("admin-hidden");
-}
-
-async function adminLogout(){
-    try{
-        if(window.__firebaseReady && window.__firebaseAuth.currentUser){
-            await window.__firebaseAuth.signOut();
-        }
-    }catch(e){}
-
-    document.getElementById("adminLoginView")?.classList.remove("admin-hidden");
-    document.getElementById("adminDashboardView")?.classList.add("admin-hidden");
-    document.getElementById("adminLogoutBtn")?.classList.add("admin-hidden");
-}
-
-async function loadAdminComplaints(){
-    try{
-        if(!window.__firebaseReady || !window.__firebaseAuth.currentUser){
-            showNotification("Sila log masuk sebagai admin terlebih dahulu");
-            return;
-        }
-
-        const records=[];
-        const snap=await window.__firebaseDb
-            .collection("complaints")
-            .orderBy("createdAt","desc")
-            .get();
-
-        snap.forEach(doc=>records.push(doc.data()));
-
-        window.__adminComplaints=records;
-        renderAdminComplaints();
-    }catch(e){
-        console.error(e);
-        showNotification("Gagal memuatkan aduan");
-    }
-}
-
-function renderAdminComplaints(){
-    const body=document.getElementById("adminComplaintRows");
-    if(!body) return;
-
-    const q=(document.getElementById("adminComplaintSearch")?.value||"").toLowerCase().trim();
-    const status=document.getElementById("adminComplaintStatusFilter")?.value||"all";
-
-    const records=(window.__adminComplaints||[]).filter(c=>{
-        const hay=[c.id,c.name,c.phone,c.category,c.location,c.description].join(" ").toLowerCase();
-        return (!q||hay.includes(q)) && (status==="all"||c.status===status);
-    });
-
-    body.innerHTML=records.length ? records.map(c=>`
-        <tr>
-            <td><b>${esc(c.id)}</b></td>
-            <td>${esc(c.date)}</td>
-            <td>${esc(c.name)}</td>
-            <td>${esc(c.phone)}</td>
-            <td>${esc(c.category)}</td>
-            <td>${esc(c.location)}</td>
-            <td style="max-width:260px">${esc(c.description)}</td>
-            <td>
-                <select onchange="updateComplaintStatus('${esc(c.id)}',this.value)">
-                    <option value="Diterima" ${c.status==="Diterima"?"selected":""}>Diterima</option>
-                    <option value="Dalam Semakan" ${c.status==="Dalam Semakan"?"selected":""}>Dalam Semakan</option>
-                    <option value="Selesai" ${c.status==="Selesai"?"selected":""}>Selesai</option>
-                </select>
-            </td>
-            <td>${c.photoUrl ? `<a class="admin-action-btn admin-action-view" href="${esc(c.photoUrl)}" target="_blank" rel="noopener">Lihat</a>` : "-"}</td>
-            <td><button class="admin-action-btn admin-action-delete" onclick="deleteComplaintRecord('${esc(c.id)}')">Padam</button></td>
-        </tr>
-    `).join("") : '<tr><td colspan="10">Tiada aduan dijumpai.</td></tr>';
-
-    updateAdminCounts();
-}
-
-function updateAdminCounts(){
-    const r=window.__adminComplaints||[];
-    const set=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
-    set("adminTotalCount",r.length);
-    set("adminReceivedCount",r.filter(x=>x.status==="Diterima").length);
-    set("adminReviewCount",r.filter(x=>x.status==="Dalam Semakan").length);
-    set("adminDoneCount",r.filter(x=>x.status==="Selesai").length);
-}
-
-async function updateComplaintStatus(id,status){
-    if(!window.__firebaseReady || !window.__firebaseAuth.currentUser){
-        showNotification("Akses tidak dibenarkan");
-        return;
-    }
-
-    try{
-        await window.__firebaseDb.collection("complaints").doc(id).update({status});
-        await loadAdminComplaints();
-        showNotification("Status aduan dikemas kini");
-    }catch(e){
-        console.error(e);
-        showNotification("Gagal mengemas kini status");
-    }
-}
-
-async function deleteComplaintRecord(id){
-    if(!window.__firebaseReady || !window.__firebaseAuth.currentUser){
-        showNotification("Akses tidak dibenarkan");
-        return;
-    }
-
-    if(!confirm("Padam aduan "+id+"?")) return;
-
-    try{
-        await window.__firebaseDb.collection("complaints").doc(id).delete();
-        await loadAdminComplaints();
-        showNotification("Aduan dipadam");
-    }catch(e){
-        console.error(e);
-        showNotification("Gagal memadam aduan");
-    }
-}
-
-document.addEventListener("DOMContentLoaded",function(){
-    initComplaintBackend();
-
-    if(firebaseConfigReady()){
-        const n=document.getElementById("adminModeNote");
-        if(n) n.textContent="Firebase dikesan. Log masuk menggunakan akaun admin Firebase Authentication.";
-    }
-});
-</script>
-
-
-<script id="admin-access-guard">
-document.addEventListener("DOMContentLoaded",function(){
-    const adminPage=document.getElementById("admin-aduan-page");
-    if(!adminPage) return;
-
-    const observer=new MutationObserver(function(){
-        if(adminPage.classList.contains("active")){
-            const loggedIn=window.__firebaseReady &&
-                           window.__firebaseAuth &&
-                           window.__firebaseAuth.currentUser;
-            if(!loggedIn){
-                document.getElementById("adminDashboardView")?.classList.add("admin-hidden");
-                document.getElementById("adminLoginView")?.classList.remove("admin-hidden");
-                document.getElementById("adminLogoutBtn")?.classList.add("admin-hidden");
-            }
-        }
-    });
-
-    observer.observe(adminPage,{attributes:true,attributeFilter:["class"]});
-});
 </script>
 
 </body>
