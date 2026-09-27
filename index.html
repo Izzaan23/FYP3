@@ -2858,43 +2858,40 @@ async function submitComplaint(event){
         return;
     }
 
-    if(submitButton){
-        submitButton.disabled = true;
-        submitButton.style.opacity = ".65";
-        submitButton.style.cursor = "not-allowed";
-    }
-
-    showNotification("Sedang menghantar aduan...");
+    const originalButtonHtml = submitButton ? submitButton.innerHTML : "";
 
     try{
-        const response = await fetch(
+        if(submitButton){
+            submitButton.disabled = true;
+            submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Menghantar...';
+            submitButton.style.opacity = ".70";
+            submitButton.style.cursor = "not-allowed";
+        }
+
+        showNotification("Sedang menghantar aduan...");
+
+        await fetch(
             "https://script.google.com/macros/s/AKfycbwitt2BdCdZK33R02-2ov95UuPusCyrAmfW9bcvYrgh2SQstjWFo1y4ajf56iNW5gQH/exec",
             {
                 method: "POST",
+                mode: "no-cors",
+                headers: {
+                    "Content-Type": "text/plain;charset=utf-8"
+                },
                 body: JSON.stringify(complaint)
             }
         );
 
-        if(!response.ok){
-            throw new Error("HTTP " + response.status);
-        }
+        if(form) form.reset();
+        showNotification("Aduan berjaya dihantar. Sila semak Google Sheet.");
 
-        const result = await response.json();
-
-        if(result && result.success){
-            if(form) form.reset();
-            showNotification("Aduan berjaya dihantar: " + result.complaintId);
-        }else{
-            const message = result && result.message ? result.message : "Aduan gagal dihantar";
-            console.error("Apps Script response:", result);
-            showNotification(message);
-        }
     }catch(error){
         console.error("Ralat penghantaran aduan:", error);
         showNotification("Tidak dapat menghantar aduan. Sila cuba lagi.");
     }finally{
         if(submitButton){
             submitButton.disabled = false;
+            submitButton.innerHTML = originalButtonHtml || '<i class="fas fa-paper-plane"></i> Hantar Aduan';
             submitButton.style.opacity = "";
             submitButton.style.cursor = "";
         }
