@@ -2838,7 +2838,68 @@ function moveMapContainer(pageId){const el=document.getElementById("map");if(!el
 /* =====================================================
    ADUAN WARGA
 ===================================================== */
-function submitComplaint(event){event.preventDefault();const c={id:"ADUAN-"+Date.now(),name:document.getElementById("complaintName").value.trim(),phone:document.getElementById("complaintPhone").value.trim(),email:document.getElementById("complaintEmail").value.trim(),category:document.getElementById("complaintCategory").value,location:document.getElementById("complaintLocation").value.trim(),description:document.getElementById("complaintDescription").value.trim(),date:new Date().toLocaleString("ms-MY"),status:"Diterima"};if(!c.name||!c.phone||!c.location||!c.description){showNotification("Sila lengkapkan semua maklumat wajib");return;}const records=JSON.parse(localStorage.getItem("webgis-complaints")||"[]");records.push(c);localStorage.setItem("webgis-complaints",JSON.stringify(records));document.getElementById("complaintForm").reset();showNotification("Aduan berjaya direkodkan: "+c.id);}
+async function submitComplaint(event){
+    event.preventDefault();
+
+    const form = document.getElementById("complaintForm");
+    const submitButton = form ? form.querySelector('button[type="submit"]') : null;
+
+    const complaint = {
+        name: document.getElementById("complaintName").value.trim(),
+        phone: document.getElementById("complaintPhone").value.trim(),
+        email: document.getElementById("complaintEmail").value.trim(),
+        category: document.getElementById("complaintCategory").value,
+        location: document.getElementById("complaintLocation").value.trim(),
+        description: document.getElementById("complaintDescription").value.trim()
+    };
+
+    if(!complaint.name || !complaint.phone || !complaint.location || !complaint.description){
+        showNotification("Sila lengkapkan semua maklumat wajib");
+        return;
+    }
+
+    if(submitButton){
+        submitButton.disabled = true;
+        submitButton.style.opacity = ".65";
+        submitButton.style.cursor = "not-allowed";
+    }
+
+    showNotification("Sedang menghantar aduan...");
+
+    try{
+        const response = await fetch(
+            "https://script.google.com/macros/s/AKfycbwitt2BdCdZK33R02-2ov95UuPusCyrAmfW9bcvYrgh2SQstjWFo1y4ajf56iNW5gQH/exec",
+            {
+                method: "POST",
+                body: JSON.stringify(complaint)
+            }
+        );
+
+        if(!response.ok){
+            throw new Error("HTTP " + response.status);
+        }
+
+        const result = await response.json();
+
+        if(result && result.success){
+            if(form) form.reset();
+            showNotification("Aduan berjaya dihantar: " + result.complaintId);
+        }else{
+            const message = result && result.message ? result.message : "Aduan gagal dihantar";
+            console.error("Apps Script response:", result);
+            showNotification(message);
+        }
+    }catch(error){
+        console.error("Ralat penghantaran aduan:", error);
+        showNotification("Tidak dapat menghantar aduan. Sila cuba lagi.");
+    }finally{
+        if(submitButton){
+            submitButton.disabled = false;
+            submitButton.style.opacity = "";
+            submitButton.style.cursor = "";
+        }
+    }
+}
 
 /* =====================================================
    NAVIGATION
